@@ -1,0 +1,50 @@
+# System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Thumbnail Cache
+._*
+Thumbs.db
+
+# Volume Root Files
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# IDE and Editor Files
+*.swp
+*~
+*.idea
+*.iml
+xcuserdata/
+*.xcuserstate
+project.xcworkspace/
+
+# Compiled Files
+*.pyc
+*.out
+*.o
+*.log
+
+# Application Directories
+node_modules/
+venv/
+build/
+dist/
+
+# Remote Share Files
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# iCloud
+*.icloud
+
