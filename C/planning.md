@@ -2,7 +2,7 @@
 
 ## Resources
 
-- Learn C Programming and OOP with Dr. Chuck (https://www.youtube.com/watch?v=PaPN51Mm5qQ)
+- C Programming - Bro Code - (https://www.youtube.com/watch?v=87SH2Cn0s9A)
 - The C Programming Language (2nd Edition) Brian W. Kernighan, Dennis M. Ritchie
 - C Programming - A Modern Approach K.N. KING
 - Understanding and Using C Pointers: Core Techniques for Memory Management
