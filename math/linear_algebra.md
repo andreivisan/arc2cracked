@@ -21,5 +21,11 @@ u_2 + v_2 \\
 u_n + v_n 
 \end{pmatrix}$
 
+2. Scalar Multiplication
 
-
+$c \mathbf{v} = \begin{pmatrix} 
+cv_1 \\ 
+cv_2 \\ 
+\vdots \\ 
+cv_n 
+\end{pmatrix}$
