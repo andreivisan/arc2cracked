@@ -18,3 +18,8 @@
 
 - long long int lli; // 8 bytes (-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807)
 - unsigned long long int ulli; // 8 bytes (0 to 18,446,744,073,709,551,615)
+
+- defining a constant is done by using the const keyword
+
+    const float PI = 3.14;
+

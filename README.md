@@ -18,15 +18,21 @@
 - [ ] Robotics [OPTIONAL]
 - [ ] Electrical Engineering [OPTIONAL]
 
-## Mathematics Table of Contents
+## The Path
 
 ### Week 1
+
+#### Mathematics
 
 - Math Academy - (https://www.mathacademy.com/learn)
 
-## C Table of Contents 
-
-### Week 1
+#### C Programming
 
 - C Programming - Bro Code - (https://www.youtube.com/watch?v=87SH2Cn0s9A)
 - The C Programming Language (2nd Edition) Brian W. Kernighan, Dennis M. Ritchie
+
+#### Books
+
+- The Art of Doing Science and Engineering: Learning to Learn - Richard Hamming
+
+    ![The Art of Doing Science and Engineering: Learning to Learn](./images/the-art-of-doing-science-and-engineering.jpg)
