@@ -20,4 +20,13 @@
 
 ## Mathematics Table of Contents
 
+### Week 1
+
+- Math Academy - (https://www.mathacademy.com/learn)
+
 ## C Table of Contents 
+
+### Week 1
+
+- C Programming - Bro Code - (https://www.youtube.com/watch?v=87SH2Cn0s9A)
+- The C Programming Language (2nd Edition) Brian W. Kernighan, Dennis M. Ritchie
