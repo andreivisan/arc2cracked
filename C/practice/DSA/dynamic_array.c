@@ -36,6 +36,18 @@ int add(DynamicArray *arr, int index, int val) {
     return 0;
 }
 
+int delete(DynamicArray *arr, int index) {
+    if (index < 0 || index >= arr->size) {
+        fprintf(stderr, "Index out of range\n");
+        return 1; 
+    }
+    for (int i = index; i < arr-> size - 1; i--) {
+        arr->data[i] = arr->data[i + 1];
+    } 
+    arr->size -= 1;
+    return 0;
+}
+
 void free_mem(DynamicArray *arr) {
     free(arr->data);
     free(arr);
