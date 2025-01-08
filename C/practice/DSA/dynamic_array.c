@@ -41,7 +41,7 @@ int delete(DynamicArray *arr, int index) {
         fprintf(stderr, "Index out of range\n");
         return 1; 
     }
-    for (int i = index; i < arr-> size - 1; i--) {
+    for (int i = index; i < arr-> size - 1; i++) {
         arr->data[i] = arr->data[i + 1];
     } 
     arr->size -= 1;
@@ -65,6 +65,11 @@ int main() {
     add(arr, 0, 10);
     add(arr, 1, 7);
     add(arr, 1, 11);
+    add(arr, 2, 16);
+    print_arr(arr);
+    printf("array size: %d\n", arr->size);
+    delete(arr, 2);
+    printf("array size: %d\n", arr->size);
     print_arr(arr);
     free_mem(arr);
     return 0;
