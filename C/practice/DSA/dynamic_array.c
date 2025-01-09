@@ -20,6 +20,13 @@ void expand_arr(DynamicArray *arr) {
     arr->data = realloc(arr->data, sizeof(int) * arr->capacity);
 }
 
+void reduce_capacity(DynamicArray *arr) {
+    if (arr->size <= arr->capacity / 4) {
+        arr->capacity = arr->capacity / 2;
+        arr->data = realloc(arr->data, sizeof(int) * arr->capacity);
+    }
+}
+
 int add(DynamicArray *arr, int index, int val) {
     if (index < 0 || index > arr->size) {
         fprintf(stderr, "Array capacity overflow\n");
@@ -45,6 +52,7 @@ int delete(DynamicArray *arr, int index) {
         arr->data[i] = arr->data[i + 1];
     } 
     arr->size -= 1;
+    reduce_capacity(arr);
     return 0;
 }
 
