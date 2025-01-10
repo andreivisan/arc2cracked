@@ -1,5 +1,9 @@
 # C Programming
 
+## Cheatsheet
+
+  ![C Cheatsheet](./images/C_cheatsheet_tetsuo.jpeg)
+
 ## Data Types
 
 - char c = 'A'; // single character | 1 byte (-128 to 127) | unsigned char (0 to 255)
@@ -21,5 +25,95 @@
 
 - defining a constant is done by using the const keyword
 
+- Math library (#include <math.h>, compile with -lm) prefers double.
+
     const float PI = 3.14;
+
+| Name      | Size    | Description                                           |
+|-----------|---------|-------------------------------------------------------|
+| char      | 1 byte  | an ASCII value: e.g. 'a' (see: man ascii)             |
+| int/long  | 4 bytes | a signed integer: e.g. 97 or hex 0x61, oct 0141       |
+| long long | 8 bytes | a longer multi-byte signed integer                    |
+| float     | 4 bytes | a floating-point (possibly fractional) value          |
+| double    | 8 bytes | a double length float                                 |
+
+## Casting
+
+Preceding a primitive expression with an alternate parenthesized type converts or "casts" value to a new value equivalent in new type:
+
+```c
+int a = (int) 3.131;   //assigns a=3 without complaint
+```
+
+Preceding any other expression with a cast forces new type for unchanged value.
+
+```c
+double b = 3.131;
+int a = *(int*)&b; //interprets the double b as an integer (not necessarily 3)
+```
+
+## STRUCTS and ARRAYS and POINTERS and ADDRESS COMPUTATION:
+
+### Structs
+
+Collect several fields into a single logical type:
+
+```c
+struct { int n; double root;} s; //s has two fields, n and root
+s.root = sqrt((s.n=7)); //ref fields (N.B. double parens=>assign OK!)
+```
+
+Basic struct definition and initialization:
+
+```c
+struct Point {
+    int x;
+    int y;
+};
+
+struct Point p1 = {10, 20}; // Initialize at declaration
+struct Point p2;
+p2.x = 30;
+p2.y = 40;
+
+printf("p1: (%d, %d)\n", p1.x, p1.y);
+printf("p2: (%d, %d)\n", p2.x, p2.y);
+```
+
+Nested structs:
+
+```c
+struct Rectangle {
+    struct Point top_left;
+    struct Point bottom_right;
+};
+
+struct Rectangle rect = {{0, 0}, {100, 100}};
+printf("Rectangle: (%d,%d) to (%d,%d)\n", 
+       rect.top_left.x, rect.top_left.y, 
+       rect.bottom_right.x, rect.bottom_right.y);
+```
+
+Array of structs:
+
+```c
+struct Student {
+    char name[50];
+    int age;
+    float gpa;
+};
+
+struct Student class[3] = {
+    {"Alice", 20, 3.8},
+    {"Bob", 22, 3.5},
+    {"Charlie", 21, 3.9}
+};
+
+for (int i = 0; i < 3; i++) {
+    printf("Student %d: %s, Age: %d, GPA: %.1f\n", 
+           i+1, class[i].name, class[i].age, class[i].gpa);
+}
+```
+
+
 
