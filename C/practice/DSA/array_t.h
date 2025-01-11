@@ -24,9 +24,14 @@ static inline void array_t_free(array_t *arr) {
 /*
  * Expand array capacity
  */
-static inline void array_t_expand(array_t *arr) {
+static inline int array_t_expand(array_t *arr) {
     arr->capacity *= 2;
-    arr->data = realloc(arr->data, sizeof(int) * arr->capacity);
+    int *temp = realloc(arr->data, sizeof(int) * arr->capacity);
+    if (!temp) {
+        return 1;
+    }
+    arr->data = temp;
+    return 0;
 }
 
 /*

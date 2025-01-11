@@ -7,6 +7,10 @@ array_t *array_t_init() {
     }
     arr->capacity = 8;
     arr->data = malloc(sizeof(int) * arr->capacity);
+    if (!arr->data) {
+        array_t_free(arr);
+        return NULL;
+    }
     arr->size = 0;
     return arr;
 }
