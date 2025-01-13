@@ -1,6 +1,13 @@
 #ifndef ARRAY_T_H // Include guard start
 #define ARRAY_T_H
 
+/*
+* Error codes macros 
+*/
+#define ARRAY_T_OK 0
+#define ARRAY_T_ERR_INDEX 1
+#define ARRAY_T_ERR_MEM 2
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -28,20 +35,25 @@ static inline int array_t_expand(array_t *arr) {
     arr->capacity *= 2;
     int *temp = realloc(arr->data, sizeof(int) * arr->capacity);
     if (!temp) {
-        return 1;
+        return ARRAY_T_ERR_MEM;
     }
     arr->data = temp;
-    return 0;
+    return ARRAY_T_OK;
 }
 
 /*
  * Reduce array capacity
  */
-static inline void array_t_reduce(array_t *arr) {
+static inline int array_t_reduce(array_t *arr) {
     if (arr->size <= arr->capacity / 4) {
         arr->capacity = arr->capacity / 2;
-        arr->data = realloc(arr->data, sizeof(int) * arr->capacity);
+        int *temp = realloc(arr->data, sizeof(int) * arr->capacity);
+        if (!temp) {
+            return ARRAY_T_ERR_MEM;
+        }
+        arr->data = temp;
     }
+    return ARRAY_T_OK;
 }
 
 /*
