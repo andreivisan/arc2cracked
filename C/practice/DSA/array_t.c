@@ -16,6 +16,7 @@ array_t *array_t_init() {
 }
 
 int array_t_add(array_t *arr, int index, int val) {
+    if (!arr) return ARRAY_T_ERR_MEM;
     if (index < 0 || index > arr->size) {
         fprintf(stderr, "Array capacity overflow\n");
         return ARRAY_T_ERR_INDEX;
@@ -32,6 +33,7 @@ int array_t_add(array_t *arr, int index, int val) {
 }
 
 int array_t_delete(array_t *arr, int index) {
+    if (!arr) return ARRAY_T_ERR_MEM;
     if (index < 0 || index >= arr->size) {
         fprintf(stderr, "Index out of range\n");
         return ARRAY_T_ERR_INDEX; 
@@ -44,11 +46,13 @@ int array_t_delete(array_t *arr, int index) {
     return ARRAY_T_OK;
 }
 
-void array_t_print(const array_t *arr) {
+int array_t_print(const array_t *arr) {
+    if (!arr) return ARRAY_T_ERR_MEM;
     for (int i = 0; i < arr->size; i++) {
         printf("%d ", arr->data[i]);
     }
     printf("\n");
+    return ARRAY_T_OK;
 }
 
 int main() {

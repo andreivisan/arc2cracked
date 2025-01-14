@@ -23,15 +23,18 @@
 /*
  * Free the dynamic array memory
  */
-static inline void array_t_free(array_t *arr) {
+static inline int array_t_free(array_t *arr) {
+    if (!arr) return ARRAY_T_ERR_MEM;
     free(arr->data);
     free(arr);
+    return ARRAY_T_OK;
 }
 
 /*
  * Expand array capacity
  */
 static inline int array_t_expand(array_t *arr) {
+    if (!arr) return ARRAY_T_ERR_MEM;
     arr->capacity *= 2;
     int *temp = realloc(arr->data, sizeof(int) * arr->capacity);
     if (!temp) {
@@ -45,6 +48,7 @@ static inline int array_t_expand(array_t *arr) {
  * Reduce array capacity
  */
 static inline int array_t_reduce(array_t *arr) {
+    if (!arr) return ARRAY_T_ERR_MEM;
     if (arr->size <= arr->capacity / 4) {
         arr->capacity = arr->capacity / 2;
         int *temp = realloc(arr->data, sizeof(int) * arr->capacity);
@@ -74,6 +78,6 @@ int array_t_delete(array_t *arr, int index);
 /*
  * Print the array
  */
-void array_t_print(const array_t *arr);
+int array_t_print(const array_t *arr);
 
 #endif
