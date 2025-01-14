@@ -71,6 +71,11 @@ array_t *array_t_init();
 int array_t_add(array_t *arr, int index, int value);
 
 /*
+ * Get value at index
+ */
+int array_t_get(const array_t *arr, int index, int *outValue);
+
+/*
  * Delete value at index
  */
 int array_t_delete(array_t *arr, int index);
