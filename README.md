@@ -36,3 +36,20 @@
 - The Art of Doing Science and Engineering: Learning to Learn - Richard Hamming
 
     ![The Art of Doing Science and Engineering: Learning to Learn](./images/the-art-of-doing-science-and-engineering.jpg)
+
+### Week 2
+
+#### Mathematics
+
+- Math Academy - (https://www.mathacademy.com/learn)
+
+#### C Programming
+
+- C Programming - Data Structures
+- Effective C (2nd Edition) - Robert C. Seacord
+
+#### Books
+
+- Effective C (2nd Edition) - Robert C. Seacord
+
+    ![Effective C (2nd Edition)](./images/EffectiveC2e.png)
