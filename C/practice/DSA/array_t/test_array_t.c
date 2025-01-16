@@ -19,6 +19,10 @@ int main() {
         // Handle error: either log, exit, etc.
         printf("Error retrieving element (code %d)\n", ret);
     }
+    array_t_push(arr, 25);
+    array_t_print(arr);
+    array_t_pop(arr);
+    array_t_print(arr);
     array_t_free(arr);
     return 0;
 }

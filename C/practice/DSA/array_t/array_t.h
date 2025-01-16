@@ -71,9 +71,19 @@ array_t *array_t_init();
 int array_t_add(array_t *arr, int index, int value);
 
 /*
+ * Push a value at the end of the array
+ */
+int array_t_push(array_t *arr, int value);
+
+/*
  * Get value at index
  */
 int array_t_get(const array_t *arr, int index, int *outValue);
+
+/*
+ * Delete the last value of the array
+ */
+int array_t_pop(array_t *arr);
 
 /*
  * Delete value at index
