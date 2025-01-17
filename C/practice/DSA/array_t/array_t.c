@@ -1,19 +1,20 @@
 #include "array_t.h"
 
-array_t *array_t_init() {
+array_t *array_t_init(size_t elem_size, size_t initial_capacity) {
     array_t *arr = malloc(sizeof(array_t));
     if (!arr) return NULL;
-    arr->capacity = 8;
-    arr->data = malloc(sizeof(int) * arr->capacity);
+    arr->element_size = elem_size;
+    arr->size = 0;
+    arr->capacity = initial_capacity;
+    arr->data = malloc(elem_size * initial_capacity);
     if (!arr->data) {
         array_t_free(arr);
         return NULL;
     }
-    arr->size = 0;
     return arr;
 }
 
-int array_t_add(array_t *arr, int index, int val) {
+int array_t_add(array_t *arr, size_t index, const void *elem) {
     if (!arr) return ARRAY_T_ERR_MEM;
     if (index < 0 || index > arr->size) return ARRAY_T_ERR_INDEX;
     if (arr->size == arr->capacity) {

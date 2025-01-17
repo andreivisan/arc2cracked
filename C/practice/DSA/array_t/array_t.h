@@ -15,9 +15,13 @@
  * Type definition for the dynamic array. 
  */
  typedef struct {
-    int *data;
-    int size;
-    int capacity;
+    /*
+     * A block of bytes.
+     */ 
+    void *data;
+    size_t element_size;
+    size_t size;
+    size_t capacity;
  } array_t;
 
 /*
@@ -63,12 +67,12 @@ static inline int array_t_reduce(array_t *arr) {
 /*
  * Initialize the dynamic array
  */
-array_t *array_t_init();
+array_t *array_t_init(size_t elem_size, size_t initial_capacity);
 
 /*
  * Insert value at index
  */
-int array_t_add(array_t *arr, int index, int value);
+int array_t_add(array_t *arr, size_t index, const void *elem);
 
 /*
  * Push a value at the end of the array
