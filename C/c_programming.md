@@ -1,5 +1,58 @@
 # C Programming
 
+## LowLevelCode Zero2Hero C course
+
+### Compilation Process
+
+The process of converting source code to machine code is the following steps.
+
+- Preprocessor
+- Compilation
+- Assembly
+- Linking
+
+### Strings
+
+Strings are special. A string in C has a very special characteristic that makes it amazing, but also dangerous. 
+All strings in C are ended with a null byte. If they don't end in a null byte, the operation you'll performing will complete going.
+
+Why does that matter? If you run operations like strcpy, which copies data from the src buffer to the dest buffer. 
+It will ONLY STOP COPYING OR PRINTING IF IT ENCOUNTERS THAT ZERO BYTE. So, the code above actually has a pretty major security vulnerability. 
+You have to make sure your strings end with a zero, otherwise things will go sideways.
+
+### Union
+
+Unions are a field that assign multiple labels of multiple types to the same memory location.
+
+You can create a structure with the following syntax.
+
+```c
+union myunion {
+    int i;
+    char c;
+};
+```
+
+This will create a type called union myunion that we can use later on in the code. 
+This structure has two members i and c, but both of them will contain data at the same location. 
+The union is only the size of the largest element, in this case int i, or 4 bytes.
+
+```c
+union myunion {
+    int i;
+    char c;
+};
+
+int main() {
+    union myunion u;
+    u.i = 0x41424344;
+    printf("%c"\n, u.c); 
+    ...
+}
+```
+
+Above, u.c will equal 0x44, which is the value in the location of i.
+
 ## Cheatsheet
 
   ![C Cheatsheet](./images/C_cheatsheet_tetsuo.jpeg)
