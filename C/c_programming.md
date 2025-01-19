@@ -20,6 +20,35 @@ Why does that matter? If you run operations like strcpy, which copies data from 
 It will ONLY STOP COPYING OR PRINTING IF IT ENCOUNTERS THAT ZERO BYTE. So, the code above actually has a pretty major security vulnerability. 
 You have to make sure your strings end with a zero, otherwise things will go sideways.
 
+### Structure
+
+If wanted to serialize this data and work on it between two different systems that might have different architectures, 
+there's a chance that the structures may change between these systems. By adding special modifiers to the structures, 
+we can ensure that the structure does not get modified in this way.
+
+You can create a structure with the following syntax.
+
+```c
+struct mystruct {
+    int i;
+    char c;
+};
+```
+
+Here, the structure should only be 5 bytes. But, there is a high chance that the structure is actually 8 bytes, or even 16 bytes due to alignment issues.
+
+To fix this, we can add the packed attribute.
+
+```c
+struct __attribute__((__packed__)) mystruct {
+    int i;
+    char c;
+};
+```
+
+This will create the same struct, but ensure that the compiler doesn't add any special sauce in between the elements 
+so we can ensure it's the same size on multiple systems.
+
 ### Union
 
 Unions are a field that assign multiple labels of multiple types to the same memory location.
