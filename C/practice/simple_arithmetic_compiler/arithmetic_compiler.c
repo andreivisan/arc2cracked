@@ -21,6 +21,10 @@ Token *tokenize(const char *input) {
     while (input) {
         if (isdigit(input)) {
             tokens[index].token_type = TOKEN_NUMBER;
+            /*
+             * strtol expects a char** for endptr.
+             * If input is a char*, &input is char**
+             */
             tokens[index].value = strtol(input, &input, 10);
             index++;
         } else {
@@ -44,3 +48,5 @@ Token *tokenize(const char *input) {
     tokens[index].token_type = TOKEN_END;
     return tokens;
 }
+
+//int parse 
