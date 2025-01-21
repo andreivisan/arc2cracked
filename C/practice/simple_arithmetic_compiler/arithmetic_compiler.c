@@ -18,7 +18,7 @@ typedef struct {
 Token *tokenize(const char *input) {
     Token *tokens = malloc(256 * sizeof(Token));
     int index = 0;
-    while (input) {
+    while (*input) {
         if (isdigit(*input)) {
             tokens[index].token_type = TOKEN_NUMBER;
             /*
