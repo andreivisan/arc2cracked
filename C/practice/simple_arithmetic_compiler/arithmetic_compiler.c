@@ -75,6 +75,49 @@ int parse(Token *tokens, int *result) {
     return 1;
 }
 
+void generate_assembly(Token *tokens) {
+    int position = 0;
+    printf("Assembly-like Instructions:\n");
+    if (tokens[position].token_type == TOKEN_NUMBER) {
+        printf("LOAD %d\n", tokens[position].value);
+        position++;
+    }
+    while (tokens[position].token_type != TOKEN_END) {
+        if (tokens[position].token_type == TOKEN_PLUS) {
+            position++;
+            if (tokens[position].token_type == TOKEN_NUMBER) {
+                printf("ADD %d\n", tokens[position].value);
+            }
+        } else if (tokens[position].token_type == TOKEN_MINUS) {
+            position++;
+            if (tokens[position].token_type == TOKEN_NUMBER) {
+                printf("SUB %d\n", tokens[position].value);
+            }
+        }
+        position++;
+    }
+}
+
 int main() {
+    char input[256];
+    printf("Enter an arithmetic expression: ");
+    fgets(input, sizeof(input), stdin);
+
+    // Remove newline character if present
+    size_t len = strlen(input);
+    if (len > 0 && input[len - 1] == '\n') {
+        input[len - 1] = '\0';
+    }
+    
+    Token* tokens = tokenize(input);
+    int result;
+    if (parse(tokens, &result)) {
+        printf("Result: %d\n", result);
+        generate_assembly(tokens);
+    } else {
+        printf("Invalid expression!\n");
+    }
+    
+    free(tokens); // Remember to free allocated memory
     return 0;
 }
