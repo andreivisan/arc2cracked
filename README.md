@@ -53,3 +53,20 @@
 - Effective C (2nd Edition) - Robert C. Seacord
 
     ![Effective C (2nd Edition)](./images/EffectiveC2e.png)
+
+### Week 3
+
+#### Mathematics
+
+- Math Academy - (https://www.mathacademy.com/learn)
+
+#### C Programming
+
+- Low Level Academy - Zero2Hero 
+- Effective C (2nd Edition) - Robert C. Seacord
+
+#### Books
+
+- Effective C (2nd Edition) - Robert C. Seacord
+
+    ![Effective C (2nd Edition)](./images/EffectiveC2e.png)
