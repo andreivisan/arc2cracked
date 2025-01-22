@@ -185,7 +185,20 @@ the variable's data is actually stored not on the stack, but somewhere in the da
 program that is running. Later calls to my_static_test will increase the variable every time, 
 so it will be 1, then 2, then 3
 
+**Static Use Case**
 
+Let's say for example we wanted to track how many times a particular function was called, maybe the employee_initialize function for example.
+
+```c
+int employee_initialize (employee_t) {
+    static int n_called = 0;
+    ...
+    
+    return n_called++;
+}
+```
+
+The above code will increment the variable every time the employee_initialize function was called, and return the current value to the user.
 
 ## Cheatsheet
 
