@@ -201,6 +201,113 @@ int employee_initialize (employee_t) {
 The above code will increment the variable every time the employee_initialize function was called, and return the current value to the user.
 The idea is that when we declare a static var we initialize it in **global** scope but only we have access to it as opposed to a global variable.
 
+### Pointers to pointers
+
+A double pointer is a pointer that points to another pointer. In memory management, double pointers are particularly useful for functions that need to modify the original pointer, such as allocating or resizing dynamic memory.
+
+#### Using Double Pointers with realloc
+
+We want to create a function foo that resizes an array using realloc. The function should accept a double pointer to the array so that it can modify the original pointer.
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef enum {
+	STATUS_GOOD,
+	STATUS_BAD,
+} status_t;
+
+status_t foo(int **arr, size_t new_size) {
+    int *temp = realloc(*arr, new_size * sizeof(int));
+    if (temp == NULL) {
+        // Handle realloc failure
+        printf("Memory allocation failed\n");
+        return STATUS_BAD;
+    }
+    *arr = temp;
+    return STATUS_GOOD;
+}
+
+int main() {
+    size_t initial_size = 5;
+    size_t new_size = 10;
+
+    int *arr = malloc(initial_size * sizeof(int));
+    if (arr == NULL) {
+        printf("Memory allocation failed\n");
+        return 1;
+    }
+
+    // Initialize the array
+    for (size_t i = 0; i < initial_size; i++) {
+        arr[i] = i;
+    }
+
+    // Print the initial array
+    printf("Initial array:\n");
+    for (size_t i = 0; i < initial_size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    // Call foo to resize the array
+    if (STATUS_BAD == foo(&arr, new_size)) {
+		printf("uh oh");
+		return -1;
+	}
+
+    // Initialize the new part of the array
+    for (size_t i = initial_size; i < new_size; i++) {
+        arr[i] = i;
+    }
+
+    // Print the resized array
+    printf("Resized array:\n");
+    for (size_t i = 0; i < new_size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    free(arr);
+    return 0;
+}
+```
+
+1. Function Definition:
+
+    - ```void foo(int **arr, size_t new_size)```: The function foo takes a double pointer arr and a new size new_size as parameters.
+
+2. Reallocating Memory:
+
+    - int ```*temp = realloc(*arr, new_size * sizeof(int));```: The ```realloc``` function attempts to resize the memory block pointed to by ```*arr``` to ```new_size``` elements.
+
+    - If ```realloc``` fails, it returns ```NULL```. The original memory block is not freed in this case.
+
+    - ```if (temp == NULL)```: Check if ```realloc``` failed.
+
+    - ```*arr = temp;```: If ```realloc``` is successful, update the original pointer ```*arr``` to point to the new memory block.
+
+3. Main Function:
+
+    - Allocate initial memory using ```malloc```.
+    - Initialize and print the initial array.
+    - Call ```foo``` to resize the array.
+    - Initialize and print the resized array.
+    - Free the allocated memory.
+
+Double pointers are essential in C for functions that need to modify the original pointer, such as those that allocate or resize dynamic memory. This lesson demonstrated how to use double pointers with ```realloc``` to resize an array in a function.
+
+The idea is that C is pass by value. If we just pass a pointer to a function we basically pass a copy of the original pointer(address). If we pass a pointer to the
+original pointer then we can change the original address.
+
+**Visual Analogy**
+
+Imagine a piece of paper (pointer) with an address written on it.
+
+    - Without double pointer: You give someone a photocopy of the paper. They scribble a new address on the copy. Your original paper remains unchanged.
+    - With double pointer: You give someone the location of your paper. They can directly edit the original address on your paper.
+
 ## Cheatsheet
 
   ![C Cheatsheet](./images/C_cheatsheet_tetsuo.jpeg)
