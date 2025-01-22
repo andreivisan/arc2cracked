@@ -199,6 +199,7 @@ int employee_initialize (employee_t) {
 ```
 
 The above code will increment the variable every time the employee_initialize function was called, and return the current value to the user.
+The idea is that when we declare a static var we initialize it in **global** scope but only we have access to it as opposed to a global variable.
 
 ## Cheatsheet
 
