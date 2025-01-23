@@ -353,6 +353,16 @@ To see what libraries your program is linked against, try:
 To see what libraries your program is linked against, try:
 ```
 
+### File Descriptors
+
+In Linux, every program you run has three file descriptors open by default
+
+    - 0: stdin - a file that represents the input to your program from the command line
+    - 1: stdout - a file that represents the output of your program to the command line
+    - 2: stderr - a file that represents the output of your program, but containing only errors
+
+
+
 ## Cheatsheet
 
   ![C Cheatsheet](./images/C_cheatsheet_tetsuo.jpeg)
