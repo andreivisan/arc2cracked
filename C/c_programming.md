@@ -350,8 +350,11 @@ and all we have to do is managed the result.
 To see what libraries your program is linked against, try:
 
 ```bash
-To see what libraries your program is linked against, try:
+ldd ./myprogram
 ```
+
+To check the documentation for functions in Glibc we need to use ```man <function_name>```. If the returned documentation is not for a function (could be a desc
+of some OS thing) then use ```man 2 <function_name>```.
 
 ### File Descriptors
 
@@ -360,6 +363,67 @@ In Linux, every program you run has three file descriptors open by default
     - 0: stdin - a file that represents the input to your program from the command line
     - 1: stdout - a file that represents the output of your program to the command line
     - 2: stderr - a file that represents the output of your program, but containing only errors
+
+### File Output
+
+To write to a file, we need to first open the file. We do this using the open libc function to get a file descriptor to that file. 
+We'll use that file descriptor in later functions to describe to the kernel what file we want to perform that action on.
+
+#### open
+
+To open a file, we specify the path that we want to open, as well as the type of open operation that we want to do. All of the types are described in the man page.
+
+```c
+...
+int fd = open("./a-file", O_RDWR | O_CREAT, 0644);
+if (fd == -1) {
+    perror("open");
+    return -1;
+}
+...
+```
+
+In the above code, we're asking the kernel to open the file ./a-file. 
+If the file does not exist, create the file. Open it read write, with the linux octal permissions 0644, or rw-r--r-.
+
+#### write
+
+With the file open and the descriptor checked to be a valid value, we can use that descriptor in other functions. For example, write.
+
+```c
+char *a_buf = "some data\n";
+write(fd, a_buf, strlen(a_buf));
+```
+
+The above function uses the descriptor from before, and writes the buffer at a_buf to that location. Doing this, we can check the file to see the contents.
+
+### File Input
+
+To read from a file, just like before we need to first open the file. We do this using the open libc function to get a file descriptor to that file.
+
+```c
+...
+int fd = open("./my-db.db", O_RDONLY);
+if (fd == -1) {
+    perror("open");
+    return -1;
+}
+...
+```
+
+#### read
+
+With the file open and the descriptor checked to be a valid value, we can use that descriptor in other functions. 
+For example, read. Here, we can use read to read the contents of that file into our database header. 
+This is really cool, because instead of reading in some data and then converting the data, we can write it directly 
+into our header structure and check the data.
+
+```c
+struct database_header head = {0};
+...
+read(fd, &head, sizeof(head));
+printf("Database Version %d", head.version);
+```
 
 
 
