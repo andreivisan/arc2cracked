@@ -308,9 +308,9 @@ Imagine a piece of paper (pointer) with an address written on it.
     - Without double pointer: You give someone a photocopy of the paper. They scribble a new address on the copy. Your original paper remains unchanged.
     - With double pointer: You give someone the location of your paper. They can directly edit the original address on your paper.
 
-## Testing for Memory Leaks
+### Testing for Memory Leaks
 
-### Valgrind
+#### Valgrind
 
 Valgrind is a program that wraps the calls to malloc and free, tags them, and checks to see where memory is leaked or potentially lost.
 
@@ -330,6 +330,28 @@ Valgrind will run your code and provide a report of what memory did not get free
 
 Please note that you need to write tests to make your code execute lines that allocate from the heap to use valgrind correctly. 
 If your code never allocates from the heap in your test case, it'll never see the memory leak.
+
+### Glibc
+
+Glibc, or the GNU C library, is the library that gets baked into every program you compile with gcc.
+
+When we write code, we write userland code, or code that exists in the context of a userspace process. To the CPU, this code is unpriveleged, 
+and as a result it can't really do anything fancy, like allocate memory, access the filesystem, or access the network.
+
+To do privleged things, we ask the kernel (which runs as privleged code) to do it for us. This is done through what is called a "system call interface" 
+where the syscall instruction is ran, and asks the kernel to perform a certain action.
+
+The GNU C library cleanly wraps all of this functionality up into easy to use functions that wrap the otherwise hard to maintain system call functionality.
+
+For example, when we allocate memory from the kernel for our process, we use malloc. Malloc internally calls the sbrk or mmap system calls, 
+which asks the kernel through a system call to give us more memory. All of this abstracted away from us as the developer, 
+and all we have to do is managed the result.
+
+To see what libraries your program is linked against, try:
+
+```bash
+To see what libraries your program is linked against, try:
+```
 
 ## Cheatsheet
 
