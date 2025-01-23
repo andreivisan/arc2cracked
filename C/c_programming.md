@@ -308,6 +308,29 @@ Imagine a piece of paper (pointer) with an address written on it.
     - Without double pointer: You give someone a photocopy of the paper. They scribble a new address on the copy. Your original paper remains unchanged.
     - With double pointer: You give someone the location of your paper. They can directly edit the original address on your paper.
 
+## Testing for Memory Leaks
+
+### Valgrind
+
+Valgrind is a program that wraps the calls to malloc and free, tags them, and checks to see where memory is leaked or potentially lost.
+
+To make your code compatible with valgrind, you'll need to compile with debug symbols in your code. Do this the following way.
+
+```bash
+gcc -o program code.c -g
+```
+
+The -g flag will add the debug symbols to your code. To test your code, run:
+
+```bash
+valgrind --leak-check=full ./program
+```
+
+Valgrind will run your code and provide a report of what memory did not get freed, and where the allocation happened.
+
+Please note that you need to write tests to make your code execute lines that allocate from the heap to use valgrind correctly. 
+If your code never allocates from the heap in your test case, it'll never see the memory leak.
+
 ## Cheatsheet
 
   ![C Cheatsheet](./images/C_cheatsheet_tetsuo.jpeg)
