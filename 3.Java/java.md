@@ -292,3 +292,50 @@ Virtual Thread 1 ────▶ [Block on File I/O] ~~~yield~~~▶ Carrier Thre
 [I/O completes] ──────────┘  
 Carrier Thread 2 ◀~~~resume~~~▶ Virtual Thread 1 continues  
 ```
+
+## Module System
+
+### Core Principles
+
+- **Problem:** Monolithic JARs, fragile classpaths, and no true encapsulation (e.g., sun.misc.Unsafe leaks).
+
+Enforce strong encapsulation and define explicit dependencies between components.
+
+### Key Features
+
+**1. Module Descriptor** (module-info.java)
+
+- Declares dependencies (requires) and exposed APIs (exports).
+
+```java
+module com.example.myapp {
+    requires java.sql;        // Dependency
+    exports com.example.api;  // Public API
+}
+```
+
+**2. Strong Encapsulation**
+
+- Non-exported packages are inaccessible to other modules (unlike classic public classes).
+
+**3. Services**
+
+- provides and uses for loose coupling via service interfaces (e.g., JDBC drivers).
+
+### Details & Nuances
+
+- jlink Tool: Create custom runtime images with only required modules.
+
+### Key Conflicts/Misunderstandings
+
+**Reflection vs. Encapsulation**
+
+- Annotations often rely on reflection (e.g., Spring’s @Autowired).
+
+- Modules restrict reflection by default (non-exported packages are hidden).
+
+- Fix: Use opens in module-info.java to allow reflective access:
+
+```java
+opens com.example.internal to spring.core;  
+```
