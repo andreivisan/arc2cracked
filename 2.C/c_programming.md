@@ -455,7 +455,140 @@ if (stat.st_size != head.size) {
 }
 ```
 
+### Variable Types
 
+#### Types
+
+Here are the common types, their bit length, their signedness, and the associated size.
+
+**C Data Type: char**
+
+- Signed/Unsigned: Signed
+- Bit Length: 8 bits
+- Minimum Value: -128
+- Maximum Value: 127
+
+**C Data Type: unsigned char**
+
+- Signed/Unsigned: Unsigned
+- Bit Length: 8 bits
+- Minimum Value: 0
+- Maximum Value: 255
+
+**C Data Type: short**
+
+- Signed/Unsigned: Signed
+- Bit Length: 16 bits
+- Minimum Value: -32,768
+- Maximum Value: 32,767
+
+**C Data Type: unsigned short**
+
+- Signed/Unsigned: Unsigned
+- Bit Length: 16 bits
+- Minimum Value: 0
+- Maximum Value: 65,535
+
+**C Data Type: int**
+
+- Signed/Unsigned: Signed
+- Bit Length: 16 or 32 bits
+- Minimum Value: -2,147,483,648 (32-bit)
+- Maximum Value: 2,147,483,647 (32-bit)
+
+**C Data Type: unsigned int**
+
+- Signed/Unsigned: Unsigned
+- Bit Length: 16 or 32 bits
+- Minimum Value: 0
+- Maximum Value: 4,294,967,295 (32-bit)
+
+**C Data Type: long**
+
+- Signed/Unsigned: Signed
+- Bit Length: 32 bits
+- Minimum Value: -2,147,483,648
+- Maximum Value: 2,147,483,647
+
+**C Data Type: unsigned long**
+
+- Signed/Unsigned: Unsigned
+- Bit Length: 32 bits
+- Minimum Value: 0
+- Maximum Value: 4,294,967,295
+
+**C Data Type: long long**
+
+- Signed/Unsigned: Signed
+- Bit Length: 64 bits
+- Minimum Value: -9,223,372,036,854,775,808
+- Maximum Value: 9,223,372,036,854,775,807
+
+**C Data Type: unsigned long long**
+
+- Signed/Unsigned: Unsigned
+- Bit Length: 64 bits
+- Minimum Value: 0
+- Maximum Value: 18,446,744,073,709,551,615
+
+**C Data Type: float**
+
+- Bit Length: 32 bits
+- Minimum Value: ~ -3.4 x 10^38
+- Maximum Value: ~ 3.4 x 10^38
+
+**C Data Type: double**
+
+- Bit Length: 64 bits
+- Minimum Value: ~ -1.7 x 10^308
+- Maximum Value: ~ 1.7 x 10^308
+
+### Type Casting
+
+To type cast a variable, you do the following expression.
+
+```c
+int other_var = -1;
+unsigned int x = (unsigned int)other_var;
+```
+
+However, typecasting variables of different types has effects on the variables that is important to understand.
+
+#### Signedness Casting
+
+```c
+int other_var = -1;
+unsigned int x = (unsigned int)other_var;
+```
+
+In this example, we cast a negative value to an unsigned value. It's important to understand under the hood how signedness will effect the value of this variable in an unsigned fashion. For example, -1 becomes MAX_INT in the following value.
+
+#### Up Casting
+
+```c
+short other_var = -1;
+int x = (unsigned int)other_var;
+```
+
+When you cast up a variable from one size to a larger size, the signedness comes with it. For example, here, despite shorts being 16 bits and integers being 32 bits, the value -1 will be sign extended through the larger variable.
+
+#### Down Casting
+
+```c
+int x = 0xfffffefe;
+short other_var = (short)int;
+```
+
+When you cast a larger variable to a smaller variable, the number will be truncated because you cannot fit the entire size of the larger variable into the smaller variable.
+
+#### Floats
+
+```c
+float f = 3.14
+int wasafloat = (int)f;
+```
+
+Floats or doubles can be cast to other variable types. It's important to understand that under the hood, assembly instructions are generated in the FPU of the processor to execute this conversion. In other casts, the data has not been significantly manipulated to enable the cast. In this case, the IEEE704 type must be manipulated to reveal the scalar value.
 
 ## Cheatsheet
 
