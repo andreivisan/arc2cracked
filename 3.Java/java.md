@@ -266,5 +266,29 @@ Virtual Thread 1 ──▶ [Block on File Read] ~~yield~~▶ Carrier Thread 1
 Virtual Thread 2 ──▶ [Block on HTTP Call] ~~yield~~▶ Carrier Thread 2  
 ```
 
+### How "Yielding" Works
 
+**1. Blocking Operation Detected** 
 
+When a virtual thread (VT) calls a blocking I/O method (e.g., Files.readString(), HttpClient.send(), JDBC query):
+
+- The JVM intercepts the call (via "continuations").
+
+- The VT is unmounted from its carrier thread (OS thread).
+
+- The carrier thread is freed to execute other VTs.
+
+**2. 2. I/O Completion**
+
+- The OS notifies the JVM when the I/O operation completes.
+
+- The VT is rescheduled onto an available carrier thread to resume execution.
+
+```
+Virtual Thread 1 ────▶ [Block on File I/O] ~~~yield~~~▶ Carrier Thread 1  
+                        (VT parked, state saved)  
+                          │  
+                          ▼  
+[I/O completes] ──────────┘  
+Carrier Thread 2 ◀~~~resume~~~▶ Virtual Thread 1 continues  
+```
