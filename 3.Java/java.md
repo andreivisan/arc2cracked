@@ -127,7 +127,144 @@ Thread.ofVirtual().start(() -> {...});
 Executors.newVirtualThreadPerTaskExecutor();
 ```
 
+2. Pinning (When Virtual Threads Block)
 
+Synchronized blocks pin the VT to a carrier thread (hurts scalability). Use ReentrantLock instead:
+
+```java
+private final ReentrantLock lock = new ReentrantLock();
+void pinnedExample() {
+    synchronized (this) { // ❌ Pins the VT!
+        // ...
+    }
+}
+void betterExample() {
+    lock.lock(); // ✅ Doesn’t pin!
+    try { /* ... */ } finally { lock.unlock(); }
+}
+```
+
+3. Debugging
+
+Use jcmd <pid> Thread.dump_to_file -format=json <file> for JSON thread dumps (supports 100k+ threads).
+
+4.  Carrier Threads
+
+By default, the number of carrier threads = number of CPU cores.
+
+```
+Virtual Threads (Millions)  
+  ~~~~~~~~~~~~~~~~~~~~~~~  
+  |      |      |      |  
+  ▼      ▼      ▼      ▼  
+Carrier Threads (OS Threads)  
+  [ ][ ][ ][ ] (e.g., 4 cores)
+```
+
+### Common Usage & Examples
+
+1. Web Server (Before vs. After Loom)
+
+- Old
+
+```java
+ExecutorService pool = Executors.newFixedThreadPool(200); // Max 200 concurrent requests  
+pool.submit(() -> handleRequest()); // Blocks under load  
+```
+
+- New (Virtual Threads):
+
+```java
+ExecutorService vtExecutor = Executors.newVirtualThreadPerTaskExecutor();  
+vtExecutor.submit(() -> handleRequest()); // Scales to 1M+ requests  
+```
+
+2. Parallel Processing
+
+```java
+List<Future<Result>> futures = new ArrayList<>();
+try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+    for (Task task : tasks) {
+        futures.add(executor.submit(task::process));
+    }
+} // Auto-close after all tasks finish
+```
+
+Virtual threads don’t replace platform threads—they’re designed for high-throughput, blocking workloads. Use platform threads for CPU-bound tasks (e.g., video encoding).
+
+### Examples
+
+1. Partitioned DB Query + Virtual Threads
+
+Use structured concurrency (Java 21) to enforce task boundaries and avoid thread leaks.
+
+```java
+import java.util.concurrent.*;
+import jdk.incubator.concurrent.StructuredTaskScope;
+
+// Assume a database client that fetches addresses by postal code partition
+class AddressService {
+    List<Address> fetchFromPartition(String partitionKey) { /* ... */ }
+    
+    List<Address> fetchAllAddresses() throws Exception {
+        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+            // Fork subtasks for each partition
+            Future<List<Address>> partition1 = scope.fork(() -> fetchFromPartition("PART_1"));
+            Future<List<Address>> partition2 = scope.fork(() -> fetchFromPartition("PART_2"));
+            
+            scope.join(); // Wait for both to finish
+            scope.throwIfFailed(); // Propagate errors
+            
+            // Merge results (simple list concatenation)
+            List<Address> merged = new ArrayList<>();
+            merged.addAll(partition1.resultNow());
+            merged.addAll(partition2.resultNow());
+            return merged;
+        }
+    }
+}
+```
+
+2. Non-Blocking I/O Integration Examples
+
+**Core Idea:** Virtual threads automatically yield during blocking I/O, freeing the carrier thread.
+
+**Example 1: File I/O** with Files.readString()
+
+```java
+try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+    executor.submit(() -> {
+        String content = Files.readString(Path.of("large-file.txt")); // Blocks, but yields VT
+        process(content);
+    });
+}
+```
+
+**Example 2: Network Call (HTTP Client)**
+
+```java
+import java.net.http.*;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+
+try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+    executor.submit(() -> {
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.example.com/data"))
+            .build();
+        HttpResponse<String> response = client.send(request, BodyHandlers.ofString()); // Blocks, yields VT
+        process(response.body());
+    });
+}
+```
+
+**Visualization:**
+
+```
+Virtual Thread 1 ──▶ [Block on File Read] ~~yield~~▶ Carrier Thread 1  
+Virtual Thread 2 ──▶ [Block on HTTP Call] ~~yield~~▶ Carrier Thread 2  
+```
 
 
 
