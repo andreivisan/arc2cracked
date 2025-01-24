@@ -8,23 +8,31 @@ Declarative type-driven logic, unifying type checks, casting, and data extractio
 
 **1. instanceof + Auto-Casting**
 
-    - Replace:
+- Replace:
 
-    ```java
-    if (obj instanceof String) {
-        String s = (String) obj; // Manual cast
-    }
-    ```
+```java
+if (obj instanceof String) {
+    String s = (String) obj; // Manual cast
+}
+```
 
-    With
+With
 
-    ```java
-    if (obj instanceof String s) { // Auto-cast to 's'
-        // Use 's' directly
-    }
-    ```
+```java
+if (obj instanceof String s) { // Auto-cast to 's'
+    // Use 's' directly
+}
+```
 
 **2. Pattern Matching in switch**
+
+```java
+if (obj instanceof String s) { // Auto-cast to 's'
+    // Use 's' directly
+}
+```
+
+
 
 
 
