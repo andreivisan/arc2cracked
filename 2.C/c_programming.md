@@ -425,6 +425,36 @@ read(fd, &head, sizeof(head));
 printf("Database Version %d", head.version);
 ```
 
+### Reading File Metadata
+
+#### stat
+
+stat is a linux system call that asks the kernel to report information about a specific file. To learn more about the specific details of stat, try man stat.
+
+```bash
+stat ./my-db.db
+```
+
+#### Validating User Input
+
+We can use the stat family of functions, specifically fstat to check what the kernel has to say about the file, and then confirm that the metadata reported in the file head is the same.
+
+```c
+...
+struct stat dbstat = {0};
+if (fstat(fd, &stat) < 0) {
+    perror("fstat");
+    close(fd);
+    return -1;
+}
+...
+if (stat.st_size != head.size) {
+    printf("HACKER DETECTED!\n");
+    close(fd);
+    return -1;
+}
+```
+
 
 
 ## Cheatsheet
