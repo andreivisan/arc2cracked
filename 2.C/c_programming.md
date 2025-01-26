@@ -706,6 +706,31 @@ gcc -o -shared libteehee.so ./lib.c
 gcc -o main main.c -lteehee -L$(pwd)/lib
 ```
 
+### Creating a Unix Command Line Utility with Getopt
+
+Using the getopt library in the following loop, we can parse the command line arguments passed to our program to capture the intent from the user.
+
+```c
+#include <getopt.h>
+
+int main(int argc, char *argv[]) {
+	int c = 0;
+
+	while ((c = getopt(argc, argv, "nf:") != -1) {
+		switch(c) {
+			case 'f':
+				...
+				break;
+			case 'n':
+				...
+				break;
+		}
+	}
+}
+```
+
+Based on this, no we can use flags like -n or -f in our program and execute logic based on those flags!
+
 ## Cheatsheet
 
   ![C Cheatsheet](./images/C_cheatsheet_tetsuo.jpeg)
