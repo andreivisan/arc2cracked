@@ -1,6 +1,6 @@
 TARGET = bin/lla_file_db
 SRC = $(wildcard src/*.c)
-OBJ = $(patsubst src/%.c, obj/%.o. $(SRC))
+OBJ = $(patsubst src/%.c, obj/%.o, $(SRC))
 
 run: clean default 
 	./$(TARGET)
