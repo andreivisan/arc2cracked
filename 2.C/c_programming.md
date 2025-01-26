@@ -590,6 +590,86 @@ int wasafloat = (int)f;
 
 Floats or doubles can be cast to other variable types. It's important to understand that under the hood, assembly instructions are generated in the FPU of the processor to execute this conversion. In other casts, the data has not been significantly manipulated to enable the cast. In this case, the IEEE704 type must be manipulated to reveal the scalar value.
 
+### Multi Module Programming
+
+#### Modules 
+
+We can think of our database project as a set of modules that interfaces with the user. Maybe we have:
+
+- the main module: interfaces via stdin and stdout
+- the file module: interfaces with the main module via an exposed interface and the filesystem
+- the parsing module: reads data from opened files and parses them for the user
+
+#### Header Files
+
+Interfaces between the main module and the other modules are exposed in header files. Header files reveal the declarations, but not necesarily the definitions, for functions that we use in a module. Inside of a C file for a module, we will define the function, but the main module does not need to know about the internal functionality: just the inputs and outputs.
+
+A sample header file could be:
+
+```c
+#ifndef FILE_H
+#define FILE_H
+
+int open_rw_file(char *path);
+
+#endif
+```
+
+In this file, file.h, we expose the interface to the file module, without giving the definition of the function. To access these functions, we use headers in main.c
+
+```c
+...
+#include "file.h"
+```
+
+### Build Systems
+
+#### Make
+
+make is a tool that, when ran, finds a local Makefile and executes the instructions to build a particular target.
+
+Makefiles are organized around targets, rules, and instructions
+
+```make
+TARGET = bin/final
+SRC = $(wildcard src/*.c)
+OBJ = $(patsubst src/%.c, obj/%.o, $(SRC))
+
+default: $(TARGET)
+```
+
+Here, default is a target, that says to be complete, first the $(TARGET) binary must be complete. Once that is complete, the instructions within default will be ran.
+
+Make will take this logic forward and recursively run the functionality in the Makefile until the target is met.
+
+```make
+TARGET = bin/final
+SRC = $(wildcard src/*.c)
+OBJ = $(patsubst src/%.c, obj/%.o, $(SRC))
+
+default: $(TARGET)
+
+clean:
+	rm -f obj/*.o
+	rm -f bin/*
+
+$(TARGET): $(OBJ)
+	gcc -o $@ $?
+
+obj/%.o : src/%.c
+	gcc -c $< -o $@ -Iinclude
+```
+
+Wildcard will capture all of our source files as a list in src/
+
+Patsubst will execute a pattern substitution and convert all src/\*.c to obj/\*.o
+
+#### Symbols
+
+- $? represents a list of all input files given as a target
+- $< represents a single file given as a target
+- $@ represents the target of the rule
+
 ## Cheatsheet
 
   ![C Cheatsheet](./images/C_cheatsheet_tetsuo.jpeg)
