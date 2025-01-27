@@ -1,5 +1,41 @@
 # Most important features
 
+## Java 7-11 Highlights
+
+### 1.1. Java 7 Highlights
+
+1. **Diamond Operator (<>)**
+    - Eliminates the need to repeat generic type parameters on the right-hand side.
+
+2. **String in switch**
+    - Allows using String values in switch statements.
+
+3. **Try-With-Resources**
+    - Ensures automatic resource management (e.g., closing files/streams).
+    - **Functional Interfaces** - Interfaces with one abstract method (e.g., Predicate, Consumer, Supplier, Function).
+
+### 1.2 Java 8 Highlights
+
+1. **Lambdas & Functional Interfaces**
+    - Introduced functional syntax ((args) -> expression) and built-in functional interfaces (Predicate, Consumer, etc.).
+
+**Common Functional Interfaces**
+
+| Interface      | Abstract Method | Purpose                     | Example                  |
+|----------------|-----------------|-----------------------------|--------------------------|
+|Predicate<T>    | test(T t)	   |Test input, return boolean	 |s -> s.isEmpty()          |
+|Consumer<T>     | accept(T t)	   |Consume input, no return	 |s -> System.out.println(s)|
+|Supplier<T>     | get()	       |Supply a value, no input	 |() -> Math.random()       |
+|Function<T,R>   | apply(T t)	   |Transform input to output	 |s -> s.length()           |
+|UnaryOperator<T>| apply(T t)	   |Function where input = output|s -> s.toUpperCase()      |
+
+**Supplier example**
+
+```java
+Supplier<Double> randomSupplier = Math::random;
+System.out.println(randomSupplier.get()); // e.g., 0.548
+```
+
 ## Pattern Matching
 
 Declarative type-driven logic, unifying type checks, casting, and data extraction in one step.
