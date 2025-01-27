@@ -36,6 +36,42 @@ Supplier<Double> randomSupplier = Math::random;
 System.out.println(randomSupplier.get()); // e.g., 0.548
 ```
 
+- **Composing Functions**
+
+    - Predicate
+
+    ```java
+    Predicate<String> startsWithA = s -> s.startsWith("A");
+    Predicate<String> endsWithE = s -> s.endsWith("e");
+    Predicate<String> startsWithAAndEndsWithE = startsWithA.and(endsWithE);
+    ```
+
+    - Function
+
+    ```java
+    Function<Integer, Integer> timesTwo = x -> x * 2;
+    Function<Integer, Integer> squared = x -> x * x;
+    Function<Integer, Integer> composed = timesTwo.andThen(squared);
+    int result = composed.apply(3); // (3*2)^2 = 36
+    ```
+
+- **Custom Functional Interface**
+
+```java
+@FunctionalInterface
+interface StringJoiner {
+    String join(String s1, String s2);
+}
+
+// Usage
+StringJoiner joiner = (s1, s2) -> s1 + "-" + s2;
+System.out.println(joiner.join("Hello", "World")); // "Hello-World"
+```
+
+2. **Streams API**
+
+
+
 ## Pattern Matching
 
 Declarative type-driven logic, unifying type checks, casting, and data extraction in one step.
