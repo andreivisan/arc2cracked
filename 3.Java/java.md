@@ -69,8 +69,36 @@ System.out.println(joiner.join("Hello", "World")); // "Hello-World"
 ```
 
 2. **Streams API**
+    - Provides a powerful, functional-like approach to collection processing (map, filter, reduce).
 
+3. **Default Methods in Interfaces**
+    - Allows adding method implementations inside interfaces without breaking existing implementations.
 
+### 1.3 Java 9 Highlights
+
+1. **Module System (Project Jigsaw)**
+    - A new way to package and encapsulate Java classes, controlling what’s exposed to other modules.
+
+2. **Flow API**
+    - Foundation for reactive streams with Publisher, Subscriber, Subscription, Processor.
+
+3. **Minor Enhancements**
+    - try with effectively final resources (no need for a variable declared outside the try).
+
+### 1.4 Java 10 Highlights
+
+1. **var for Local Variables**
+    - Automatic type inference for local variables.
+
+2. **Performance Tweaks**
+    - Various JVM-level improvements.
+
+### 1.5 Java 11 Highlights
+
+1. **New String Methods (strip, repeat, lines)**
+2. **HttpClient (standardized from incubator in Java 9)**
+3. **var in lambda parameters**
+4. **Removal of Java EE modules (like JAXB) from the JDK**
 
 ## Pattern Matching
 
