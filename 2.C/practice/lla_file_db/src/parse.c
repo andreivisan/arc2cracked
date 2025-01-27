@@ -62,3 +62,18 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
         return -1;
     }
 }
+
+int output_file(int fd, struct dbheader_t *dbhdr) {
+    if (fd < 0) {
+        printf("Got a bad FD from the user\n");
+        return STATUS_ERROR;
+    }
+    // Host to Network Long
+    dbhdr->magic = htonl(dbhdr->magic);
+    dbhdr->filesize = htonl(dbhdr->filesize);
+    dbhdr->count = htons(dbhdr->count);
+    dbhdr->version = htons(dbhdr->version);
+    lseek(fd, 0, SEEK_SET);
+    write(fd, dbhdr, sizeof(struct dbheader_t));
+    return 0;
+}
