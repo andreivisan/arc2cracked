@@ -61,6 +61,7 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
         free(header);
         return -1;
     }
+    *headerOut = header;
 }
 
 int output_file(int fd, struct dbheader_t *dbhdr) {
