@@ -44,8 +44,20 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
     header->count = ntohs(header->count);
     header->magic = ntohl(header->magic);
     header->filesize = ntohl(header->filesize);
+    if (header->magic != HEADER_MAGIC) {
+        printf("Improper header version\n");
+        free(header);
+        return -1;
+    }
     if (header->version != 1) {
         printf("Improper header version\n");
+        free(header);
+        return -1;
+    }
+    struct stat dbstat = {0};
+    fstat(fd, &dbstat);
+    if (header ->filesize != dbstat.st_size) {
+        printf("Corrupted database\n");
         free(header);
         return -1;
     }
