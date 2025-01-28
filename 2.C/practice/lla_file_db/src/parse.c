@@ -114,3 +114,13 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
     employees[dbhdr->count-1].hours = atoi(hours);
     return STATUS_SUCCESS;
 }
+
+void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees) {
+    int i = 0;
+    for (; i < dbhdr->count; i++) {
+        printf("Employee %d\n", i);
+        printf("\tName: %s\n", employees[i].name);
+        printf("\tAddress: %s\n", employees[i].address);
+        printf("\tHours: %d\n", employees[i].hours);
+    }
+}
