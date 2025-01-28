@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <getopt.h>
 
@@ -81,7 +82,7 @@ int main(int argc, char *argv[]) {
         add_employee(header, employees, addstring);
     }
 
-    output_file(dbfd, header);
+    output_file(dbfd, header, employees);
 
     return 0;
 }

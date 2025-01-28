@@ -64,18 +64,23 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
     *headerOut = header;
 }
 
-int output_file(int fd, struct dbheader_t *dbhdr) {
+int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) {
     if (fd < 0) {
         printf("Got a bad FD from the user\n");
         return STATUS_ERROR;
     }
+    int realcount = dbhdr->count;
     // Host to Network Long
     dbhdr->magic = htonl(dbhdr->magic);
-    dbhdr->filesize = htonl(dbhdr->filesize);
+    dbhdr->filesize = htonl(sizeof(struct dbheader_t) + sizeof(struct employee_t) * realcount);
     dbhdr->count = htons(dbhdr->count);
     dbhdr->version = htons(dbhdr->version);
     lseek(fd, 0, SEEK_SET);
     write(fd, dbhdr, sizeof(struct dbheader_t));
+    for (int i = 0; i < realcount; i++) {
+        employees[i].hours = htonl(employees[i].hours);
+        write(fd, &employees[i], sizeof(struct employee_t));
+    }
     return 0;
 }
 
@@ -106,6 +111,6 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
     char *hours = strtok(NULL, ",");
     strncpy(employees[dbhdr->count-1].name, name, sizeof(employees[dbhdr->count-1].name));
     strncpy(employees[dbhdr->count-1].address, addr, sizeof(employees[dbhdr->count-1].address));
-    strncpy(employees[dbhdr->count-1].hours, hours, sizeof(employees[dbhdr->count-1].hours));
+    employees[dbhdr->count-1].hours = atoi(hours);
     return STATUS_SUCCESS;
 }
