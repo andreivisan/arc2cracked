@@ -15,18 +15,24 @@ void print_usage(char *argv[]) {
 
 int main(int argc, char *argv[]) {
     char *filepath = NULL;
+    char *addstring = NULL;
     bool newfile = false;
     //getopt case - what we get from commandline
     int c;
     int dbfd = -1;
     struct dbheader_t *header = NULL;
-    while ((c = getopt(argc, argv, "nf:")) != -1) {
+    struct employee_t *employees = NULL;
+    // f: and a: because the both have data coming after
+    while ((c = getopt(argc, argv, "nf:a:")) != -1) {
         switch (c) {
             case 'n':
                 newfile = true;
                 break;
             case 'f':
                 filepath = optarg;
+                break;
+            case 'a':
+                addstring = optarg;
                 break;
             case '?':
                 printf("Unknown option -%c\n", c);
@@ -62,6 +68,17 @@ int main(int argc, char *argv[]) {
             printf("Failed to validate database header\n");
             return -1; 
         }
+    }
+
+    if(read_employees(dbfd, header, &employees) != STATUS_SUCCESS) {
+        printf("Failed to read employees\n");
+        return 0;
+    }
+
+    if (addstring) {
+        header->count++;
+        employees = realloc(employees, header->count*(sizeof(struct employee_t)));
+        add_employee(header, employees, addstring);
     }
 
     output_file(dbfd, header);
