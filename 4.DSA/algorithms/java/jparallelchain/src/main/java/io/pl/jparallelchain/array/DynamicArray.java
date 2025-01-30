@@ -1,9 +1,16 @@
+package io.pl.jparallelchain.array;
+
+import io.pl.jparallelchain.array.error.ErrorMessage;
+
 public class DynamicArray {
     private int[] data;
     private int capacity;
     private int size;
 
     public DynamicArray(int capacity) {
+        if (capacity < 0) {
+            throw new IllegalArgumentException(String.format(ErrorMessage.NEGATIVE_CAPACITY.errorMessage(), capacity));
+        }
         this.capacity = capacity;
         data = new int[capacity];
         this.size = 0;
@@ -54,13 +61,5 @@ public class DynamicArray {
         for (int i = 0; i < this.size; i++) {
             System.out.print(String.format("%d ", this.data[i]));
         }
-    }
-
-    public static void main(String args[]) {
-        DynamicArray myArr = new DynamicArray(2);
-        myArr.append(1);
-        myArr.append(2);
-        myArr.append(3);
-        myArr.print();
     }
 }

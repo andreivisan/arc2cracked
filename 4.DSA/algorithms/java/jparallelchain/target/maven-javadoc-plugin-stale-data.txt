@@ -1,0 +1,43 @@
+@options
+@packages
+-encoding
+'UTF-8'
+-protected
+-source
+'17'
+-sourcepath
+'/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/src/main/java:/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2025. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'jparallelchain 1.0.0 API'
+-use
+-version
+-windowtitle
+'jparallelchain 1.0.0 API'
+io.pl.jparallelchain.array
+io.pl.jparallelchain.array.error
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/src/main/java/.DS_Store = 1738228059353
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/src/main/java = 1738228059352
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/generated-sources/annotations = 1738234302176
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/tag-search-index.js = 1738234305803
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/overview-tree.html = 1738234305789
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/module-search-index.js = 1738234305800
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/index.html = 1738234305793
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/package-search-index.js = 1738234305801
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/index-all.html = 1738234305808
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/allpackages-index.html = 1738234305799
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/member-search-index.js = 1738234305801
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/overview-summary.html = 1738234305810
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/help-doc.html = 1738234305813
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/element-list = 1738234305757
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/search.html = 1738234305810
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/allclasses-index.html = 1738234305798
+/Users/taavianf/personal/dev/arc2cracked/4.DSA/algorithms/java/jparallelchain/target/apidocs/type-search-index.js = 1738234305801
