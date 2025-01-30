@@ -17,6 +17,7 @@ void print_usage(char *argv[]) {
 int main(int argc, char *argv[]) {
     char *filepath = NULL;
     char *addstring = NULL;
+    char *updatestring = NULL;
     bool newfile = false;
     bool list = false;
     //getopt case - what we get from commandline
@@ -25,7 +26,7 @@ int main(int argc, char *argv[]) {
     struct dbheader_t *header = NULL;
     struct employee_t *employees = NULL;
     // f: and a: because the both have data coming after
-    while ((c = getopt(argc, argv, "nf:a:l")) != -1) {
+    while ((c = getopt(argc, argv, "nf:a:lu:")) != -1) {
         switch (c) {
             case 'n':
                 newfile = true;
@@ -38,6 +39,9 @@ int main(int argc, char *argv[]) {
                 break;
             case 'l':
                 list = true;
+                break;
+            case 'u':
+                updatestring = optarg;
                 break;
             case '?':
                 printf("Unknown option -%c\n", c);
@@ -84,6 +88,10 @@ int main(int argc, char *argv[]) {
         header->count++;
         employees = realloc(employees, header->count*(sizeof(struct employee_t)));
         add_employee(header, employees, addstring);
+    }
+
+    if (updatestring) {
+        update_employee(header, employees, updatestring);
     }
 
     if (list) {

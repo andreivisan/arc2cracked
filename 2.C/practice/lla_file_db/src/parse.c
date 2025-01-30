@@ -105,7 +105,6 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 }
 
 int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *addstring) {
-    printf("%s\n", addstring);
     char *name = strtok(addstring, ",");
     char *addr = strtok(NULL, ",");
     char *hours = strtok(NULL, ",");
@@ -113,6 +112,23 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
     strncpy(employees[dbhdr->count-1].address, addr, sizeof(employees[dbhdr->count-1].address));
     employees[dbhdr->count-1].hours = atoi(hours);
     return STATUS_SUCCESS;
+}
+
+int update_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *updatestring) {
+    char *hours = strtok(updatestring, ",");
+    char *new_name = strtok(NULL, ",");
+    char *new_addr = strtok(NULL, ",");
+    char *new_hours = strtok(NULL, ",");
+    for (int i = 0; i < dbhdr->count; i++) {
+        if (employees[i].hours == atoi(hours)) {
+            strncpy(employees[i].name, new_name, sizeof(employees[i].name));
+            strncpy(employees[i].address, new_addr, sizeof(employees[i].address));
+            employees[i].hours = atoi(new_hours);
+            return STATUS_SUCCESS;
+        }
+    }
+    printf("Employee not found\n");
+    return STATUS_ERROR;
 }
 
 void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees) {
