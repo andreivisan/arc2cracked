@@ -131,6 +131,28 @@ int update_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char
     return STATUS_ERROR;
 }
 
+int remove_employee(struct dbheader_t *dbhdr, struct employee_t **employeesOut, char *deletestring) {
+    char *hours = strtok(deletestring, ",");
+    struct employee_t *employees = *employeesOut;
+    for (int i = 0; i < dbhdr->count; i++) {
+        if (employees[i].hours == atoi(hours)) {
+            for (int j = i; i < dbhdr->count - 1; j++) {
+                employees[j] = employees[j+1];
+            }
+            dbhdr->count--;
+            struct employee_t *newmem = realloc(employees, dbhdr->count*sizeof(struct employee_t));
+            if (newmem == NULL && dbhdr->count > 0) {
+                printf("Realloc failed\n");
+                return STATUS_ERROR;
+            }
+            *employeesOut = newmem;
+            return STATUS_SUCCESS;
+        }
+    }
+    printf("Employee not found\n");
+    return STATUS_ERROR; 
+}
+
 void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees) {
     int i = 0;
     for (; i < dbhdr->count; i++) {
