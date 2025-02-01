@@ -23,3 +23,17 @@ Create project “scaffolds” for various Java project types, each with built�
 - **dependencies.json**:
     - Lists all required libraries (with versions).
     - May include metadata for transitive dependencies.
+- **commands.json**:
+    - Defines custom command combinations (much like the “scripts” section in package.json).
+    - Supports common operations like build, test, run, and even custom AI‑enhanced workflows.
+
+#### AI Integration:
+
+- **AI‑Driven Best Practices**:
+    - When scaffolding a project, the AI engine (via your local model) analyzes best practices from similar, 
+    proven projects and suggests optimal folder structures, dependency sets, and even initial custom commands.
+- **Interactive Mode**:
+    - Run in an interactive mode where the AI asks questions to tailor the scaffold to your needs.
+    
+
+
