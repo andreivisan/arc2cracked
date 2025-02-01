@@ -10,7 +10,7 @@ public class DynamicArrayTest {
     
     @Test
     public void append_CapacityDoubles_whenLimitReached() {
-        DynamicArray myArr = new DynamicArray(2);
+        DynamicArray<Integer> myArr = new DynamicArray<>(2);
         myArr.append(1);
         myArr.append(2);
         myArr.append(3);
@@ -24,7 +24,7 @@ public class DynamicArrayTest {
     public void constructor_ThrowsException_ForNegativeCapacity(int invalidCapacity) {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new DynamicArray(invalidCapacity)
+                () -> new DynamicArray<>(invalidCapacity)
         );
     }
 }
