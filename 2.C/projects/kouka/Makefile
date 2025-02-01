@@ -1,6 +1,6 @@
 # Makefile for kouka build tool
 
-TARGET = bin/kouka
+TARGET = bin/kk
 # Compiler and Flags
 CC     = gcc 
 CFLAGS = -Wall -Wextra -02 -Include
@@ -8,3 +8,46 @@ CFLAGS = -Wall -Wextra -02 -Include
 SRC    = $(wildcard src/*.c)
 OBJ    = $(patsubst src/%.c, obj/%.o, $(SRC))
 
+# Directories
+BIN_DIR   = bin
+OBJ_DIR   = obj
+# Install prefix; can be overridden on the command line, e.g.,
+# make PREFIX=/my/custom/path install
+PREFIX    ?= /usr/local
+
+# Phony targets
+.PHONY: all clean build install test
+
+# Default target: build the project
+all: build
+
+# Build target: compile and link the executable kk
+build: $(TARGET)
+
+$(TARGET): $(OBJ) | $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Compile each C source file into an object file
+$(OBJ_DIR)/%.o: src/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Create necessary directories if they don't exist
+$(BIN_DIR) $(OBJ_DIR):
+	mkdir -p $@
+
+# Clean up build artifacts (object files and binary)
+clean:
+	rm -rf $(OBJ_DIR)/*
+	rm -rf $(BIN_DIR)/*
+
+# Install target: copy kk to $(PREFIX)/bin
+install: build
+	@echo "Installing kk to $(PREFIX)/bin"
+	mkdir -p $(PREFIX)/bin
+	cp $(TARGET) $(PREFIX)/bin
+
+# Test target: run the kk executable with the "test" subcommand.
+# (Your C program should interpret "test" and run its test suite.)
+test: build
+	@echo "Running kk tests..."
+	./$(TARGET) test
