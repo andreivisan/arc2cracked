@@ -867,7 +867,7 @@ dependencies are newer. .PHONY bypasses this, forcing execution of the target's 
 
 ### Common Use Cases
 
-- Standard targets
+- **Standard targets**
 
 ```makefile
 .PHONY: all clean install
@@ -877,7 +877,7 @@ dependencies are newer. .PHONY bypasses this, forcing execution of the target's 
 - `clean`: Removes build artifacts
 - `install`: Copies binaries to system directories
 
-- Composite Workflows
+- **Composite Workflows**
 
 ```makefile
 .PHONY: rebuild
