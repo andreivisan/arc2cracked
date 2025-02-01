@@ -70,9 +70,10 @@ int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) 
         return STATUS_ERROR;
     }
     int realcount = dbhdr->count;
+    int host_size  = sizeof(struct dbheader_t) + realcount * sizeof(struct employee_t);
     // Host to Network Long
     dbhdr->magic = htonl(dbhdr->magic);
-    dbhdr->filesize = htonl(sizeof(struct dbheader_t) + sizeof(struct employee_t) * realcount);
+    dbhdr->filesize = htonl(host_size);
     dbhdr->count = htons(dbhdr->count);
     dbhdr->version = htons(dbhdr->version);
     lseek(fd, 0, SEEK_SET);
@@ -80,6 +81,11 @@ int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) 
     for (int i = 0; i < realcount; i++) {
         employees[i].hours = htonl(employees[i].hours);
         write(fd, &employees[i], sizeof(struct employee_t));
+    }
+    if (ftruncate(fd, host_size) == -1) {
+        printf("Error when truncating file\n");
+        perror("ftruncate");
+        return STATUS_ERROR;
     }
     return 0;
 }
