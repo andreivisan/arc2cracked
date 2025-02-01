@@ -846,5 +846,43 @@ for (int i = 0; i < 3; i++) {
 }
 ```
 
+===============================================
 
+LEAVES - TOOLS AND EXTRAS FOR C PROGRAMMING
+
+===============================================
+
+## .PHONY
+
+`.PHONY` in a Makefile declares targets that don't produce output files, ensuring their commands always execute 
+regardless of file timestamps or existence. This prevents conflicts when a real file shares the target's name and 
+optimizes build performance.
+
+### Core Purpose
+
+- Overrides file-based behavior: By default, make checks if a target's output file exists and whether its 
+dependencies are newer. .PHONY bypasses this, forcing execution of the target's commands
+- Avoids naming conflicts: If a file named clean exists, make clean would do nothing without .PHONY
+- Improves performance: make skips implicit rule checks for phony targets (e.g., timestamp comparisons)
+
+### Common Use Cases
+
+- Standard targets
+
+```makefile
+.PHONY: all clean install
+```
+
+- `all`: Builds all targets
+- `clean`: Removes build artifacts
+- `install`: Copies binaries to system directories
+
+- Composite Workflows
+
+```makefile
+.PHONY: rebuild
+rebuild: clean all
+```
+
+Runs clean followed by all.
 
