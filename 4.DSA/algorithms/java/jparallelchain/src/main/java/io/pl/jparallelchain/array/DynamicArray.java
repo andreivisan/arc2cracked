@@ -67,7 +67,24 @@ public class DynamicArray<T> {
      * See docs for expand method
      */
     public void bulkAppend(T[] values) {
-        // TODO: Implement bulk append
+        int bulkLen = values.length;
+        if (bulkLen == 0) {
+            return;
+        }
+        for (int i = 0; i < bulkLen; i++) {
+            append(values[i]);
+        }
+    }
+
+    /*
+     * Retrieves a value at a given index.
+     */
+    public T get(int index) {
+        if (index < 0)
+            throw new IllegalArgumentException(String.format(ErrorMessage.NEGATIVE_INDEX.errorMessage(), index));
+        if (index >= this.size)
+            throw new IllegalArgumentException(String.format(ErrorMessage.INDEX_OVERFLOW.errorMessage(), this.size, index));
+        return this.data[index];
     }
 
     /*
