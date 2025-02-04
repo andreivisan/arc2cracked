@@ -5,6 +5,7 @@
 * An isogram is a word that has no repeating letters, consecutive or non-consecutive. 
 * Implement a function that determines whether a string that contains only letters is an isogram. 
 * Assume the empty string is an isogram. Ignore letter case.
+* https://www.codewars.com/kata/5502c9e7b3216ec63c0001aa/c
 */
 
 #include <stdlib.h>
