@@ -3,7 +3,7 @@
 TARGET = bin/kk
 # Compiler and Flags
 CC     = gcc 
-CFLAGS = -Wall -Wextra -02 -Include
+CFLAGS = -Wall -Wextra -O2 -Iinclude
 # Source and Object files
 SRC    = $(wildcard src/*.c)
 OBJ    = $(patsubst src/%.c, obj/%.o, $(SRC))
