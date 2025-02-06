@@ -70,3 +70,37 @@
 - Effective C (2nd Edition) - Robert C. Seacord
 
     ![Effective C (2nd Edition)](./images/EffectiveC2e.png)
+
+### Week 4
+
+#### Mathematics
+
+- Math Academy - (https://www.mathacademy.com/learn)
+
+#### C Programming
+
+- Low Level Academy - Zero2Hero 
+- Effective C (2nd Edition) - Robert C. Seacord
+
+#### Books
+
+- Effective C (2nd Edition) - Robert C. Seacord
+
+    ![Effective C (2nd Edition)](./images/EffectiveC2e.png)
+
+### Week 5
+
+#### Mathematics
+
+- [Calculus 1A: Differentiation](https://openlearninglibrary.mit.edu/courses/course-v1:MITx+18.01.1x+2T2019/about)
+
+#### C Programming
+
+- Building a Java build tool in C
+- Effective C (2nd Edition) - Robert C. Seacord
+
+#### Books
+
+- Effective C (2nd Edition) - Robert C. Seacord
+
+    ![Effective C (2nd Edition)](./images/EffectiveC2e.png)
