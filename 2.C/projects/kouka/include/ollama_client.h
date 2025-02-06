@@ -13,6 +13,7 @@ typedef struct ResponseBuffer {
 } ResponseBuffer;
 
 size_t write_callback(void *contents, size_t size, size_t no_memb, void *user_data);
+int parse_ollama_response(ResponseBuffer *buffer);
 void call_ollama(const char *prompt);
 
 #endif

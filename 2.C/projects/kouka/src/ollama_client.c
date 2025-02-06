@@ -1,3 +1,4 @@
+#include "common.h"
 #include "ollama_client.h"
 
 size_t write_callback(void *contents, size_t size, size_t no_memb, void *user_data)
@@ -12,7 +13,11 @@ size_t write_callback(void *contents, size_t size, size_t no_memb, void *user_da
     memcpy(&(buffer->data[buffer->size]), contents, real_size);
     buffer->size += real_size;
     buffer->data[buffer->size] = '\0';
+    parse_ollama_response(buffer);
+    return real_size;
+}
 
+int parse_ollama_response(ResponseBuffer *buffer) {
     // Now parse only newly added text
     // i.e. from buffer->data + buffer->parsed_offset up to buffer->data + buffer->size
     char *start = buffer->data + buffer->parsed_offset;
@@ -20,13 +25,12 @@ size_t write_callback(void *contents, size_t size, size_t no_memb, void *user_da
     const char *search_key = "response\":\"";
     char *found = NULL;
     while ((found = strstr(start, search_key)) && found < end) {
-        // Move pointer to just after response":"
         found += strlen(search_key);
-        // found = first character of the actual response
-        // we read until the next double quote
         // Find the closing quote
         char *closing_quote = strchr(found, '"');
-        if (!closing_quote || closing_quote > end) break;
+        if (!closing_quote || closing_quote > end) {
+            break;
+        }
         // Print the substring [found, closing_quote)
         for (char *p = found; p < closing_quote; p++) {
             fputc(*p, stdout);
@@ -35,11 +39,10 @@ size_t write_callback(void *contents, size_t size, size_t no_memb, void *user_da
         // advance 'start' so we keep searching after this closing quote
         start = closing_quote + 1;
     }
-
     // Update parsed_offset so next time we skip all the old data
     // We only update if 'start' advanced beyond the old offset
     buffer->parsed_offset = start - buffer->data;
-    return real_size;
+    return STATUS_SUCCESS;
 }
 
 void call_ollama(const char *prompt) {
