@@ -94,6 +94,10 @@
 - Building a Java build tool in C
 - Effective C (2nd Edition) - Robert C. Seacord
 
+#### DSA
+
+- Data Structures and Algorithms in Java - building a Java library for super fast DSA
+
 #### Books
 
 - Effective C (2nd Edition) - Robert C. Seacord
