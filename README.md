@@ -68,9 +68,6 @@
 #### Books
 
 - Effective C (2nd Edition) - Robert C. Seacord
-
-    ![Effective C (2nd Edition)](./images/EffectiveC2e.png)
-
 ### Week 4
 
 #### Mathematics
@@ -86,8 +83,6 @@
 
 - Effective C (2nd Edition) - Robert C. Seacord
 
-    ![Effective C (2nd Edition)](./images/EffectiveC2e.png)
-
 ### Week 5
 
 #### Mathematics
@@ -102,5 +97,3 @@
 #### Books
 
 - Effective C (2nd Edition) - Robert C. Seacord
-
-    ![Effective C (2nd Edition)](./images/EffectiveC2e.png)
