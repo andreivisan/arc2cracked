@@ -64,17 +64,6 @@ void json_parse(JsonParser *parser, const char *chunk, size_t length) {
                         parser->current_key[parser->key_pos++] = curr_chunk;
                     }
                 } else if (parser->parsing_response_value) {
-                    // Building value
-                    // ---------------------------------------------------------
-                    // PARTIAL STREAMING: Call the callback with each character
-                    // if we've identified "found_response" is relevant
-                    // ---------------------------------------------------------
-                    if (parser->found_response && parser->callback) {
-                        parser->callback(&curr_chunk, 1);
-                        fflush(stdout);
-                    }
-
-                    // Also keep storing in parser->value_buffer
                     if (parser->value_pos < sizeof(parser->value_buffer) - 1) {
                         parser->value_buffer[parser->value_pos++] = curr_chunk;
                     }
