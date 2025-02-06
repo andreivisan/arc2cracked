@@ -30,18 +30,14 @@ static void response_callback(const char *value, size_t length) {
 int parse_ollama_response(ResponseBuffer *buffer) {
     static JsonParser parser;
     static int parser_initialized = 0;
-    
     if (!parser_initialized) {
         json_parser_init(&parser, response_callback);
         parser_initialized = 1;
     }
-    
     // Process only new data since last parse
     char *new_data_start = buffer->data + buffer->parsed_offset;
     size_t new_data_length = buffer->size - buffer->parsed_offset;
-    
     json_parse(&parser, new_data_start, new_data_length);
-    
     // Update parsed offset to mark this data as processed
     buffer->parsed_offset = buffer->size;
     return STATUS_SUCCESS;
