@@ -4,6 +4,7 @@ TARGET = bin/kk
 # Compiler and Flags
 CC     = gcc 
 CFLAGS = -Wall -Wextra -O2 -Iinclude
+LDFLAGS = -lcurl
 # Source and Object files
 
 # Directories
@@ -31,7 +32,7 @@ all: build
 build: $(TARGET)
 
 $(TARGET): $(OBJ) | $(BIN_DIR)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 # Compile each C source file into an object file
 $(OBJ_DIR)/%.o: src/%.c | $(OBJ_DIR)

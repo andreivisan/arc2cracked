@@ -9,6 +9,7 @@
 typedef struct ResponseBuffer {
     char *data;
     size_t size;
+    size_t parsed_offset;
 } ResponseBuffer;
 
 size_t write_callback(void *contents, size_t size, size_t no_memb, void *user_data);
