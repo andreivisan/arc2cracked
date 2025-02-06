@@ -1,47 +1,49 @@
 #include "common.h"
+#include "kk_json.h"
 #include "ollama_client.h"
 
 size_t write_callback(void *contents, size_t size, size_t no_memb, void *user_data)
 {
     size_t real_size = size * no_memb;
     ResponseBuffer *buffer = (ResponseBuffer *)user_data;
-    // Reallocate buffer->data
+    
+    // Reallocate buffer
     char *ptr = realloc(buffer->data, buffer->size + real_size + 1);
     if(!ptr) return 0;
     buffer->data = ptr;
-    // Copy the newly arrived chunk into the end of buffer->data
     memcpy(&(buffer->data[buffer->size]), contents, real_size);
     buffer->size += real_size;
     buffer->data[buffer->size] = '\0';
+    
+    // Parse ONLY the new data
     parse_ollama_response(buffer);
+    
     return real_size;
 }
 
-int parse_ollama_response(ResponseBuffer *buffer) {
-    // Now parse only newly added text
-    // i.e. from buffer->data + buffer->parsed_offset up to buffer->data + buffer->size
-    char *start = buffer->data + buffer->parsed_offset;
-    char *end   = buffer->data + buffer->size;
-    const char *search_key = "response\":\"";
-    char *found = NULL;
-    while ((found = strstr(start, search_key)) && found < end) {
-        found += strlen(search_key);
-        // Find the closing quote
-        char *closing_quote = strchr(found, '"');
-        if (!closing_quote || closing_quote > end) {
-            break;
-        }
-        // Print the substring [found, closing_quote)
-        for (char *p = found; p < closing_quote; p++) {
-            fputc(*p, stdout);
-            fflush(stdout);
-        }
-        // advance 'start' so we keep searching after this closing quote
-        start = closing_quote + 1;
+static void response_callback(const char *value, size_t length) {
+    for (size_t i = 0; i < length; i++) {
+        fputc(value[i], stdout);
     }
-    // Update parsed_offset so next time we skip all the old data
-    // We only update if 'start' advanced beyond the old offset
-    buffer->parsed_offset = start - buffer->data;
+}
+
+int parse_ollama_response(ResponseBuffer *buffer) {
+    static JsonParser parser;
+    static int parser_initialized = 0;
+    
+    if (!parser_initialized) {
+        json_parser_init(&parser, response_callback);
+        parser_initialized = 1;
+    }
+    
+    // Process only new data since last parse
+    char *new_data_start = buffer->data + buffer->parsed_offset;
+    size_t new_data_length = buffer->size - buffer->parsed_offset;
+    
+    json_parse(&parser, new_data_start, new_data_length);
+    
+    // Update parsed offset to mark this data as processed
+    buffer->parsed_offset = buffer->size;
     return STATUS_SUCCESS;
 }
 
@@ -76,6 +78,7 @@ void call_ollama(const char *prompt) {
 }
 
 int main() {
+    setbuf(stdout, NULL);
     curl_global_init(CURL_GLOBAL_DEFAULT);
     call_ollama("Please give me the structure of a Java jar application in JSON format");
     curl_global_cleanup();
