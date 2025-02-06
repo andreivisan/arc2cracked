@@ -5,12 +5,18 @@ TARGET = bin/kk
 CC     = gcc 
 CFLAGS = -Wall -Wextra -O2 -Iinclude
 # Source and Object files
-SRC    = $(wildcard src/*.c)
-OBJ    = $(patsubst src/%.c, obj/%.o, $(SRC))
 
 # Directories
 BIN_DIR   = bin
 OBJ_DIR   = obj
+TEST_DIR  = test
+
+SRC    = $(wildcard src/*.c)
+OBJ    = $(patsubst src/%.c, obj/%.o, $(SRC))
+TEST_SOURCES := $(wildcard $(TEST_DIR)/*.c)
+TEST_OBJECTS := $(patsubst $(TEST_DIR)/%.c, $(TEST_DIR)/%.o, $(TEST_SOURCES))
+TEST_EXES := $(TEST_SOURCES:$(TEST_DIR)/%.c=$(TEST_DIR)/%)
+
 # Install prefix; can be overridden on the command line, e.g.,
 # make PREFIX=/my/custom/path install
 PREFIX    ?= /usr/local
@@ -48,6 +54,13 @@ install: build
 
 # Test target: run the kk executable with the "test" subcommand.
 # (Your C program should interpret "test" and run its test suite.)
-test: build
-	@echo "Running kk tests..."
-	./$(TARGET) test
+test: $(TEST_EXES)
+	@echo "Running all tests..."
+	@for test in $(TEST_EXES); do \
+		echo "Testing: $$test"; \
+		$$test || exit 1; \
+	done
+
+# Rule to build test executables
+$(TEST_DIR)/%: $(TEST_DIR)/%.o $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^

@@ -13,6 +13,19 @@ size_t write_callback(void *contents, size_t size, size_t no_memb, void *user_da
     return real_size;
 }
 
+void call_ollama(const char *prompt) {
+    CURL *curl = curl_easy_init();
+    if (!curl) {
+        fprintf(stderr, "Failed to initialize curl\n");
+        return;
+    }
+    ResponseBuffer buffer = {0};
+    char json_data[1024];
+    snprintf(json_data, sizeof(json_data), "{\"model\":\"qwen2.5-coder:32b\",\"prompt\":\"%s\"}", prompt);
+    // initialize Ollama request headers
+    struct curl_slist *headers = NULL;
+}
+
 
 
 
