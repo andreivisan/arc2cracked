@@ -28,15 +28,14 @@ public class DynamicArrayTest {
         Assertions.assertEquals(myArr.get(0), "Test");
     }
 
-    //TODO Test get and test error throwing for get
+    @Test
+    public void get_ValidIndex() {
+        DynamicArray<Integer> myArr = new DynamicArray<>(2);
+        myArr.append(1);
+        myArr.append(2);
+        myArr.append(3);
 
-    @ParameterizedTest
-    @ValueSource(ints = {-100, -2, -999})
-    public void constructor_ThrowsException_ForNegativeCapacity(int invalidCapacity) {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new DynamicArray<>(invalidCapacity)
-        );
+        Assertions.assertEquals(myArr.get(1), 2);
     }
 
     @Test
@@ -48,5 +47,40 @@ public class DynamicArrayTest {
 
         myArr.remove(2);
         myArr.print();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-100, -2, -999})
+    public void constructor_ThrowsException_ForNegativeCapacity(int invalidCapacity) {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new DynamicArray<>(invalidCapacity)
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-2, 4})
+    public void get_ThrowsException_InvalidIndex(int invalidIdx) {
+        DynamicArray<Integer> myArr = new DynamicArray<>(2);
+        myArr.append(1);
+        myArr.append(2);
+        myArr.append(3); 
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> myArr.get(invalidIdx)
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-2, 4})
+    public void remove_ThrowsException_InvalidIndex(int invalidIdx) {
+        DynamicArray<Integer> myArr = new DynamicArray<>(2);
+        myArr.append(1);
+        myArr.append(2);
+        myArr.append(3); 
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> myArr.remove(invalidIdx)
+        );
     }
 }
