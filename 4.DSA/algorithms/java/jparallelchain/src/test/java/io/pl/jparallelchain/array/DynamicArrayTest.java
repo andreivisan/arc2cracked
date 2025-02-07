@@ -38,4 +38,15 @@ public class DynamicArrayTest {
                 () -> new DynamicArray<>(invalidCapacity)
         );
     }
+
+    @Test
+    public void remove_ValidIndex() {
+        DynamicArray<Integer> myArr = new DynamicArray<>(2);
+        myArr.append(1);
+        myArr.append(2);
+        myArr.append(3);
+
+        myArr.remove(2);
+        myArr.print();
+    }
 }

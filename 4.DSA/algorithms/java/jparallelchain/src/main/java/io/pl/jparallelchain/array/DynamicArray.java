@@ -89,9 +89,26 @@ public class DynamicArray<T> {
 
     /*
      * Removes a value at a given index
+     * TODO: maybe a fast version would be to copy each element minus the deleted element
+     * to a new array using the GPU
      */
     public void remove(int index) {
-        // TODO: Implement remove
+        if (index < 0)
+            throw new IllegalArgumentException(String.format(ErrorMessage.NEGATIVE_INDEX.errorMessage(), index));
+        if (index >= this.size)
+            throw new IllegalArgumentException(String.format(ErrorMessage.INDEX_OVERFLOW.errorMessage(), this.size, index));
+        // Added this for optimisation, otherwise the for loop
+        // would loop through all elements until the last
+        if (index == this.size - 1) {
+            this.data[this.size - 1] = null;
+            this.size--;
+            return;
+        }
+        for (int i = index; i < this.size - 1; i++) {
+            this.data[i] = this.data[i+1];
+        }
+        this.data[this.size - 1] = null;
+        this.size--;
     }
 
     /*
