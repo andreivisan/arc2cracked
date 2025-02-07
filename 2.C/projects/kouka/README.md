@@ -34,6 +34,25 @@ Create project “scaffolds” for various Java project types, each with built�
     proven projects and suggests optimal folder structures, dependency sets, and even initial custom commands.
 - **Interactive Mode**:
     - Run in an interactive mode where the AI asks questions to tailor the scaffold to your needs.
-    
+
+## Architecture
+
+```text
+User Input  
+  │  
+  ▼  
+CLI → AI Orchestrator  
+  │  
+  ├──→ Project Structure Agent → Knowledge Base  
+  ├──→ Dependency Agent → Maven Central API  
+  ├──→ Configuration Agent → Template Engine  
+  └──→ Validation Agent → Security DB  
+  │  
+  ▼  
+File Generator → Project Directory  
+  │  
+  ▼  
+User Feedback → Retraining Pipeline  
+```
 
 

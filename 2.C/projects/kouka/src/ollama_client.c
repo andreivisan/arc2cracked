@@ -40,7 +40,7 @@ int parse_ollama_response(ResponseBuffer *buffer) {
     return STATUS_SUCCESS;
 }
 
-void call_ollama(const char *prompt) {
+void call_ollama(const char *model, const char *prompt) {
     CURL *curl = curl_easy_init();
     if (!curl) {
         fprintf(stderr, "Failed to initialize curl\n");
@@ -48,7 +48,7 @@ void call_ollama(const char *prompt) {
     }
     ResponseBuffer buffer = {0};
     char json_data[1024];
-    snprintf(json_data, sizeof(json_data), "{\"model\":\"qwen2.5-coder:32b\",\"prompt\":\"%s\"}", prompt);
+    snprintf(json_data, sizeof(json_data), "{\"model\":\"%s\",\"prompt\":\"%s\"}", model, prompt);
     // initialize Ollama request headers
     struct curl_slist *headers = NULL;
     // add headers
@@ -73,7 +73,7 @@ void call_ollama(const char *prompt) {
 int main() {
     setbuf(stdout, NULL);
     curl_global_init(CURL_GLOBAL_DEFAULT);
-    call_ollama("Please give me the structure of a Java jar application in JSON format");
+    call_ollama("qwen2.5-coder:14b", "Please give me the structure of a Java Spring Web application in JSON format");
     curl_global_cleanup();
     return 0;
 }
