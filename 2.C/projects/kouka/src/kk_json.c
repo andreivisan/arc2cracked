@@ -2,14 +2,19 @@
 #include <string.h>
 #include <ctype.h>
 
-void json_parser_init(JsonParser *parser, json_value_callback callback) {
+void json_parser_init(JsonParser *parser, json_value_callback callback, void *agent_response) {
     memset(parser, 0, sizeof(JsonParser));
     parser->callback = callback;
+    parser->agent_response = agent_response;
 }
 
 static void handle_json_value(JsonParser *parser) {
     if (parser->found_response && parser->depth == 1) {
-        parser->callback(parser->value_buffer, parser->value_pos);
+        // Null-terminate the value_buffer.
+        if (parser->value_pos < sizeof(parser->value_buffer)) {
+            parser->value_buffer[parser->value_pos] = '\0';
+        }
+        parser->callback(parser->value_buffer, parser->value_pos, parser->agent_response);
     }
     parser->value_pos = 0;
 }
@@ -35,7 +40,7 @@ void json_parse(JsonParser *parser, const char *chunk, size_t length) {
                                 parser->value_buffer[parser->value_pos++] = '?';
                             }
                             break;
-                        default:   parser->value_buffer[parser->value_pos++] = curr_chunk; break;
+                        default: parser->value_buffer[parser->value_pos++] = curr_chunk; break;
                 }
             }
             parser->escape_next = 0;

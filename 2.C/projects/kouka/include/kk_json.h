@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
-typedef void (*json_value_callback)(const char *value, size_t length);
+typedef void (*json_value_callback)(const char *value, size_t length, void *agent_response);
 
 typedef struct {
     int in_string;
@@ -19,9 +19,10 @@ typedef struct {
     size_t value_pos;
     json_value_callback callback;
     int found_response;
+    void *agent_response;
 } JsonParser;
 
-void json_parser_init(JsonParser *parser, json_value_callback callback);
+void json_parser_init(JsonParser *parser, json_value_callback callback, void *agent_response);
 void json_parse(JsonParser *parser, const char *chunk, size_t length);
 
 #endif
