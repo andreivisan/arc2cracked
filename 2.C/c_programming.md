@@ -890,7 +890,7 @@ Runs clean followed by all.
 
 ### Pages and virtual memory
 
-In most modern operating systems, memory is divided into ```pages```. A age is simply a 
+In most modern operating systems, memory is divided into ```pages```. A page is simply a 
 fixed-size block of memory managed by the OS's virtual memory subsystem, and a common page size
 on many systems is 4 KB (4096 bytes).
 
@@ -991,4 +991,63 @@ in tiny capacitors.
 ### The tutorial
 
 A process runs within its own virtual address space that's distinct from the virtual address spaces of other
-processes.
+processes. This virtual address space typically comprises of 5 sections:
+
+- **Text section**: The part that contains the binary instructions to be executed by the processor.
+- **Data section**: Contains non-zero initialized static data.
+- **BSS (Block Started by Symbol)**: Contains zero-initialized static data. Static data uninitialized in 
+program is initialized 0 and goes here.
+
+```text
++------------------+            +----------------------+
+|  Process Space   |            |  Other Process Space |
+| (Virtual Memory) |            | (Virtual Memory)     |
++-----+-----+------+            +------+-----+---------+
+      |     |                          |
+      |     +------------------------------------+
+      |                                       (In reality, each process has its
+      |                                       own virtual space. This arrow
+      |                                       just shows that we could have many.)
+      v
+   +----------------------------+
+   |   Page Tables (per CPU)   |
+   +----------------------------+
+      |
+      | (The OS populates these
+      |  tables to map virtual
+      |  addresses to physical
+      |  addresses.)
+      v
+   +-----------------------------------------------------+
+   |                 Memory Management Unit (MMU)        |
+   |  (Inside CPU, uses Page Tables to translate Virtual |
+   |   addresses → Physical addresses on each memory op) |
+   +-----------------------------------------------------+
+      |
+      | (Once the MMU knows the physical address,
+      |  it sends that address to the memory controller.)
+      v
+   +-------------------------------------+
+   |  CPU / Memory Controller (Northbridge or integrated)  |
+   +-------------------------------------+
+      |
+      | (Physical Address, e.g. 0x9ABCD000 + offset)
+      v
+   +-------------------------------------------------------+
+   |          System Bus / Memory Bus (Electrical)         |
+   |   (Address lines, Data lines, Control signals like     |
+   |    RAS, CAS, WE, etc.)                                 |
+   +-------------------------------------------------------+
+      |
+      v
+   +-----------------+
+   |  DRAM Modules   |
+   | (Physical RAM)  |
+   +-----------------+
+      | (Internally: row/column decoding,
+      |  storage cells, charge in capacitors.)
+      v
+  (Electrical impulses flip bits in RAM cells)
+```
+
+
