@@ -886,3 +886,109 @@ rebuild: clean all
 
 Runs clean followed by all.
 
+## Memory Allocators 101 - Write a simple memory allocator
+
+### Pages and virtual memory
+
+In most modern operating systems, memory is divided into ```pages```. A age is simply a 
+fixed-size block of memory managed by the OS's virtual memory subsystem, and a common page size
+on many systems is 4 KB (4096 bytes).
+
+To align a page boundary, means ensuring that the starting address of the allocated
+memory is an exact multiple of the system's page size. 
+
+Why page alignment matters?
+
+- **Performance/Hardware reasons**
+- **System calls/OS interactions**: When you request memory directly from the OS 
+(e.g., via mmap or a similar low-level call), you typically have to request multiples of the page size.
+- **Special use cases**: Sometimes you may need memory that’s aligned for DMA (Direct Memory Access) 
+or other low-level hardware operations.
+
+### Virtual memory
+
+Most modern operating systems (Windows, Linux, macOS, etc.) use a “virtual memory” mechanism. 
+This means that every process gets its own (seemingly large, contiguous) address space, independent 
+of other processes. Internally, the OS works behind the scenes with the CPU to map virtual addresses 
+to actual physical addresses.
+
+### Page Tables and the OS
+
+Inside your CPU, there’s a hardware component called the Memory Management Unit (MMU). 
+It uses page tables that the operating system sets up. These tables describe how virtual pages 
+map to physical pages of RAM. For example:
+
+- Virtual page #5 in a process → Physical page #200.
+- Virtual page #6 in a process → Physical page #89.
+
+The OS is in control of these mappings. It can even mark some pages as being located on disk (in swap space) 
+or shared between processes, etc.
+
+- The OS configures page tables in the CPU (via the Memory Management Unit, MMU).
+- When your code accesses a virtual address, the MMU consults the page tables to figure out 
+the corresponding physical address.
+- The CPU then places that physical address on the address bus, and the memory controller 
+talks to RAM at that location.
+
+Imagine your physical memory as a huge set of boxes, each box can hold 4 KB of data. Your OS is the manager 
+who decides how these boxes get handed out. In your process’s “virtual world,” you see a nice row of addresses 
+from, say, 0x00000000 to 0xFFFFFFFF (in a 32-bit system), but really each “page” of that virtual world is 
+mapped to one of the OS-managed physical boxes.
+
+If you draw a line in that big row of addresses every 4096 bytes, each line you draw corresponds to a “page boundary.” 
+Aligning on a page boundary means you’re starting your data exactly at one of those lines.
+
+### Electrical Signals on the RAM Modules
+
+Here’s a simplified view of what happens electrically in, say, a modern DRAM module (e.g., DDR4, DDR5):
+
+- **Address bus**: A set of lines (wires) that carry bits of the physical address.
+- **Control signals**: Signals like Row Address Strobe (RAS), Column Address Strobe (CAS), 
+Chip Select (CS), Write Enable (WE), etc.
+- **Data bus**: The lines used to send or receive the actual data bits.
+
+### How is the OS Involved Here?
+
+- The OS doesn’t typically instruct the memory chip line-by-line. That job is done automatically 
+by the CPU’s memory controller.
+- The OS’s job is to set up the page tables that tell the MMU how to convert virtual addresses 
+to physical addresses.
+- Once that’s done, normal load/store instructions in user code automatically end up driving the 
+physical signals in the memory hardware.
+
+### Down to the Impulses (Conceptually)
+
+If you want to visualize the “electrical impulses,” think of it like this:
+
+1. Your code runs an instruction like mov eax, [0x7ffdf3c0] (simplifying the syntax):
+    - That’s a request to read from the virtual address 0x7ffdf3c0.
+
+2. The CPU’s MMU looks up the page table entry for the page containing 0x7ffdf3c0:
+    - Maybe it sees that this virtual page translates to physical page frame #1234, 
+    offset 0x3C0 within that page.
+    - If page frame #1234 corresponds to a physical address range starting at, say, 0x9ABCD000, 
+    then the actual physical address is 0x9ABCD000 + 0x3C0.
+
+3. The CPU then electrically places 0x9ABCD3C0 on the address bus (in binary form across the address lines), 
+and sets the read control signals.
+
+4. The memory controller decodes that address. It determines which DRAM module/bank/row/column must be accessed.
+
+5. The memory controller asserts signals on the RAM pins:
+    - The row bits (part of 0x9ABCD3C0) go out on the address lines, RAS is pulsed.
+    - The column bits go out, CAS is pulsed.
+    - WE is not asserted (because it’s a read).
+
+6. The RAM module, seeing these signals, locates the correct row and column in its internal array of cells, 
+and places the requested data on the data lines.
+
+7. The CPU reads the data lines, stores the result in eax (completing the mov instruction).
+
+All of those signals on the address bus, data bus, and control lines are literally changes in voltage—electrical impulses. 
+That’s as low-level as it gets: voltages and timing signals that DRAM responds to, reading or writing charge 
+in tiny capacitors.
+
+### The tutorial
+
+A process runs within its own virtual address space that's distinct from the virtual address spaces of other
+processes.
