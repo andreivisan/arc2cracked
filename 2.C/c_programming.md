@@ -997,6 +997,8 @@ processes. This virtual address space typically comprises of 5 sections:
 - **Data section**: Contains non-zero initialized static data.
 - **BSS (Block Started by Symbol)**: Contains zero-initialized static data. Static data uninitialized in 
 program is initialized 0 and goes here.
+- **Heap**: Contains the dynamically allocated data.
+- **Stack**: Contains your automatic variables, function arguments, copy of base pointer etc.
 
 ```text
 +------------------+            +----------------------+
@@ -1049,5 +1051,7 @@ program is initialized 0 and goes here.
       v
   (Electrical impulses flip bits in RAM cells)
 ```
+
+![memlayout](./images/memlayout.jpg)
 
 
