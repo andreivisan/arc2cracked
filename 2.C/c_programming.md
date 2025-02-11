@@ -1066,3 +1066,25 @@ manipulate the program break.
 - Calling ```sbrk(x)``` with a positive value increments brk by x bytes, as a result allocating memory.
 - Calling ```sbrk(-x)``` with a negative value decrements brk by x bytes, as a result releasing memory.
 - On failure, sbrk() returns ```(void*) -1```.
+- sbrk() is not our best buddy in 2015. There are better alternatives like mmap() available today.
+- Moreover, we need to understand that the heap memory the operating system has provided is contiguous. 
+So we can only release memory which is at the end of the heap. We can’t release a block of memory in the middle to the OS. 
+Imagine your heap to be something like a long loaf of bread that you can stretch and shrink at one end, but you have to 
+keep it in one piece.
+- To address this issue of not being able to release memory that’s not at the end of the heap, we will make a distinction 
+between freeing memory and releasing memory.
+- From now on, freeing a block of memory does not necessarily mean we release memory back to OS. It just means that we keep 
+the block marked as free. This block marked as free may be reused on a later malloc() call. Since memory not at the end 
+of the heap can’t be released, this is the only way ahead for us.
+- So now, we have two things to store for every block of allocated memory (we store in struct header_t):
+    1. size
+    2. Whether a block is free or not-free?
+- To store this information, we will add a header to every newly allocated memory block.
+- The idea is simple. When a program requests for size bytes of memory, we calculate total_size = header_size + size, 
+and call sbrk(total_size). We use this memory space returned by sbrk() to fit in both the header and the actual memory block. 
+The header is internally managed, and is kept completely hidden from the calling program.
+- Now, each one of our memory blocks will look like:
+
+![memblock][./images/node.png]
+
+
