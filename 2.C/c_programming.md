@@ -1085,6 +1085,6 @@ and call sbrk(total_size). We use this memory space returned by sbrk() to fit in
 The header is internally managed, and is kept completely hidden from the calling program.
 - Now, each one of our memory blocks will look like:
 
-![memblock][./images/node.png]
+![memblock](./images/node.png)
 
 
