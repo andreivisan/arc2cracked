@@ -1101,6 +1101,10 @@ larger size of its members. So the union guarantees that the end of the header i
 is where the actual memory block begins and therefore the memory provided to the caller by the allocator will be aligned 
 to 16 bytes.
 
+- To prevent two or more threads from concurrently accessing memory, we will put a basic locking mechanism in place.
+- We’ll have a global lock, and before every action on memory you have to acquire the lock, and once you are done you 
+have to release the lock.
+
 
 
 
