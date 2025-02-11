@@ -1054,4 +1054,15 @@ program is initialized 0 and goes here.
 
 ![memlayout](./images/memlayout.jpg)
 
-
+- As you can see in the image, the stack and the heap grow in the opposite directions.
+- Sometimes the data, bss and heap sections are collectively referred to as the “data segment”,
+the end of which is demarcated by a pointer named program break or brk.
+- That is, brk points to the end of the heap.
+- Now if we want to allocate more memory in the heap, we need to request the system to increment brk. 
+Similarly, to release memory we need to request the system to decrement brk.
+- Assuming we run Linux (or a Unix-like system), we can make use of sbrk() system call that lets us 
+manipulate the program break.
+- Calling ```sbrk(0)``` gives the current address of program break.
+- Calling ```sbrk(x)``` with a positive value increments brk by x bytes, as a result allocating memory.
+- Calling ```sbrk(-x)``` with a negative value decrements brk by x bytes, as a result releasing memory.
+- On failure, sbrk() returns ```(void*) -1```.
