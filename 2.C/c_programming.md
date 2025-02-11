@@ -1087,4 +1087,20 @@ The header is internally managed, and is kept completely hidden from the calling
 
 ![memblock](./images/node.png)
 
+- We can’t be completely sure the blocks of memory allocated by our malloc is contiguous. Imagine the calling program 
+has a foreign sbrk(), or there’s a section of memory mmap()ed in between our memory blocks. 
+We also need a way to traverse through our blocks for memory (why traverse? we will get to know when we look at the 
+implementation of free()). So to keep track of the memory allocated by our malloc, we will put them in a linked list. 
+Our linked list of memory blocks like this:
+
+![nodelist](./images/nodes.png)
+
+- Let’s wrap the entire header struct in a union along with a stub variable of size 16 bytes. 
+This makes the header end up on a memory address aligned to 16 bytes. Recall that the size of a union is the 
+larger size of its members. So the union guarantees that the end of the header is memory aligned. The end of the header 
+is where the actual memory block begins and therefore the memory provided to the caller by the allocator will be aligned 
+to 16 bytes.
+
+
+
 
