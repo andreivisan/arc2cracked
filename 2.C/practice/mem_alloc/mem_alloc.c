@@ -87,3 +87,16 @@ void free(void *block) {
     header->s.is_free = 1;
 	pthread_mutex_unlock(&global_malloc_lock);
 }
+
+void *calloc(size_t num, size_t numsize) {
+    size_t size;
+    void *block;
+    if (!num || !numsize) return NULL;
+    size = num * numsize;
+    /* check mul overflow */
+    if (numsize != size/num) return NULL;
+    block = malloc(size);
+    if (!block) return null;
+    memset(block, 0, size);
+    return block;
+}

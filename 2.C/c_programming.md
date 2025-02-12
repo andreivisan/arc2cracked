@@ -1161,3 +1161,9 @@ To release this much amount of memory, we call sbrk() with the negative of this 
 In the case the block is not the last one in the linked list, we simply set the is_free 
 field of its header. This is the field checked by get_free_block() before actually calling 
 sbrk() on a malloc().
+
+### calloc()
+
+The calloc(num, nsize) function allocates memory for an array of num elements of nsize 
+bytes each and returns a pointer to the allocated memory. Additionally, the memory is 
+all set to zeroes.
