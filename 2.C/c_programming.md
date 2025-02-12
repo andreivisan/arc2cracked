@@ -1105,6 +1105,34 @@ to 16 bytes.
 - We’ll have a global lock, and before every action on memory you have to acquire the lock, and once you are done you 
 have to release the lock.
 
+### Malloc code explanation
 
+We check if the requested size is zero. If it is, then we return NULL.
+For a valid size, we first acquire the lock. The we call get_free_block() - 
+it traverses the linked list and see if there already exist a block of memory 
+that is marked as free and can accomodate the given size. Here, we take a first-fit 
+approach in searching the linked list.
+
+If a sufficiently large free block is found, we will simply mark that block as not-free, 
+release the global lock, and then return a pointer to that block. In such a case, the 
+header pointer will refer to the header part of the block of memory we just found by 
+traversing the list. Remember, we have to hide the very existence of the header to an 
+outside party. When we do (header + 1), it points to the byte right after the end of the 
+header. This is incidentally also the first byte of the actual memory block, the one the 
+caller is interested in. This is cast to (void*) and returned.
+
+If we have not found a sufficiently large free block, then we have to extend the heap by 
+calling sbrk(). The heap has to be extended by a size that fits the requested size as 
+well a header. For that, we first compute the total size: 
+total_size = sizeof(header_t) + size;. 
+Now, we request the OS to increment the program break: sbrk(total_size).
+
+In the memory thus obtained from the OS, we first make space for the header. 
+In C, there is no need to cast a void* to any other pointer type, it is always safely 
+promoted. That’s why we don’t explicitly do: ```header = (header_t *)block;
+We fill this header with the requested size (not the total size) and mark it as not-free.```
+We update the next pointer, head and tail so to reflect the new state of the linked list.
+As explained earlier, we hide the header from the caller and hence return 
+(void*)(header + 1). We make sure we release the global lock as well.
 
 

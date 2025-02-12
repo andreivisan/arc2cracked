@@ -41,7 +41,8 @@ void *malloc(size_t size) {
     pthread_mutex_unlock(&global_malloc_lock);
     return (void *)(header + 1);
 }
- header_t *get_free_block(size_t size) {
+
+header_t *get_free_block(size_t size) {
     header_t *curr = head;
     while (curr) {
         if (curr->s.is_free && curr->s.size >= size) {
@@ -50,4 +51,4 @@ void *malloc(size_t size) {
         curr = curr->s.next;
     }
     return NULL;
- }
+}
