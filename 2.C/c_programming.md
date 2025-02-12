@@ -1167,3 +1167,8 @@ sbrk() on a malloc().
 The calloc(num, nsize) function allocates memory for an array of num elements of nsize 
 bytes each and returns a pointer to the allocated memory. Additionally, the memory is 
 all set to zeroes.
+
+### realloc()
+
+realloc() changes the size of the given memory block to the size given.
+
