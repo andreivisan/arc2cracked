@@ -1135,4 +1135,8 @@ We update the next pointer, head and tail so to reflect the new state of the lin
 As explained earlier, we hide the header from the caller and hence return 
 (void*)(header + 1). We make sure we release the global lock as well.
 
+### free()
 
+Now, we will look at what free() should do. free() has to first deterimine if the 
+block-to-be-freed is at the end of the heap. If it is, we can release it to the OS. 
+Otherwise, all we do is mark it ‘free’, hoping to reuse it later.
