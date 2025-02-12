@@ -1172,3 +1172,26 @@ all set to zeroes.
 
 realloc() changes the size of the given memory block to the size given.
 
+We first get the block’s header and see if the block already has the size to accomodate 
+the requested size. If it does, there’s nothing to be done.
+
+If the current block does not have the requested size, then we call malloc() to get a i
+block of the request size, and relocate contents to the new bigger block using memcpy(). 
+The old memory block is then freed.
+
+### Compiling and using our memory allocator
+
+```bash
+gcc -o memalloc.so -fPIC -shared memalloc.c
+```
+
+### Other memory allocators
+
+[liballoc](https://github.com/blanham/liballoc/)
+[Doug Lea’s Memory Allocator](http://oswego.edu/dl/html/malloc.html%20dlmalloc)
+[TCMalloc](http://goog-perftools.sourceforge.net/doc/tcmalloc.html)
+[ptmalloc](http://www.malloc.de/en/)
+
+[The GNU C Library: Malloc Tunable Parameters](https://www.gnu.org/software/libc/manual/html_node/Malloc-Tunable-Parameters.html)
+[OSDev - Memory allocation](http://wiki.osdev.org/Memory_Allocation)
+[Memory Allocators 101 - James Golick](http://jamesgolick.com/2013/5/15/memory-allocators-101.html)
