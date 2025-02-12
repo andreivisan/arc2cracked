@@ -71,7 +71,19 @@ void free(void *block) {
         if (head == tail) {
             head = tail = NULL;
         } else {
-            
+            tmp = head;
+            while (tmp) {
+                if (tmp->s.next == tail) {
+                    tmp->s.next = NULL;
+                    tail = tmp;
+                }
+                tmp = tmp->s.next;
+            }
         }
+        sbrk(0 - sizeof(header_t) - header->s.size);
+        pthread_mutex_unlock(&global_malloc_lock);
+        return;
     }
+    header->s.is_free = 1;
+	pthread_mutex_unlock(&global_malloc_lock);
 }

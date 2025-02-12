@@ -1140,3 +1140,24 @@ As explained earlier, we hide the header from the caller and hence return
 Now, we will look at what free() should do. free() has to first deterimine if the 
 block-to-be-freed is at the end of the heap. If it is, we can release it to the OS. 
 Otherwise, all we do is mark it ‘free’, hoping to reuse it later.
+
+#### Code explanation
+
+Here, first we get the header of the block we want to free. All we need to do is get a 
+pointer that is behind the block by a distance equalling the size of the header. So, 
+we cast block to a header pointer type and move it behind by 1 unit.
+header = (header_t*)block - 1;
+
+sbrk(0) gives the current value of program break. To check if the block to be freed is 
+at the end of the heap, we first find the end of the current block. The end can be 
+computed as (char*)block + header->s.size. This is then compared with the program break.
+
+If it is in fact at the end, then we could shrink the size of the heap and release 
+memory to OS. We first reset our head and tail pointers to reflect the loss of the 
+last block. Then the amount of memory to be released is calculated. This the sum of 
+sizes of the header and the acutal block: sizeof(header_t) + header->s.size. 
+To release this much amount of memory, we call sbrk() with the negative of this value.
+
+In the case the block is not the last one in the linked list, we simply set the is_free 
+field of its header. This is the field checked by get_free_block() before actually calling 
+sbrk() on a malloc().
