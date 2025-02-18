@@ -7,6 +7,11 @@ public class DynamicArray<T> {
     private int capacity;
     private int size;
 
+    private static enum SortingDirection {
+        ASC,
+        DESC
+    }
+
     @SuppressWarnings("unchecked")
     public DynamicArray(int capacity) {
         if (capacity < 0) {
@@ -116,16 +121,32 @@ public class DynamicArray<T> {
      * Uses GPU to copy data and for parallel processing
      */
     public void bulkRemove(int[] indices) {
-        // TODO: Implement bulk remove
+        //temp implementation before GPU
+        if (indices.length == 0) {
+            return;
+        }
+        for (int idx : indices) {
+            remove(idx);
+        }
     }
 
     /*
      * Sorts the array
+     * The chosen algorithm is Bitonic Sort as it is opimised
      * Uses GPU to copy data and for parallel processing
      */ 
-    public T[] sort() {
-        // TODO: Implement sort
+    public T[] sort(SortingDirection direction) {
         return null;
+    }
+
+    private boolean isPowOfTwoLong() {
+        return this.data.length / 2 == 0;
+    }
+
+    private void pad(SortingDirection direction) {
+        if (direction == SortingDirection.DESC) {
+            // this.data.in
+        }
     }
 
     /*
