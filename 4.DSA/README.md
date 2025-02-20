@@ -109,7 +109,7 @@
 
 * Substring Problems: Longest substring without repeating characters.
 
-[More Details](./algorithms/java/blind75/sliding_window/sliding_window.md)
+[More Details](./algorithms/java/blind_75/sliding_window/sliding_window.md)
 
 ## Stacks
 
