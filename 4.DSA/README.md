@@ -1,6 +1,6 @@
 # Algorithms workouts
 
-## Arrays 
+## Arrays
 
 ### Dynamic Arrays
 
@@ -109,6 +109,7 @@
 
 * Substring Problems: Longest substring without repeating characters.
 
+[More Details](./algorithms/java/blind75/sliding_window/sliding_window.md)
 
 ## Stacks
 
@@ -278,7 +279,7 @@ A queue is a fundamental data structure in computer science that operates on a F
 - Linear Data Structure: Elements are arranged sequentially.
 
 - Two Primary Operations:
-    
+
     - Enqueue: Add an element to the back (rear) of the queue.
 
     - Dequeue: Remove an element from the front of the queue.
@@ -316,7 +317,7 @@ Queues can be implemented using:
 
 #### Intro
 
-Recursion is a programming technique where a function calls itself directly or indirectly to solve a problem. 
+Recursion is a programming technique where a function calls itself directly or indirectly to solve a problem.
 A recursive function typically has two main components:
 
 * Base Case: The condition under which the function stops calling itself. Without a base case, the function would call itself indefinitely, leading to a stack overflow.
@@ -339,7 +340,7 @@ A recursive function typically has two main components:
 
 2. Return Cached Result: If the result is found in the cache, return it immediately, avoiding redundant computations.
 
-3. Compute and Cache Result: If the result is not in the cache, compute it and store the result in the cache before returning it. 
+3. Compute and Cache Result: If the result is not in the cache, compute it and store the result in the cache before returning it.
 
 ##### Steps for Implementing Memoization
 
@@ -388,7 +389,7 @@ The easiest way to understand is by using a decision tree
                n=2   n=1    n=1   n=0
               /  \   /  \    / \
            n=1  n=0 n=0 n=-1 n=0 n=-1
-          / \ 
+          / \
         n=0 n=-1
 
 **Python**
@@ -581,7 +582,7 @@ Initial Array: [38, 27, 43, 3, 9, 82, 10]
     1. First Split:
 
         - Split the array into two halves:
-        
+
         - Left Half: [38, 27, 43]
 
         - Right Half: [3, 9, 82, 10]
@@ -633,7 +634,7 @@ Initial Array: [38, 27, 43, 3, 9, 82, 10]
     2. Merge [38] and [27, 43]:
 
         - Compare 38 and 27.
-        
+
             - 27 < 38, so place 27 in the merged list.
 
         - Compare 38 and 43.
@@ -815,9 +816,9 @@ Let's break down the steps:
         - If arr[j] <= pivot:
 
             - Increment i by 1 (i += 1).
-            
+
             - Swap arr[i] with arr[j].
-            
+
             - This places the smaller element at index i.
 
 3. Final Swap to Place Pivot:
@@ -1471,7 +1472,7 @@ Hashing is a fundamental concept in computer science, used extensively for data 
 
 * Hash tables often align memory allocation to word boundaries to optimize access speeds. Modern CPUs handle memory in chunks (words), so aligning data structures accordingly can improve performance.
 
-<b>3. Resizing:</b> 
+<b>3. Resizing:</b>
 
 * When the hash table becomes too full (a high load factor), it may resize itself, usually doubling in size. This involves allocating a new array and rehashing all existing elements into the new array, a process known as rehashing.
 
@@ -1496,6 +1497,3 @@ Hashing is a fundamental concept in computer science, used extensively for data 
 <b>3. Security Concerns:</b>
 
 Hash functions should be resistant to hash collisions to prevent attacks like hash flooding, where an adversary intentionally causes many collisions to degrade the performance of a hash table.
-
-
-
