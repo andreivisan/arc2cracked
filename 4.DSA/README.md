@@ -1532,3 +1532,97 @@ Another clue is the problem’s ask: DP is common in problems that involve makin
 If the problem asks for “the number of ways to...” or “the maximum/minimum ... achievable”, it often can be framed in a DP way. For instance, “count the ways to climb n stairs” or “find the minimum cost path” naturally hint that smaller instances (fewer stairs, smaller paths) will be reused in building the solution for a larger instance.
 Essentially, DP is recursion with a memory. If you find yourself writing a recursive solution that recalculates results, that’s a prompt to convert it to DP and store intermediate outcomes.
 
+To decide between a divide-and-conquer approach and DP, check for overlapping subproblems. Some recursive problems (like mergesort or binary search) divide into independent subproblems that are solved separately (no overlap) – those don’t benefit from DP. But if subproblems overlap (like in Fibonacci, or computing combinations), DP can save the day by avoiding duplicate work.
+
+Summary of recognition tips:
+
+    - Try writing a recursive solution: if it ends up solving the same sub-case repeatedly, use DP.
+    - Look for keywords like “maximize”, “minimum”, “number of ways”, which often imply combining results of subproblems.
+    - Check for the two DP properties: overlapping subproblems and optimal substructure. If both present, the problem is a good DP candidate.
+
+### 3. Formulating Recurrence Relations
+
+Define the DP state clearly: Let dp[i] represent the solution for the subproblem of size i. Precisely what i means depends on the problem:
+
+    - For Fibonacci, dp[i] = the i-th Fibonacci number.
+    - For Climbing Stairs, dp[i] = number of distinct ways to reach step i.
+    - For Min Cost Climbing Stairs, dp[i] = minimum cost to reach step i.
+    - For House Robber, dp[i] = maximum loot possible from the first i houses.
+
+With the state defined, figure out how to compute dp[i] using smaller states (dp[j] for j < i). Ask yourself: If I were to solve subproblem i, what sub-subproblems would I need? This gives you the recurrence relation – a formula or rule to get dp[i] from previous values.
+
+### 4. Approaches to DP
+
+There are two primary ways to implement a DP solution once you have the recurrence: Top-Down (Memoization) and Bottom-Up (Tabulation). Both achieve the same result – avoiding recomputation of subproblems – but in different ways. Let’s explore each approach, with Java examples, and then compare their trade-offs.
+
+**Top-Down Approach (Memoization)**
+
+Concept: The top-down approach uses recursion + caching. You start with the original problem and recursively solve subproblems, but memoize (store) their results so that each subproblem is solved only once.
+This is essentially adding memory to a plain recursive solution. When a recursive call is about to recompute a result that was solved earlier, you retrieve the stored answer instead of recursing again.
+
+How to implement in Java: You typically use a hash map or an array to cache results. The recursive function checks if the answer for the current state is already computed (memoized); if yes, return it directly. If not, compute it by recursing to sub-states, store it, and return it.
+
+Let’s illustrate memoization by computing Fibonacci numbers in Java:
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class FibonacciMemo {
+    private Map<Integer, Long> memo = new HashMap<>();  // cache for computed fib values
+
+    public long fib(int n) {
+        if (memo.containsKey(n)) {
+            return memo.get(n);               // return cached result if available
+        }
+        if (n <= 1) {
+            return n;                         // base cases: fib(0)=0, fib(1)=1
+        }
+        // compute and memoize the result for n
+        long result = fib(n - 1) + fib(n - 2);
+        memo.put(n, result);
+        return result;
+    }
+
+    public static void main(String[] args) {
+        FibonacciMemo fibCalc = new FibonacciMemo();
+        System.out.println(fibCalc.fib(10));  // Outputs 55 (10th Fibonacci number)
+    }
+}
+```
+
+**Bottom-Up Approach (Tabulation)**
+
+Concept: The bottom-up approach builds the solution iteratively from the smallest subproblems up to the original problem. It starts from base cases and iteratively fills a table (array) up to the desired result.
+Instead of recursion, it uses loops. By solving all smaller subproblems first, when it comes to computing a larger subproblem, the answers to all necessary subcomponents are already available in the table.
+
+How to implement in Java: You allocate an array (or use variables) for the DP table. Initialize it with base case values. Then use a loop to fill in the table according to the recurrence relation, from the smallest index up to n. Finally, the table entry for n (or whatever represents the full problem) will hold the answer.
+
+Here’s a bottom-up implementation for Fibonacci:
+
+```java
+public class FibonacciTab {
+    public long fib(int n) {
+        if (n <= 1) {
+            return n;
+        }
+        long[] dp = new long[n+1];
+        dp[0] = 0;
+        dp[1] = 1;
+        // Build up from 2 to n using the recurrence dp[i] = dp[i-1] + dp[i-2]
+        for (int i = 2; i <= n; i++) {
+            dp[i] = dp[i-1] + dp[i-2];
+        }
+        return dp[n];
+    }
+
+    public static void main(String[] args) {
+        FibonacciTab fibCalc = new FibonacciTab();
+        System.out.println(fibCalc.fib(10));  // Outputs 55
+    }
+}
+```
+Bottom-up is essentially the tabulation method: all subproblems from the smallest up to n are solved in order.
+It ensures that when calculating dp[i], the sub-results it depends on (dp[i-1], dp[i-2], etc.) are already computed and stored in the table.
+
+
