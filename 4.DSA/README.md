@@ -1497,3 +1497,29 @@ Hashing is a fundamental concept in computer science, used extensively for data 
 <b>3. Security Concerns:</b>
 
 Hash functions should be resistant to hash collisions to prevent attacks like hash flooding, where an adversary intentionally causes many collisions to degrade the performance of a hash table.
+
+## 1-D Dynamic Programming
+
+### 1. Introduction to Dynamic Programming (DP)
+
+Dynamic Programming (DP) is an optimization technique used to solve complex problems by breaking them into simpler subproblems and reusing solutions to those subproblems.
+Instead of recomputing repeated sub-cases (as naive recursion might do), DP stores results of subproblems so they can be reused, dramatically improving efficiency. This makes DP especially important for turning exponential-time brute force solutions into polynomial-time solutions.
+
+**When and Why to use DP**
+
+Use DP when a problem can be decomposed into overlapping subproblems and has an optimal substructure.
+In practice, DP is effective for problems that ask for the optimal value (min/max) or count of ways to do something, since these often involve exploring many possibilities with repeated sub-calculations.
+
+**Key properties of DP**
+
+- Overlapping Subproblems: The problem can be broken into subproblems that are reused multiple time. A classic example is 
+Fibonacci: computing F(n) recursively calls for F(n-1) and F(n-2), and those calls in turn recompute Fibonacci for smaller 
+values repeatedly. Overlapping subproblems means a naive recursive or brute-force solution does the same work over and over.
+DP tackles this by storing results of subproblems (memoization) so each is solved once.
+
+- Optimal Substructure: An optimal solution of the problem can be constructed from optimal solutions of its subproblems.
+In other words, the “best” solution to the big problem incorporates the best solutions to subparts.
+For instance, in a shortest path problem, the shortest path from A to C that goes through B will include the shortest path from A to B and from B to C.
+If a problem’s optimal solution can be composed of optimal sub-solutions, we can build the solution using DP. (If removing a subproblem solution could lead to a better overall solution, then optimal substructure doesn’t hold, and DP may not apply.)
+
+
