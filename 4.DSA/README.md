@@ -1522,4 +1522,13 @@ In other words, the “best” solution to the big problem incorporates the best
 For instance, in a shortest path problem, the shortest path from A to C that goes through B will include the shortest path from A to B and from B to C.
 If a problem’s optimal solution can be composed of optimal sub-solutions, we can build the solution using DP. (If removing a subproblem solution could lead to a better overall solution, then optimal substructure doesn’t hold, and DP may not apply.)
 
+### 2. Recognizing DP Problems
+
+How do you identify that a problem should be solved with DP? The first indication is to look for repeated calculations in a brute-force or recursive solution. If a naive recursion revisits the same subproblem multiple times, that’s a flag for DP.
+For example, the recursive solution to Fibonacci (without memoization) recalculates lower Fibonacci numbers repeatedly – this overlap suggests we can memoize results. 
+More generally, if you can formulate a problem recursively and notice repeated sub-cases, you’re likely dealing with a DP candidate.
+
+Another clue is the problem’s ask: DP is common in problems that involve making a sequence of decisions to optimize something (maximize profit, minimize cost, count combinations, etc.). 
+If the problem asks for “the number of ways to...” or “the maximum/minimum ... achievable”, it often can be framed in a DP way. For instance, “count the ways to climb n stairs” or “find the minimum cost path” naturally hint that smaller instances (fewer stairs, smaller paths) will be reused in building the solution for a larger instance.
+Essentially, DP is recursion with a memory. If you find yourself writing a recursive solution that recalculates results, that’s a prompt to convert it to DP and store intermediate outcomes.
 
