@@ -42,4 +42,25 @@ integers, floating-point numbers, Booleans and characters.
 | arch   | isize  | usize    |
 ---
 
+- Each signed variant can store numbers from –(2n – 1) to 2n – 1 inclusive,
+where n is the number of bits that variant uses. So an i8 can store numbers
+from –(27) to 27 – 1, which equals –128 to 127.
+
+- The isize and usize types depend on the architecture of
+the computer your program is running on, which is denoted in the table
+as “arch”: 64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a
+32-bit architecture.
+
+- Number literals can also use ```-``` asa visual separator to make the number 
+easier to read, such as 1_000, whichwill have the same value as if you had 
+specified 1000.
+
+| Number literals | Example |
+|----------------|---------|
+| Decimal        | 98_222  |
+| Hex            | 0xff    |
+| Octal          | 0o77    |
+| Binary         | 0b1111_0000 |
+| Byte (u8 only) | b'A'    |
+---
 
