@@ -226,9 +226,106 @@ fn five() -> i32 {
 
 ## Control Flow
 
+- if-else statements are the same as in Java.
+- The logical operands are the same as in Java only that we are not using
+parenthesis.
 
+**Using if in a let Statement**
 
+```rust
+let number = if condition { 5 } else { 6 };
+```
 
+**Repetition with Loops**
 
+- It's done using ```loop``` keyword.
 
+```rust
+fn main() {
+    loop {
+        println!("again!");
+    }
+}
+```
+
+- ```break``` and ```continue``` inside a loop act like in Java.
+- We can return value from a loop with break:
+
+```rust
+fn main() {
+    let mut counter = 0;
+    let result = loop {
+        counter += 1;
+        if counter == 10 {
+            break counter * 2;
+        }
+    };
+    println!("The result is {result}");
+}
+```
+
+**Loop Labels to Disambiguate Between Multiple Loops**
+
+- If you have loops within loops, break and continue apply to the innermost
+loop at that point. You can optionally specify a loop label on a loop that you
+can then use with break or continue to specify that those keywords apply to
+the labeled loop instead of the innermost loop. Loop labels must begin with
+a single quote. Here’s an example with two nested loops:
+
+```rust
+fn main() {
+    let mut count = 0;
+    'counting_up: loop {
+        println!("count = {count}");
+        let mut remaining = 10;
+        loop {
+            println!("remaining = {remaining}");
+            if remaining == 9 {
+                break;
+            }
+            if count == 2 {
+                break 'counting_up;
+            }
+            remaining -= 1;
+        }
+        count += 1;
+    }
+    println!("End count = {count}");
+}
+```
+
+**Conditional Loops with while**
+
+```rust
+fn main() {
+    let mut number = 3;
+    while number != 0 {
+        println!("{number}!");
+        number -= 1;
+    }
+    println!("LIFTOFF!!!");
+}
+```
+
+**Looping Through a Collection with for**
+
+```rust
+fn main() {
+    let a = [10, 20, 30, 40, 50];
+    for element in a {
+        println!("the value is: {element}");
+    }
+}
+```
+
+or 
+
+```rust
+fn main() {
+    for number in (1..4).rev() {
+        println!("{number}!");
+    }
+    println!("LIFTOFF!!!");
+}
+```
 
