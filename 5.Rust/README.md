@@ -182,6 +182,25 @@ of the array in square brackets, as shown here:
 let a = [3; 5];
 ```
 
+- This is how vectors are used:
+
+```rust
+// Create a vector with initial values
+let mut vec = vec![1, 2, 3];
+
+// Add elements dynamically
+vec.push(4); // Now contains [1, 2, 3, 4]
+
+// Create with specified capacity
+let mut vec_with_capacity = Vec::with_capacity(100);
+```
+
+- Memory Allocation
+
+    - Arrays: Stack-allocated, which means they're stored directly in the 
+    program's stack memory.
+    - Vectors: Heap-allocated, with memory managed dynamically on the heap.
+
 ## Functions
 
 
