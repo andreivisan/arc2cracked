@@ -64,3 +64,43 @@ specified 1000.
 | Byte (u8 only) | b'A'    |
 ---
 
+- Rust performs two’s complement wrapping.
+
+- To explicitly handle the possibility of overflow, you can use these families
+of methods provided by the standard library for primitive numeric types:
+
+    - Wrap in all modes with the wrapping_* methods, such as wrapping_add.
+    - Return the None value if there is overflow with the checked_* methods.
+    - Return the value and a Boolean indicating whether there was overflow with
+the overflowing_* methods.
+    - Saturate at the value’s minimum or maximum values with the saturating_*
+methods.
+
+**Floating-Point Types**
+
+- Rust’s floating-point types are f32 and f64, which are 32 bits and 64 bits 
+in size, respectively.
+- All floating-point types are signed.
+
+**Numeric Operations**
+
+- Integer division truncates toward zero to the nearest integer.
+
+```rust
+fn main() {
+    // addition
+    let sum = 5 + 10;
+    // subtraction
+    let difference = 95.5 - 4.3;
+    // multiplication
+    let product = 4 * 30;
+    // division
+    let quotient = 56.7 / 32.2;
+    let truncated = -5 / 3; // Results in -1
+    // remainder
+    let remainder = 43 % 5;
+}
+```
+
+
+
