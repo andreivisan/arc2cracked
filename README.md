@@ -2,9 +2,10 @@
 
 ## Path to Cracked
 
-- [ ] Mathematics
-- [ ] C Programming
-- [ ] Data Structures and Algorithms
+- [x] Mathematics
+- [x] C Programming
+- [x] Data Structures and Algorithms
+- [ ] Rust
 - [ ] Computer Architecture
 - [ ] Operating Systems
 - [ ] Compilers
