@@ -203,6 +203,29 @@ let mut vec_with_capacity = Vec::with_capacity(100);
 
 ## Functions
 
+- ```snake case``` convention for naming functions and vars.
+
+### Parameters
+
+```rust
+fn another_function(x: i32) {
+    println!("The value of x is: {x}");
+}
+```
+
+- In function signatures, you must declare the type of each parameter.
+- The return type for a function is declared using ```->```.
+
+```rust
+fn five() -> i32 {
+    5
+}
+```
+
+- In Rust there is no ```;``` for the return statement.
+
+## Control Flow
+
 
 
 
