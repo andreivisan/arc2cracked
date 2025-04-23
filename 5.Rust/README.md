@@ -152,3 +152,41 @@ fn main() {
 }
 ```
 
+**The Array Type**
+
+- Arrays in Rust have a fixed length.
+
+```rust
+fn main() {
+    let a = [1, 2, 3, 4, 5];
+}
+```
+
+- Arrays are useful when you want your data allocated on the stack rather than 
+the heap.
+- A vector is a similar collection type provided by the standard library that 
+is allowed to grow or shrink in size.
+- You write an array’s type using square brackets with the type of each
+element, a semicolon, and then the number of elements in the array, like so:
+
+```rust
+let a: [i32; 5] = [1, 2, 3, 4, 5];
+```
+
+- You can also initialize an array to contain the same value for each element 
+by specifying the initial value, followed by a semicolon, and then the length 
+of the array in square brackets, as shown here:
+
+```rust
+// array of 5 elements all having the value of 3
+let a = [3; 5];
+```
+
+## Functions
+
+
+
+
+
+
+
