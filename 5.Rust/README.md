@@ -102,5 +102,53 @@ fn main() {
 }
 ```
 
+**The Character Type**
 
+- Rust’s char type is four bytes in size and represents a Unicode scalar value, 
+which means it can represent a lot more than just ASCII. Accented letters; 
+Chinese, Japanese, and Korean characters; emoji; and zero-width spaces are all 
+valid char values in Rust. 
+- Unicode scalar values range from U+0000 to U+D7FF and U+E000 to U+10FFFF 
+inclusive.
+
+### Compound Types
+
+- Compound types can group multiple values into one type. Rust has two primitive 
+compound types: tuples and arrays.
+
+**The Tuple Type**
+
+- Groups together a number of values with a variety of types into one compound
+type.
+
+```rust
+fn main() {
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+}
+```
+
+- The type annotations are optional.
+
+- To get the individual values from a tuple we can use pattern mattching to 
+destructure a touple value:
+
+```rust
+fn main() {
+    let tup = (500, 6.4, 1);
+    let (x, y, z) = tup;
+    println!("The value of y is: {y}");
+}
+```
+
+- We can also access a tuple element by using ```.``` followed by the index
+of the value we want to access.
+
+```rust
+fn main() {
+    let x: (i32, f64, u8) = (500, 6.4, 1);
+    let five_hundred = x.0;
+    let six_point_four = x.1;
+    let one = x.2;
+}
+```
 
