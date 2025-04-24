@@ -556,3 +556,24 @@ fn main() {
 
 | Note: *The opposite of referencing by using & is dereferencing, which is 
 accomplished with the dereference operator, `*`.*
+
+- We call the action of creating a reference borrowing. As in real life, if a
+person owns something, you can borrow it from them. When you’re done,
+you have to give it back. You don’t own it.
+
+- Just as variables are immutable by default, so are references. We’re not
+allowed to modify something we have a reference to.
+
+**Mutable References**
+
+- We can create mutable references:
+
+```rust
+fn main() {
+    let mut s = String::from("hello");
+    change(&mut s);
+    fn change(some_string: &mut String) {
+        some_string.push_str(", world");
+    }
+}
+```
