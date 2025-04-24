@@ -482,3 +482,27 @@ addresses.
 - Each value in Rust has an owner.
 - There can only be an owner at a time.
 - When the owner goes out of scope, the value will be dropped.
+
+**Variables and Data Interacting with Move**
+
+```rust
+let x = 5;
+let y = x;
+```
+
+- Because both of the above values are residing on the stack we bind the value
+5 to x then make a copy of the value in x and bind it to y.
+
+```rust
+let s1 = String::from("hello");
+let s2 = s1;
+```
+
+- A String is made up of three parts, shown on the left: a pointer to
+the memory that holds the contents of the string, a length, and a capacity.
+This group of data is stored on the stack. On the right is the memory on the
+heap that holds the contents.
+
+![String mem Rust](/images/string_mem_rust.png)
+
+
