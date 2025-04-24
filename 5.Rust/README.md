@@ -464,4 +464,15 @@ fn main() {
 ```
 ## Ownership
 
-
+- Set of rules that govern how a Rust program manages memory.
+- Data with fixed size, stored on the stack.
+- Data with variable size stored on the Heap. When storing on the Heap a block
+of memory has to be allocated an the pointer to this block is returned. The
+pointer is of fixed size so it can be store on the stack.
+- Pushing to the stack is faster than allocating on the heap because the allcator
+has to search for a place to store the data. Also the stack is closer to the
+processor than the heap.
+- Keeping track of what parts of code are using what data on the heap,
+minimizing the amount of duplicate data on the heap, and cleaning up unused
+data on the heap so you don’t run out of space are all problems that ownership
+addresses.
