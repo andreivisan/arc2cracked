@@ -503,6 +503,6 @@ the memory that holds the contents of the string, a length, and a capacity.
 This group of data is stored on the stack. On the right is the memory on the
 heap that holds the contents.
 
-![String mem Rust](/images/string_mem_rust.png)
+![String mem Rust](./images/string_mem_rust.png)
 
 
