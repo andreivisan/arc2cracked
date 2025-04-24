@@ -505,4 +505,51 @@ heap that holds the contents.
 
 ![String mem Rust](./images/string_mem_rust.png)
 
+- When performing ```s2 = s1``` we basically create a new pointer that points
+to the index 0 of the same heap value.
+- Because in Rust, when a variable goes out of scope Rust automatically cleans
+the heap which in the case above will cause a *double free* error.
+- What Rust will do in the case above, it will invalidate the s1 variable, so
+only s2 will now point at the heap memory block. Thus, if after s1 is still used,
+Rust will throw an error.
 
+**Variables and Data Interacting with Clone**
+
+- If we do want to deeply copy the heap data of the String, not just the stack
+data, we can use a common method called clone.
+
+```rust
+let s1 = String::from("hello");
+let s2 = s1.clone();
+println!("s1 = {s1}, s2 = {s2}");
+```
+
+- Rust has a special annotation called the Copy trait that we can place on
+types that are stored on the stack, as integers are.
+- If a type implements the Copy trait, variables that use
+it do not move, but rather are trivially copied, making them still valid after
+assignment to another variable.
+- Rust won’t let us annotate a type with Copy if the type, or any of its parts,
+has implemented the Drop trait.
+- Rust does let us return multiple values using a tuple.
+
+### References and Borrowing
+
+- Instead of using functions to pass ownership between variables, in Rust we
+can use *references*.
+- A *reference* is like a pointer in that it’s an address we can follow to access 
+the data stored at that address; that data is owned by some other variable.
+- Unlike a pointer, a reference is guaranteed to point to a valid value of a 
+particular type for the life of that reference.
+
+```rust
+fn main() {
+    let s1 = String::from("hello");
+    let len = calculate_length(&s1);
+    println!("The length of '{s1}' is {len}.");
+    fn calculate_length(s: &String) -> usize {
+        s.len()
+    }
+}
+```
+![Reference in Rust](./images/reference_rust.png)
