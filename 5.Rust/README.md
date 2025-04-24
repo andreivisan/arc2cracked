@@ -577,3 +577,19 @@ fn main() {
     }
 }
 ```
+- First we change s to be mut. Then we create a mutable reference with
+&mut s where we call the change function, and update the function signature
+to accept a mutable reference with some_string: &mut String. This makes it
+very clear that the change function will mutate the value it borrows.
+- Mutable references have one big restriction: if you have a mutable refer-
+ence to a value, you can have no other references to that value.
+- As always, we can use curly brackets to create a new scope, allowing for
+multiple mutable references, just not simultaneous ones:
+
+```rust
+let mut s = String::from("hello");
+{
+    let r1 = &mut s;
+} // r1 goes out of scope here, so we can make a new reference with no problems
+let r2 = &mut s;
+```
