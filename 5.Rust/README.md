@@ -553,3 +553,6 @@ fn main() {
 }
 ```
 ![Reference in Rust](./images/reference_rust.png)
+
+| Note: *The opposite of referencing by using & is dereferencing, which is 
+accomplished with the dereference operator, `*`.*
