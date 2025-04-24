@@ -476,3 +476,9 @@ processor than the heap.
 minimizing the amount of duplicate data on the heap, and cleaning up unused
 data on the heap so you don’t run out of space are all problems that ownership
 addresses.
+
+### Ownership rule
+
+- Each value in Rust has an owner.
+- There can only be an owner at a time.
+- When the owner goes out of scope, the value will be dropped.
