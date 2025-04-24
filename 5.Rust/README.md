@@ -593,3 +593,20 @@ let mut s = String::from("hello");
 } // r1 goes out of scope here, so we can make a new reference with no problems
 let r2 = &mut s;
 ```
+
+- We also cannot have a mutable reference while we have an immutable one to 
+the same value.
+- Note that a reference’s scope starts from where it is introduced and
+continues through the last time that reference is used. For instance, this
+code will compile because the last usage of the immutable references, the
+println!, occurs before the mutable reference is introduced:
+
+```rust
+let mut s = String::from("hello");
+let r1 = &s; // no problem
+let r2 = &s; // no problem
+println!("{r1} and {r2}");
+// Variables r1 and r2 will not be used after this point.
+let r3 = &mut s; // no problem
+println!("{r3}");
+```
