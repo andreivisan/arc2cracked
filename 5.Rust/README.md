@@ -610,3 +610,15 @@ println!("{r1} and {r2}");
 let r3 = &mut s; // no problem
 println!("{r3}");
 ```
+
+**The Rules of References**
+
+- At any given time, you can have either one mutable reference or any
+number of immutable references.
+- References must always be valid.
+
+### The Slice Type
+
+- *Slices* let you reference a contiguous sequence of elements in a collection
+rather than the whole collection. A slice is a kind of reference, so it does not
+have ownership.
