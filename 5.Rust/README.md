@@ -657,3 +657,11 @@ let world = &s[6..11];
 in the slice and ending_index is one more than the last position in the slice.
 
 ![Rust Slices](./images/slices_rust.png)
+
+- These are equal:
+
+```rust
+let s = String::from("hello");
+let slice = &s[0..2];
+let slice = &s[..2];
+```
