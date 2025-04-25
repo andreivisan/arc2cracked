@@ -669,3 +669,14 @@ let slice = &s[..2];
 >Note: *String slice range indices must occur at valid UTF-8 character boundaries. If you
 attempt to create a string slice in the middle of a multibyte character, your program
 will exit with an error.*
+
+-Improving the first_word function by using a string slice for the type of the s
+parameter, because it allows us to use the same function on both &String values 
+and &str values.
+
+```rust
+fn first_word(s: &str) -> &str {
+    //...
+}
+```
+
