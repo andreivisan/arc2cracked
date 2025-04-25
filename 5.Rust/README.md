@@ -554,7 +554,7 @@ fn main() {
 ```
 ![Reference in Rust](./images/reference_rust.png)
 
-| Note: *The opposite of referencing by using & is dereferencing, which is 
+> Note: *The opposite of referencing by using & is dereferencing, which is 
 accomplished with the dereference operator, `*`.*
 
 - We call the action of creating a reference borrowing. As in real life, if a
@@ -666,6 +666,6 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-|Note: *String slice range indices must occur at valid UTF-8 character boundaries. If you
+>Note: *String slice range indices must occur at valid UTF-8 character boundaries. If you
 attempt to create a string slice in the middle of a multibyte character, your program
 will exit with an error.*
