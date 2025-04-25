@@ -622,3 +622,38 @@ number of immutable references.
 - *Slices* let you reference a contiguous sequence of elements in a collection
 rather than the whole collection. A slice is a kind of reference, so it does not
 have ownership.
+
+- Here’s a small programming problem: write a function that takes a string
+of words separated by spaces and returns the first word it finds in that string.
+If the function doesn’t find a space in the string, the whole string must be
+one word, so the entire string should be returned.
+
+```rust
+fn first_word(s: &String) -> usize {
+    let bytes = s.as_bytes();
+    for ( i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return i;
+        }
+    }
+    s.len()
+}
+```
+
+- The solution above is problematic if the string changes.
+
+**String Slices**
+
+- A string slice is a reference to part of a String, and it looks like this:
+
+```rust
+let s = String::from("hello world");
+let hello = &s[0..5];
+let world = &s[6..11];
+```
+
+- We create slices using a range within brackets by specifying 
+[starting_index..ending_index], where starting_index is the first position 
+in the slice and ending_index is one more than the last position in the slice.
+
+![Rust Slices](./images/slices_rust.png)
