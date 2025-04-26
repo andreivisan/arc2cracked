@@ -1024,6 +1024,80 @@ impl Rectangle {
 - To call this associated function, we use the :: syntax with the struct name; 
 ```let sq = Rectangle::square(3);```
 
+## Enums and Pattern Matching
+
+- Where structs give you a way of grouping together related fields and data, 
+like a Rectangle with its width and height, enums give you a way of saying a 
+value is one of a possible set of values.
+
+```rust
+enum IpAddrKind {
+    V4,
+    V6,
+}
+```
+
+**Enum Values**
+
+```rust
+let four = IpAddrKind::V4;
+let six = IpAddrKind::V6;
+```
+
+- Combine with structs so we can store their values.
+
+```rust
+    enum IpAddrKind {
+        V4,
+        V6,
+    }
+
+    struct IpAddr {
+        kind: IpAddrKind,
+        address: String,
+    }
+
+    let home = IpAddr {
+        kind: IpAddrKind::V4,
+        address: String::from("127.0.0.1"),
+    };
+
+    let loopback = IpAddr {
+        kind: IpAddrKind::V6,
+        address: String::from("::1"),
+    };
+```
+
+- However, representing the same concept using just an enum is more concise: 
+rather than an enum inside a struct, we can put data directly into each enum 
+variant. This new definition of the IpAddr enum says that both V4 and V6 
+variants will have associated String values:
+
+```rust
+    enum IpAddr {
+        V4(String),
+        V6(String),
+    }
+
+    let home = IpAddr::V4(String::from("127.0.0.1"));
+
+    let loopback = IpAddr::V6(String::from("::1"));
+```
+
+-  If we wanted to store V4 addresses as four u8 values but still express V6 
+addresses as one String value, we wouldn’t be able to with a struct. Enums 
+handle this case with ease:
+
+```rust
+    enum IpAddr {
+        V4(u8, u8, u8, u8),
+        V6(String),
+    }
+
+    let home = IpAddr::V4(127, 0, 0, 1);
+
+    let loopback = IpAddr::V6(String::from("::1"));
+```
 
 
 
