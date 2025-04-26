@@ -1141,6 +1141,79 @@ enums. Here’s a method named call that we could define on our Message enum:
 
 **The Option Enum and Its Advantages Over Null Values**
 
+- The Option type encodes the very common scenario in which a value could be 
+something or it could be nothing.
+
+```rust
+enum Option<T> {
+    None,
+    Some(T),
+}
+
+let some_number = Some(5);
+let some_char = Some('e');
+
+let absent_number: Option<i32> = None;
+```
+
+- For absent_number, Rust requires us to annotate the overall Option type: 
+the compiler can’t infer the type that the corresponding Some variant will hold 
+by looking only at a None value.
+
+### The match Control Flow Construct
+
+- Rust has an extremely powerful control flow construct called match that allows 
+you to compare a value against a series of patterns and then execute code based 
+on which pattern matches.
+
+```rust
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter,
+}
+
+fn value_in_cents(coin: Coin) -> u8 {
+    match coin {
+        Coin::Penny => 1,
+        Coin::Nickel => 5,
+        Coin::Dime => 10,
+        Coin::Quarter => 25,
+    }
+}
+```
+
+- The ```match``` has ``` arms```. An arm has two parts: a pattern and some 
+code. The first arm here has a pattern that is the value Coin::Penny and then 
+the => operator that separates the pattern and the code to run. The code in 
+this case is just the value 1. Each arm is separated from the next with a comma.
+- If you want to run multiple lines of code in a match arm, you must use curly 
+brackets, and the comma following the arm is then optional.
+
+```rust
+fn value_in_cents(coin: Coin) -> u8 {
+    match coin {
+        Coin::Penny => {
+            println!("Lucky penny!");
+            1
+        }
+        Coin::Nickel => 5,
+        Coin::Dime => 10,
+        Coin::Quarter => 25,
+    }
+}
+```
+
+**Patterns That Bind to Values**
+
+
+
+
+
+
+
+
 
 
 
