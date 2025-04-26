@@ -825,6 +825,23 @@ fn main() {
 }
 ```
 
+**Using Tuple Structs Without Named Fields to Create Different Types**
+
+- Rust also supports structs that look similar to tuples, called tuple structs. 
+Tuple structs have the added meaning the struct name provides but don’t have 
+names associated with their fields; rather, they just have the types of the fields.
+
+```rust
+struct Color(i32, i32, i32);
+struct Point(i32, i32, i32);
+
+fn main() {
+    let black = Color(0, 0, 0);
+    let origin = Point(0, 0, 0);
+}
+```
+
+**Unit-Like Structs Without Any Fields**
 
 
 
