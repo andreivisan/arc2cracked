@@ -1099,6 +1099,17 @@ handle this case with ease:
     let loopback = IpAddr::V6(String::from("::1"));
 ```
 
+- Let’s look at another example of an enum in Listing 6-2: this one has a wide 
+variety of types embedded in its variants.
+
+```rust
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+```
 
 
 
