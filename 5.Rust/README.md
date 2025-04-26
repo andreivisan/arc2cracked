@@ -987,6 +987,18 @@ for struct fields as some other languages do. Getters are useful because you
 can make the field private but the method public, and thus enable read-only 
 access to that field as part of the type’s public API. 
 
+- Rust has a feature called automatic referencing and dereferencing. Calling 
+methods is one of the few places in Rust with this behavior.
+- Here’s how it works: when you call a method with object.something(), Rust 
+automatically adds in &, &mut, or * so object matches the signature of the 
+method. In other words, the following are the same:
+
+```rust
+p1.distance(&p2);
+(&p1).distance(&p2);
+```
+
+
 
 
 
