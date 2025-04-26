@@ -1010,6 +1010,25 @@ defined on the String type.
 will return a new instance of the struct. These are often called new, but new 
 isn’t a special name and isn’t built into the language.
 
+```rust
+impl Rectangle {
+    fn square(size: u32) -> Self {
+        Self {
+            width: size,
+            height: size,
+        }
+    }
+}
+```
+
+- To call this associated function, we use the :: syntax with the struct name; 
+```let sq = Rectangle::square(3);```
+
+
+
+
+
+
 
 
 ## Useful frameworks
