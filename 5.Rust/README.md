@@ -1111,6 +1111,37 @@ enum Message {
 }
 ```
 
+- The following structs could hold the same data that the preceding enum 
+variants hold:
+
+```rust
+struct QuitMessage; // unit struct
+struct MoveMessage {
+    x: i32,
+    y: i32,
+}
+struct WriteMessage(String); // tuple struct
+struct ChangeColorMessage(i32, i32, i32); // tuple struct
+```
+
+- There is one more similarity between enums and structs: just as we’re able to 
+define methods on structs using impl, we’re also able to define methods on 
+enums. Here’s a method named call that we could define on our Message enum:
+
+```rust
+    impl Message {
+        fn call(&self) {
+            // method body would be defined here
+        }
+    }
+
+    let m = Message::Write(String::from("hello"));
+    m.call();
+```
+
+**The Option Enum and Its Advantages Over Null Values**
+
+
 
 
 
