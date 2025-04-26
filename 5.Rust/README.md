@@ -843,7 +843,72 @@ fn main() {
 
 **Unit-Like Structs Without Any Fields**
 
+- You can also define structs that don’t have any fields! These are called 
+unit-like structs because they behave similarly to ().
+- Unit-like structs can be useful when you need to implement a trait on some 
+type but don’t have any data that you want to store in the type itself.
+
+```rust
+struct AlwaysEqual;
+
+fn main() {
+    let subject = AlwaysEqual;
+}
+```
+
+**Example structs & borrowing them**
+
+```rust
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let rect1 = Rectangle {
+        width: 30,
+        height: 50,
+    };
+
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        area(&rect1)
+    );
+}
+
+fn area(rectangle: &Rectangle) -> u32 {
+    rectangle.width * rectangle.height
+}
+```
+
+- Our area function is now defined with one parameter, which we’ve named 
+rectangle, whose type is an immutable borrow of a struct Rectangle instance. 
+As mentioned in Chapter 4, we want to borrow the struct rather than take 
+ownership of it. This way, main retains its ownership and can continue using 
+rect1, which is the reason we use the & in the function signature and where we 
+call the function.
+- The area function accesses the width and height fields of the Rectangle 
+instance (note that accessing fields of a borrowed struct instance does not 
+move the field values, which is why you often see borrows of structs).
+
+**Adding Useful Functionality with Derived Traits**
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+## Useful frameworks
+
+[Web - Actix](https://actix.rs/)
+
+[TUI - ratatui](https://ratatui.rs/)
