@@ -893,10 +893,39 @@ move the field values, which is why you often see borrows of structs).
 
 **Adding Useful Functionality with Derived Traits**
 
+- If we want to print a rectangle ``` println!("rect1 is {}", rect1);``` we 
+will get an error.
+- To fix:
 
+```rust
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
 
+fn main() {
+    let rect1 = Rectangle {
+        width: 30,
+        height: 50,
+    };
 
+    println!("rect1 is {rect1:?}");
+}
+```
 
+- Now Rectangle implements Debug traits, and using ```:?```. Putting the 
+specifier ```:?``` inside the curly brackets tells println! we want to use an 
+output format called Debug.
+- Another way to print out a value using the Debug format is to use the dbg! 
+macro, which takes ownership of an expression (as opposed to println!, 
+which takes a reference), prints the file and line number of where that dbg! 
+macro call occurs in your code along with the resultant value of that expression, 
+and returns ownership of the value.
+
+> Note: Calling the dbg! macro prints to the standard error console stream 
+(stderr), as opposed to println!, which prints to the standard output console 
+stream (stdout).
 
 
 
