@@ -927,10 +927,65 @@ and returns ownership of the value.
 (stderr), as opposed to println!, which prints to the standard output console 
 stream (stdout).
 
+```rust
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
 
+fn main() {
+    let scale = 2;
+    let rect1 = Rectangle {
+        width: dbg!(30 * scale),
+        height: 50,
+    };
 
+    dbg!(&rect1);
+}
+```
 
+### Method Syntax
 
+- Methods are similar to functions: we declare them with the fn keyword and 
+a name, they can have parameters and a return value, and they contain some code 
+that’s run when the method is called from somewhere else. Unlike functions, 
+methods are defined within the context of a struct (or an enum or a trait 
+object, and their first parameter is always self, which represents the instance 
+of the struct the method is being called on.
+
+```rust
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+}
+
+fn main() {
+    let rect1 = Rectangle {
+        width: 30,
+        height: 50,
+    };
+
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        rect1.area()
+    );
+}
+```
+
+- Often, but not always, when we give a method the same name as a field we 
+want it to only return the value in the field and do nothing else. Methods 
+like this are called getters, and Rust does not implement them automatically 
+for struct fields as some other languages do. Getters are useful because you 
+can make the field private but the method public, and thus enable read-only 
+access to that field as part of the type’s public API. 
 
 
 
