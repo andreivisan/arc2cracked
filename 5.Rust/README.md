@@ -1231,7 +1231,98 @@ enum Coin {
 pattern that matches values of the variant Coin::Quarter. When a Coin::Quarter 
 matches, the state variable will bind to the value of that quarter’s state. 
 Then we can use state in the code for that arm, like so:
+- If we were to call value_in_cents(Coin::Quarter(UsState::Alaska)), coin would 
+be Coin::Quarter(UsState::Alaska). When we compare that value with each of the 
+match arms, none of them match until we reach Coin::Quarter(state). At that 
+point, the binding for state will be the value UsState::Alaska. We can then use 
+that binding in the println! expression, thus getting the inner state value out 
+of the Coin enum variant for Quarter.
+- Basically we can create a match to match the enum value together with the 
+binding.
 
+**Matching with Option<T>**
+
+- Let’s say we want to write a function that takes an Option<i32> and, if 
+there’s a value inside, adds 1 to that value. If there isn’t a value inside, 
+the function should return the None value and not attempt to perform any 
+operations.
+
+```rust
+    fn plus_one(x: Option<i32>) -> Option<i32> {
+        match x {
+            None => None,
+            Some(i) => Some(i + 1),
+        }
+    }
+
+    let five = Some(5);
+    let six = plus_one(five);
+    let none = plus_one(None);
+```
+
+**Matches Are Exhaustive**
+
+- There’s one other aspect of match we need to discuss: the arms’ patterns must 
+cover all possibilities. Consider this version of our plus_one function, which 
+has a bug and won’t compile:
+
+```rust
+    fn plus_one(x: Option<i32>) -> Option<i32> {
+        match x {
+            Some(i) => Some(i + 1),
+        }
+    }
+```
+
+**Catch-All Patterns and the _ Placeholder**
+
+- Using enums, we can also take special actions for a few particular values, 
+but for all other values take one default action. 
+
+1. If we want to use the value:
+
+```rust
+    let dice_roll = 9;
+    match dice_roll {
+        3 => add_fancy_hat(),
+        7 => remove_fancy_hat(),
+        other => move_player(other),
+    }
+
+    fn add_fancy_hat() {}
+    fn remove_fancy_hat() {}
+    fn move_player(num_spaces: u8) {}
+```
+
+2. If we do not want to use a value but we want a function to be called for all
+other values:
+
+```rust
+    let dice_roll = 9;
+    match dice_roll {
+        3 => add_fancy_hat(),
+        7 => remove_fancy_hat(),
+        _ => reroll(),
+    }
+
+    fn add_fancy_hat() {}
+    fn remove_fancy_hat() {}
+    fn reroll() {}
+```
+
+3. If we do not want to use a value and we want nothing to happen:
+
+```rust
+    let dice_roll = 9;
+    match dice_roll {
+        3 => add_fancy_hat(),
+        7 => remove_fancy_hat(),
+        _ => (),
+    }
+
+    fn add_fancy_hat() {}
+    fn remove_fancy_hat() {}
+```
 
 
 
