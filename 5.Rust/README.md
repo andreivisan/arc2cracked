@@ -1347,6 +1347,30 @@ We can transform into:
     }
 ```
 
+- We can include an else with an if let. The block of code that goes with the 
+else is the same as the block of code that would go with the _ case in the 
+match expression that is equivalent to the if let and else.
+
+For:
+
+```rust
+    let mut count = 0;
+    match coin {
+        Coin::Quarter(state) => println!("State quarter from {state:?}!"),
+        _ => count += 1,
+    }
+```
+
+We can have:
+
+```rust
+    let mut count = 0;
+    if let Coin::Quarter(state) = coin {
+        println!("State quarter from {state:?}!");
+    } else {
+        count += 1;
+    }
+```
 
 
 
