@@ -1207,6 +1207,26 @@ fn value_in_cents(coin: Coin) -> u8 {
 
 **Patterns That Bind to Values**
 
+- Another useful feature of match arms is that they can bind to the parts of 
+the values that match the pattern. This is how we can extract values out of 
+enum variants.
+
+```rust
+#[derive(Debug)] // so we can inspect the state in a minute
+enum UsState {
+    Alabama,
+    Alaska,
+    // --snip--
+}
+
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter(UsState),
+}
+```
+
 
 
 
