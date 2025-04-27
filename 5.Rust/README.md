@@ -1372,8 +1372,57 @@ We can have:
     }
 ```
 
+### Staying on the “Happy Path” with let...else
 
+- One common pattern is to perform some computation when a value is present and 
+return a default value otherwise.
 
+```rust
+impl UsState {
+    fn existed_in(&self, year: u16) -> bool {
+        match self {
+            UsState::Alabama => year >= 1819,
+            UsState::Alaska => year >= 1959,
+            // -- snip --
+        }
+    }
+}
+```
+
+- Then we might use if let to match on the type of coin, introducing a state 
+variable within the body of the condition.
+
+```rust
+fn describe_state_quarter(coin: Coin) -> Option<String> {
+    if let Coin::Quarter(state) = coin {
+        if state.existed_in(1900) {
+            Some(format!("{state:?} is pretty old, for America!"))
+        } else {
+            Some(format!("{state:?} is relatively new."))
+        }
+    } else {
+        None
+    }
+}
+```
+
+- That gets the job done, but it has pushed the work into the body of the if 
+let statement, and if the work to be done is more complicated, it might be hard 
+to follow exactly how the top-level branches relate.
+
+```rust
+fn describe_state_quarter(coin: Coin) -> Option<String> {
+    let Coin::Quarter(state) = coin else {
+        return None;
+    };
+
+    if state.existed_in(1900) {
+        Some(format!("{state:?} is pretty old, for America!"))
+    } else {
+        Some(format!("{state:?} is relatively new."))
+    }
+}
+```
 
 
 
