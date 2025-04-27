@@ -1227,6 +1227,11 @@ enum Coin {
 }
 ```
 
+- In the match expression for this code, we add a variable called state to the 
+pattern that matches values of the variant Coin::Quarter. When a Coin::Quarter 
+matches, the state variable will bind to the value of that quarter’s state. 
+Then we can use state in the code for that arm, like so:
+
 
 
 
