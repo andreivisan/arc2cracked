@@ -1324,6 +1324,29 @@ other values:
     fn remove_fancy_hat() {}
 ```
 
+**Concise Control Flow with if let and let else**
+
+- The if let syntax lets you combine if and let into a less verbose way to 
+handle values that match one pattern while ignoring the rest.
+
+Having:
+
+```rust
+    let config_max = Some(3u8);
+    if let Some(max) = config_max {
+        println!("The maximum is configured to be {max}");
+    }
+```
+
+We can transform into:
+
+```rust
+    let config_max = Some(3u8);
+    if let Some(max) = config_max {
+        println!("The maximum is configured to be {max}");
+    }
+```
+
 
 
 
