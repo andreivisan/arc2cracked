@@ -1424,6 +1424,14 @@ fn describe_state_quarter(coin: Coin) -> Option<String> {
 }
 ```
 
+## Managing Growing Projects with Packages, Crates, and Modules
+
+### Packages and Crates
+
+- A crate is the smallest amount of code that the Rust compiler considers at a 
+time. Even if you run rustc rather than cargo and pass a single source code 
+file (as we did all the way back in “Writing and Running a Rust Program” in 
+Chapter 1), the compiler considers that file to be a crate.
 
 
 
