@@ -1480,6 +1480,16 @@ src/lib.rs, it has two crates: a binary and a library, both with the same name
 as the package. A package can have multiple binary crates by placing files in 
 the src/bin directory: each file will be a separate binary crate.
 
+### Defining Modules to Control Scope and Privacy
+
+**Modules Cheat Sheet**
+
+
+
+
+
+
+
 
 
 
