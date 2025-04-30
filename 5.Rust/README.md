@@ -1532,6 +1532,40 @@ backyard
     └── main.rs
 ```
 
+The crate root file in this case is src/main.rs, and it contains:
+
+Filename: src/main.rs
+
+```rust
+use crate::garden::vegetables::Asparagus;
+
+pub mod garden;
+
+fn main() {
+    let plant = Asparagus {};
+    println!("I'm growing {plant:?}!");
+}
+```
+
+The pub mod garden; line tells the compiler to include the code it finds in src/garden.rs, which is:
+
+Filename: src/garden.rs
+
+```rust
+pub mod vegetables;
+```
+
+Here, pub mod vegetables; means the code in src/garden/vegetables.rs is 
+included too. That code is:
+
+```rust
+#[derive(Debug)]
+pub struct Asparagus {}
+```
+
+**Grouping Related Code in Modules**
+
+
 
 
 
