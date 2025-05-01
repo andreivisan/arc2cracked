@@ -1600,6 +1600,25 @@ mod front_of_house {
 - Modules can also hold definitions for other items, such as structs, enums, 
 constants, traits, and functions.
 
+- Earlier, we mentioned that src/main.rs and src/lib.rs are called crate roots. 
+The reason for their name is that the contents of either of these two files form 
+a module named crate at the root of the crate’s module structure, known as the 
+module tree.
+
+Below the module tree for the structure in the code above:
+
+```text
+crate
+ └── front_of_house
+     ├── hosting
+     │   ├── add_to_waitlist
+     │   └── seat_at_table
+     └── serving
+         ├── take_order
+         ├── serve_order
+         └── take_payment
+```
+
 
 
 
