@@ -1673,7 +1673,8 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-
+Unfortunately, the code in Listing 7-5 still results in compiler errors: 
+```add_to_waitlist() -> private function```.
 
 
 
