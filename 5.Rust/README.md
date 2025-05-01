@@ -1565,6 +1565,9 @@ pub struct Asparagus {}
 
 **Grouping Related Code in Modules**
 
+- Modules let us organize code within a crate for readability and easy reuse.
+- Modules also allow us to control the privacy of items because code within a 
+module is private by default.
 
 
 
