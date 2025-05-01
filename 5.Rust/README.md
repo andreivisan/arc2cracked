@@ -1716,6 +1716,28 @@ pub fn eat_at_restaurant() {
 >This helps you design a good API; not only are you the author, you’re also a 
 >client!
 
+**Starting Relative Paths with super**
+
+- We can construct relative paths that begin in the parent module, rather than 
+the current module or the crate root, by using super at the start of the path.
+
+Filename: src/lib.rs
+
+```rust
+fn deliver_order() {}
+
+mod back_of_house {
+    fn fix_incorrect_order() {
+        cook_order();
+        super::deliver_order();
+    }
+
+    fn cook_order() {}
+}
+```
+
+
+
 
 
 
