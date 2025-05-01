@@ -1676,7 +1676,10 @@ pub fn eat_at_restaurant() {
 Unfortunately, the code in Listing 7-5 still results in compiler errors: 
 ```add_to_waitlist() -> private function```.
 
-
+- Adding the pub keyword in front of mod hosting makes the module public. With 
+this change, if we can access front_of_house, we can access hosting. But the 
+contents of hosting are still private; making the module public doesn’t make 
+its contents public.
 
 
 
