@@ -1568,11 +1568,37 @@ pub struct Asparagus {}
 - Modules let us organize code within a crate for readability and easy reuse.
 - Modules also allow us to control the privacy of items because code within a 
 module is private by default.
+- We can choose to make modules and the items within them public, which exposes 
+them to allow external code to use and depend on them.
 
+*Example*: Creation of a restaurant project.
 
+```bash
+cargo new restaurant --lib
+```
 
+Filename: src/lib.rs
 
+```rust
+mod front_of_house {
+    mod hosting {
+        fn add_to_waitlist() {}
 
+        fn seat_at_table() {}
+    }
+
+    mod serving {
+        fn take_order() {}
+
+        fn serve_order() {}
+
+        fn take_payment() {}
+    }
+}
+```
+
+- Modules can also hold definitions for other items, such as structs, enums, 
+constants, traits, and functions.
 
 
 
