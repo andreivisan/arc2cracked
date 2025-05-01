@@ -1634,6 +1634,24 @@ we need to know its path.
 - Both absolute and relative paths are followed by one or more identifiers 
 separated by double colons (::).
 
+We’ll show two ways to call the add_to_waitlist function from a new function, 
+eat_at_restaurant, defined in the crate root.
+
+```rust
+mod front_of_house {
+    mod hosting {
+        fn add_to_waitlist() {}
+    }
+}
+
+pub fn eat_at_restaurant() {
+    // Absolute path
+    crate::front_of_house::hosting::add_to_waitlist();
+
+    // Relative path
+    front_of_house::hosting::add_to_waitlist();
+}
+```
 
 
 
