@@ -1838,6 +1838,28 @@ fn main() {
 
 - There’s no strong reason behind this idiom: it’s just the convention that has 
 emerged, and folks have gotten used to reading and writing Rust code this way.
+- The exception to this idiom is if we’re bringing two items with the same name 
+into scope with use statements, because Rust doesn’t allow that.
+
+Filename: src/lib.rs
+
+```rust
+use std::fmt;
+use std::io;
+
+fn function1() -> fmt::Result {
+    // --snip--
+}
+
+fn function2() -> io::Result<()> {
+    // --snip--
+}
+```
+
+- As you can see, using the parent modules distinguishes the two Result types. 
+If instead we specified use std::fmt::Result and use std::io::Result, we’d have 
+two Result types in the same scope, and Rust wouldn’t know which one we meant 
+when we used Result.
 
 
 
