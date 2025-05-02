@@ -1861,6 +1861,74 @@ If instead we specified use std::fmt::Result and use std::io::Result, we’d hav
 two Result types in the same scope, and Rust wouldn’t know which one we meant 
 when we used Result.
 
+**Providing New Names with the as Keyword**
+
+- There’s another solution to the problem of bringing two types of the same name 
+into the same scope with use: after the path, we can specify as and a new local 
+name, or alias, for the type.
+
+Filename: src/lib.rs
+
+```rust
+use std::fmt::Result;
+use std::io::Result as IoResult;
+
+fn function1() -> Result {
+    // --snip--
+}
+
+fn function2() -> IoResult<()> {
+    // --snip--
+}
+```
+
+**Re-exporting Names with pub use**
+
+- When we bring a name into scope with the use keyword, the name available in 
+the new scope is private. To enable the code that calls our code to refer to 
+that name as if it had been defined in that code’s scope, we can combine pub 
+and use. This technique is called re-exporting because we’re bringing an item 
+into scope but also making that item available for others to bring into their 
+scope.
+
+```rust
+mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+pub use crate::front_of_house::hosting;
+
+pub fn eat_at_restaurant() {
+    hosting::add_to_waitlist();
+}
+```
+
+**Using External Packages**
+
+Filename: Cargo.toml
+
+```toml
+rand = "0.8.5"
+```
+
+- Adding rand as a dependency in Cargo.toml tells Cargo to download the rand 
+package and any dependencies from crates.io and make rand available to our 
+project.
+
+```rust
+use rand::Rng;
+
+fn main() {
+    let secret_number = rand::thread_rng().gen_range(1..=100);
+}
+```
+
+**Using Nested Paths to Clean Up Large use Lists**
+
+
+
 
 
 
