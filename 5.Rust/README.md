@@ -1776,7 +1776,8 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-
+- In contrast, if we make an enum public, all of its variants are then public. 
+We only need the pub before the enum keyword.
 
 
 
