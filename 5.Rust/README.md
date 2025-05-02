@@ -1927,8 +1927,52 @@ fn main() {
 
 **Using Nested Paths to Clean Up Large use Lists**
 
+- If we’re using multiple items defined in the same crate or same module, 
+listing each item on its own line can take up a lot of vertical space in our 
+files.
 
+```rust
+// --snip--
+use std::cmp::Ordering;
+use std::io;
+// --snip--
+```
 
+- Instead, we can use nested paths to bring the same items into scope in one 
+line. 
+
+```rust
+// --snip--
+use std::{cmp::Ordering, io};
+// --snip--
+```
+
+- Or for something like:
+
+```rust
+use std::io;
+use std::io::Write;
+```
+
+then refactor it as:
+
+```rust
+use std::io::{self, Write};
+```
+
+- This line brings std::io and std::io::Write into scope.
+
+**The Glob Operator**
+
+- If we want to bring all public items defined in a path into scope, we can 
+specify that path followed by the * glob operator:
+
+```rust
+use std::collections::*;
+```
+
+- The glob operator is often used when testing to bring everything under test 
+into the tests module.
 
 
 
