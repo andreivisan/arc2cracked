@@ -1818,6 +1818,29 @@ pub fn eat_at_restaurant() {
 
 **Creating Idiomatic use Paths**
 
+- We can also bring the whole function into the scope using ```use``` by
+```use crate::front_of_house::hosting::add_to_waitlist;``` and then directly
+calling the function, but bringing the function's parent module is the 
+idiomatic way of doing this in Rust.
+- On the other hand, when bringing in structs, enums, and other items with use, 
+it’s idiomatic to specify the full path. 
+
+Filename: src/main.rs
+
+```rust
+use std::collections::HashMap;
+
+fn main() {
+    let mut map = HashMap::new();
+    map.insert(1, 2);
+}
+```
+
+- There’s no strong reason behind this idiom: it’s just the convention that has 
+emerged, and folks have gotten used to reading and writing Rust code this way.
+
+
+
 
 
 
