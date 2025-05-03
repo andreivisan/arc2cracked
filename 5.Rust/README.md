@@ -2005,18 +2005,6 @@ pub mod hosting {
 - Note that you only need to load a file using a mod declaration once in your 
 module tree.
 
-> | keyword                | one-line mantra                                   | what it works on                                                                                                                                                      |
-> | ---------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-> | `mod foo;`             | **“Create a child module.”**                      | *Only inside your own crate.* It *declares* that `foo` exists and tells the compiler where to read its source (inline block, `foo.rs`, or `foo/mod.rs`).              |
-> | `use path::to::Thing;` | **“Give me a shorter name for that thing here.”** | *Any* item that already exists—whether it lives in **this crate** or an **external crate**, whether it’s a module, struct, enum, trait, function, constant, or macro. |
-> 
-> * **`mod`** – *Declare* (once) that a sub-module of the *current crate* exists.
->   *It never pulls code in from another crate.*
-> 
-> * **`use`** – *Bring* an existing path (from this crate **or** another crate) into the current scope so you can type it more conveniently.
->   *It never creates a module; it just saves you keystrokes and makes code clearer.*
-
-
 
 
 
@@ -2044,3 +2032,115 @@ module tree.
 [Web - Actix](https://actix.rs/)
 
 [TUI - ratatui](https://ratatui.rs/)
+
+## Rust important things to remember
+
+Below is a “Rosetta Stone” that lines up the core *structural* building-blocks of Rust with the closest concepts in Java and (where helpful) Python. I start by fine-tuning your four items, then fill in the most common pieces people forget on a first pass.
+
+---
+
+## 1. `mod` -- the Rust *module*
+
+**What you said:** “Separates bigger units of code … we can have multiple modules in one file or separate them.”
+
+| Rust                       | Java                                   | Python                      | Notes                                                                                                                                                                                                      |
+| -------------------------- | -------------------------------------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mod http;` or `mod { … }` | *package-private* class or sub-package | sub-module inside a package | *Declares*, not imports. A module is always *inside a single crate* (see next section). Visibility is controlled with `pub` and follows an “up-the-tree” rule rather than Java’s public/private/protected. |
+
+*Key gotcha*: a **file** is **not** automatically a module. You must declare `mod foo;` in the parent file so the compiler knows to read `foo.rs`.
+
+---
+
+## 2. `struct` + `impl` -- data + behaviour
+
+**Your take:** “Like objects; methods live in the `impl`.”
+
+| Rust                                                                            | Java                                                  | Python           | Notes                                                                                                                                                                                                                                    |
+| ------------------------------------------------------------------------------- | ----------------------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `struct Point { x: f32, y: f32 }` + `impl Point { fn len(&self) -> f32 { … } }` | `class Point { float x; float y; float len() { … } }` | `class Point: …` | `struct` itself is *pure data*, no methods. Methods (including constructors) live in one or more `impl` blocks. You can have many separate `impl`s, even in different files. No inheritance; reuse is via **composition** or **traits**. |
+
+Extra variants you’ll meet soon:
+
+* **Tuple struct** – `struct Color(u8,u8,u8);` (like a Java *record* or Python `namedtuple` without field names).
+* **Unit struct** – `struct Marker;` (a zero-sized type, handy as a tag).
+
+---
+
+## 3. `crate` -- the compilation unit
+
+**Your take:** “Collection of modules, like packages.”
+
+| Rust                             | Java                                          | Python                          |
+| -------------------------------- | --------------------------------------------- | ------------------------------- |
+| one `Cargo.toml` → one **crate** | one Maven/Gradle module → one compiled `.jar` | one installable package on PyPI |
+
+A crate can be **binary** (`src/main.rs` → an executable) or **library** (`src/lib.rs` → a `.rlib` or `.so`). Inside it lives exactly one *module tree*. When you run `cargo build`, each dependency line in `Cargo.toml` pulls another *crate*, not another module.
+
+---
+
+## 4. `trait` -- capabilities, not state
+
+**Your take:** “Like Java interfaces.”
+
+| Rust                                                      | Java                                          | Python                                                       |
+| --------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------ |
+| `trait Drawable { fn draw(&self, canvas: &mut Canvas); }` | `interface Drawable { void draw(Canvas c); }` | *Protocol* in `typing`, or **duck typing** informal contract |
+
+*Same core idea*: a *set of required methods*. Differences that trip up Java folks:
+
+* **Blanket impls** – you can implement a trait for *any* type you own, even a foreign generic (`impl<T> Drawable for Vec<T>`).
+* **Static vs dynamic dispatch** – calling through a *generic bound* (`fn paint<T: Drawable>(t: T)`) is *monomorphised* at compile time (zero runtime cost). Calling through `&dyn Drawable` works like Java’s virtual call, paying indirection.
+* Traits can provide **default method bodies** (Java since 8), but still no fields.
+
+---
+
+## 5. What you haven’t listed yet (but soon will)
+
+| Rust construct                            | 1-liner                                                            | Java / Python nearest analogue                                                   |
+| ----------------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
+| **`enum`**                                | algebraic type with *tagged* variants (`Result<T,E>`, `Option<T>`) | Java sealed classes / enum + payload (since 17), Python `enum` + dataclass combo |
+| **Pattern matching (`match`)**            | exhaustive, compiler-checked switch                                | Java `switch` on pattern (since 17 preview), Python `match` (3.10)               |
+| **Generics**                              | `Vec<T>` with *monomorphisation*                                   | Java generics (but *reified*, no erasure)                                        |
+| **Lifetimes**                             | `"how long is this reference valid?"`                              | no direct Java/Python equivalent (GC hides it)                                   |
+| **`Option` / `Result`**                   | nullable / exception replacement                                   | `Optional<T>` / `Either`, or checked exceptions                                  |
+| **Macros** (`macro_rules!`, `proc-macro`) | syntax-level metaprogramming                                       | Java annotation processors, Python metaclasses/decorators                        |
+| **`const` / `static`**                    | compile-time constants / one per program value                     | `static final` in Java, module-level constants in Python                         |
+| **`union`** (rare)                        | C-style memory overlay                                             | Java `ByteBuffer` views, Python `ctypes.Union`                                   |
+| **Modules *inside traits/impls***         | `pub(in crate::foo)` fine-grained visibility                       | Java’s `protected`/module system, Python `_underscore` convention                |
+| **Workspaces**                            | multi-crate repo with joint `Cargo.lock`                           | Maven multi-module build, Python monorepo with several `setup.cfg`s              |
+
+---
+
+### A quick “when to reach for it” cheat sheet
+
+| Need                                   | Rust feature          | Java / Python habit you’ll migrate from                       |
+| -------------------------------------- | --------------------- | ------------------------------------------------------------- |
+| Plain data bag                         | `struct`              | POJO / dataclass                                              |
+| Tagged union / discriminated hierarchy | `enum`                | sealed class hierarchy / `typing.Union`                       |
+| Behaviour contract                     | `trait`               | interface / ABC                                               |
+| Utilities grouped in a file            | `mod util;`           | `package util;` / `util.py`                                   |
+| Public API surface                     | `pub use …` re-export | re-export from `__init__.py` / Java’s `exports` (module-info) |
+| Compile entire library                 | *crate*               | JAR / wheel                                                   |
+| Cross-crate abstraction                | trait + generic       | interface + type parameter                                    |
+
+---
+
+## Where newcomers slip
+
+1. **Thinking `use` *imports code* at runtime** – it doesn’t; it’s purely *compile-time name shortening*.
+2. **Expecting inheritance** – Rust composition + traits give you flexibility, but there’s no “extends”.
+3. **Ignoring lifetimes until the borrow checker yells** – they look scary but mainly document ownership; the compiler often infers them.
+
+---
+
+> | keyword                | one-line mantra                                   | what it works on                                                                                                                                                      |
+> | ---------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | `mod foo;`             | **“Create a child module.”**                      | *Only inside your own crate.* It *declares* that `foo` exists and tells the compiler where to read its source (inline block, `foo.rs`, or `foo/mod.rs`).              |
+> | `use path::to::Thing;` | **“Give me a shorter name for that thing here.”** | *Any* item that already exists—whether it lives in **this crate** or an **external crate**, whether it’s a module, struct, enum, trait, function, constant, or macro. |
+> 
+> * **`mod`** – *Declare* (once) that a sub-module of the *current crate* exists.
+>   *It never pulls code in from another crate.*
+> 
+> * **`use`** – *Bring* an existing path (from this crate **or** another crate) into the current scope so you can type it more conveniently.
+>   *It never creates a module; it just saves you keystrokes and makes code clearer.*
+
