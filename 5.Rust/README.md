@@ -2182,3 +2182,28 @@ A crate can be **binary** (`src/main.rs` → an executable) or **library** (`src
 > * **`use`** – *Bring* an existing path (from this crate **or** another crate) into the current scope so you can type it more conveniently.
 >   *It never creates a module; it just saves you keystrokes and makes code clearer.*
 
+---
+
+## When to use address (borrow) or own
+
+| Situation                                                | Prefer                                    | Reason                                                    | Docs                      |
+| -------------------------------------------------------- | ----------------------------------------- | --------------------------------------------------------- | ------------------------- |
+| Need only to read or do a quick calculation              | `&T`                                      | Zero cost; keeps ownership with caller                    | ([Rust Documentation][1]) |
+| Need to mutate in place, caller still owns data          | `&mut T`                                  | Exclusive, one at a time borrow                           | ([Rust Documentation][1]) |
+| Need to keep the value past the call or put it elsewhere | `T` (owned)                               | Ownership must move, or clone if the caller also needs it | ([Reddit][2])             |
+| Type is tiny and `Copy` (e.g. `i32`, `usize`)            | Either; `*ref` makes a copy automatically | Copies are as cheap as passing references                 | ([Rust Documentation][3]) |
+| Large / heap-allocated types (e.g. `String`, `Vec`)      | `&T` unless you genuinely must own        | Avoid implicit heap clones                                | ([fasterthanli.me][4])    |
+
+Two quick mental cues:
+
+1. Does the callee’s lifetime have to outlast the caller’s borrow? If yes → own / clone.
+
+2. Will I call a method that needs &mut self? If yes → own or take a &mut.
+
+3. Collections lend you data by reference unless you explicitly ask to move it.
+
+4. Default to borrowing; move/clone only when the lifetime or mutability rules force you to.
+
+5. Copy scalars blur the difference because dereferencing is a single CPU instruction.
+
+
