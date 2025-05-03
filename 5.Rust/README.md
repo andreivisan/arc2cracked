@@ -1974,6 +1974,53 @@ use std::collections::*;
 - The glob operator is often used when testing to bring everything under test 
 into the tests module.
 
+### Separating Modules into Different Files
+
+- We will separate the restaurant module into multiple files.
+- First we’ll extract the front_of_house module to its own file. 
+
+Filename: src/lib.rs
+
+```rust
+mod front_of_house;
+
+pub use crate::front_of_house::hosting;
+
+pub fn eat_at_restaurant() {
+    hosting::add_to_waitlist();
+}
+```
+
+Next, place the code that was in the curly brackets into a new file named 
+src/front_of_house.rs.
+
+Filename: src/front_of_house.rs
+
+```rust
+pub mod hosting {
+    pub fn add_to_waitlist() {}
+}
+```
+
+- Note that you only need to load a file using a mod declaration once in your 
+module tree.
+
+> Thought for 4 seconds
+> 
+> | keyword                | one-line mantra                                   | what it works on                                                                                                                                                      |
+> | ---------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | `mod foo;`             | **“Create a child module.”**                      | *Only inside your own crate.* It *declares* that `foo` exists and tells the compiler where to read its source (inline block, `foo.rs`, or `foo/mod.rs`).              |
+> | `use path::to::Thing;` | **“Give me a shorter name for that thing here.”** | *Any* item that already exists—whether it lives in **this crate** or an **external crate**, whether it’s a module, struct, enum, trait, function, constant, or macro. |
+> 
+> * **`mod`** – *Declare* (once) that a sub-module of the *current crate* exists.
+>   *It never pulls code in from another crate.*
+> 
+> * **`use`** – *Bring* an existing path (from this crate **or** another crate) into the current scope so you can type it more conveniently.
+>   *It never creates a module; it just saves you keystrokes and makes code clearer.*
+
+
+
+
 
 
 
