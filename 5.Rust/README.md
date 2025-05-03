@@ -2283,4 +2283,12 @@ the same String into two vectors that outlive each other.
 | **No**                  | **Yes**                  | Borrow (`&` / `&mut`)               |
 | **Yes**                 | –                        | Clone (or another sharing strategy) |
 
+- For our TwoSum example:
+
+| what you do                               | code sketch                                   | what happens to the value in the map                                                                                                                                                                    |
+| ----------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Borrow** *(no copy, no move)*           | `if let Some(&j) = map.get(&k) { … }`         | `get` returns `Option<&V>` — you merely read through a reference. Works because `i32` is `Copy`; for bigger types use `if let Some(v) = map.get(&k) { /* v: &T */ }` ([Reddit][1], [Stack Overflow][2]) |
+| **Move** *(transfer ownership out)*       | `if let Some(j) = map.remove(&k) { … }`       | `remove` gives `Option<V>` and deletes the entry, so you now **own** `j`; no clone, but the key is gone. Perfect when you need the data exactly once. ([The Rust Programming Language Forum][3])        |
+| **Clone** *(leave original, make a copy)* | `if let Some(j) = map.get(&k).cloned() { … }` | `.cloned()` turns `Option<&V>` into `Option<V>` by calling `Clone`; use only when both caller and callee must keep their own copy. ([Reddit][4], [The Rust Programming Language Forum][5])              |
+
 
