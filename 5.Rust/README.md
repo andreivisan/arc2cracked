@@ -2206,4 +2206,42 @@ Two quick mental cues:
 
 5. Copy scalars blur the difference because dereferencing is a single CPU instruction.
 
+### Borrowing with &—why every collection lookup gives you a reference
 
+- &T is an immutable borrow: “I promise just to read T, and only while this 
+borrow lives.” The owner keeps the data; no copy, no move. &mut T is the same 
+but exclusive and writable. 
+
+**Why library APIs prefer references**
+
+- Vec::iter, slice[index], HashMap::get and most read-only methods return &T or 
+Option<&T> so the container retains ownership.
+- “Consuming” APIs (into_iter, remove, take) move or return T itself, because 
+the caller is supposed to become the new owner.
+
+### Pattern-matching enums right in the if condition
+
+- if let is sugar for a one-arm match
+
+```rust
+if let Some(value) = maybe { … }            // concise
+// ≡
+match maybe { Some(value) => …, _ => {} }   // verbose
+```
+
+**Borrow or move inside the pattern?**
+
+- To borrow the payload, prefix it with ref (immutable) or ref mut:
+
+```rust
+if let Some(ref text) = maybe_str { … }   // text: &String
+```
+
+- To copy (only for Copy types) use & on the left-hand side:
+
+```rust
+if let Some(&n) = maybe_i32 { … }         // n: i32
+```
+
+- To move it out (ownership), just bind without ref. That only works if the 
+value implements Copy or maybe isn’t needed later (it will be partially moved).
