@@ -2035,7 +2035,7 @@ pub fn add_to_waitlist() {}
 > compiler will look for the module’s code in:
 > 
 > - ```src/front_of_house/hosting.rs (what we covered)```
-> - ``` src/front_of_house/hosting/mod.rs (older style, still supported path)```
+> - ```src/front_of_house/hosting/mod.rs (older style, still supported path)```
 > 
 > If you use both styles for the same module, you’ll get a compiler error. 
 > Using a mix of both styles for different modules in the same project is 
