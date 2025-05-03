@@ -2028,16 +2028,14 @@ pub fn add_to_waitlist() {}
 > front_of_house declared in the crate root, the compiler will look for the 
 > module’s code in:
 >
-> src/front_of_house.rs (what we covered)
-> 
-> src/front_of_house/mod.rs (older style, still supported path)
+> - ```src/front_of_house.rs (what we covered)```
+> - ```src/front_of_house/mod.rs (older style, still supported path)```
 > 
 > For a module named hosting that is a submodule of front_of_house, the 
 > compiler will look for the module’s code in:
 > 
-> src/front_of_house/hosting.rs (what we covered)
-> 
-> src/front_of_house/hosting/mod.rs (older style, still supported path)
+> - ```src/front_of_house/hosting.rs (what we covered)```
+> - ``` src/front_of_house/hosting/mod.rs (older style, still supported path)```
 > 
 > If you use both styles for the same module, you’ll get a compiler error. 
 > Using a mix of both styles for different modules in the same project is 
