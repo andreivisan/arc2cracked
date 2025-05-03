@@ -2,19 +2,15 @@ use std::collections::HashMap;
 
 pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
     let mut map: HashMap<i32, i32> = HashMap::new();
-    let mut result: Vec<i32> = Vec::new();
 
     for (index, &value) in nums.iter().enumerate() {
-        let diff = target - value;
-        if map.contains_key(&diff) {
-            result.push(index as i32);
-            result.push(map.get(&diff).unwrap().clone());
-        } else {
-            map.insert(value, index as i32);
+        if let Some(&diff) = map.get(&(target - value)) {
+            return vec![index as i32, diff];
         }
+        map.insert(value, index as i32);
     }
 
-    result
+    vec![]
 }
 
 #[cfg(test)]
