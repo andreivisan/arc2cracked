@@ -2245,3 +2245,42 @@ if let Some(&n) = maybe_i32 { … }         // n: i32
 
 - To move it out (ownership), just bind without ref. That only works if the 
 value implements Copy or maybe isn’t needed later (it will be partially moved).
+
+### Quick decision tree: do I use a reference?
+
+1. Only need to read or compare? → &T
+
+2. Need to mutate in place but don’t want to own? → &mut T
+
+3. Need to store or return the value, or its lifetime must outlive the borrow? → take T by value (move) or clone() first.
+
+4. Is the type Copy? If yes, dereferencing (*r) or pattern &x gives you a cheap copy; ownership questions shrink to zero.
+
+- When a value isn’t Copy you don’t automatically have to call .clone()—you have three choices: move it, borrow it, or clone it.
+
+### Move, Borrow, or Clone? -- the three paths
+
+**Move (transfer ownership)**
+
+- Passing a non-Copy value by value—for example returning a String from a function—moves it;
+
+**Borrow (&T / &mut T)**
+
+- If the caller must keep using the value, lend it with & or &mut; the callee 
+gets a reference, not the data. Nothing is cloned, and the borrow checker ensures 
+aliasing rules are respected. 
+
+**Clone (make a second owned value)**
+
+- Call .clone() only when both sides need ownership—for instance, when you push 
+the same String into two vectors that outlive each other.
+
+**How to decide in practice**
+
+| Need both owners alive? | Caller still uses value? | Technique                           |
+| ----------------------- | ------------------------ | ----------------------------------- |
+| **No**                  | **No**                   | Move (cheapest)                     |
+| **No**                  | **Yes**                  | Borrow (`&` / `&mut`)               |
+| **Yes**                 | –                        | Clone (or another sharing strategy) |
+
+
