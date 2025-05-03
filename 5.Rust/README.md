@@ -2005,8 +2005,6 @@ pub mod hosting {
 - Note that you only need to load a file using a mod declaration once in your 
 module tree.
 
-> Thought for 4 seconds
-> 
 > | keyword                | one-line mantra                                   | what it works on                                                                                                                                                      |
 > | ---------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `mod foo;`             | **“Create a child module.”**                      | *Only inside your own crate.* It *declares* that `foo` exists and tells the compiler where to read its source (inline block, `foo.rs`, or `foo/mod.rs`).              |
