@@ -2079,7 +2079,73 @@ let v = vec![1, 2, 3];
     v.push(8);
 ```
 
+**Reading Elements of Vectors**
 
+- There are two ways to reference a value stored in a vector: via indexing or 
+by using the get method.
+
+```rust
+    let v = vec![1, 2, 3, 4, 5];
+
+    let third: &i32 = &v[2];
+    println!("The third element is {third}");
+
+    let third: Option<&i32> = v.get(2);
+    match third {
+        Some(third) => println!("The third element is {third}"),
+        None => println!("There is no third element."),
+    }
+```
+
+**Iterating Over the Values in a Vector**
+
+- How to use a for loop to get immutable references to each element in a vector 
+of i32 values and print them.
+
+```rust
+    let v = vec![100, 32, 57];
+    for i in &v {
+        println!("{i}");
+    }
+```
+
+- We can also iterate over mutable references to each element in a mutable 
+vector in order to make changes to all the elements.
+
+```rust
+    let mut v = vec![100, 32, 57];
+    for i in &mut v {
+        *i += 50;
+    }
+```
+
+**Dropping a Vector Drops Its Elements**
+
+- Like any other struct, a vector is freed when it goes out of scope.
+
+```rust
+    {
+        let v = vec![1, 2, 3, 4];
+
+        // do stuff with v
+    } // <- v goes out of scope and is freed here
+```
+
+### Using an Enum to Store Multiple Types
+
+```rust
+    enum SpreadsheetCell {
+        Int(i32),
+        Float(f64),
+        Text(String),
+    }
+
+    let row = vec![
+        SpreadsheetCell::Int(3),
+        SpreadsheetCell::Text(String::from("blue")),
+        SpreadsheetCell::Float(10.12),
+    ];
+```
 
 
 
