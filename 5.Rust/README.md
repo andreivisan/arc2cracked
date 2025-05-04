@@ -2045,6 +2045,21 @@ pub fn add_to_waitlist() {}
 > project can end up with many files named mod.rs, which can get confusing when 
 > you have them open in your editor at the same time.
 
+## Common Collections
+
+### Storing Lists of Values with Vectors
+
+- The first collection type we’ll look at is Vec<T>, also known as a vector.
+- Vectors allow you to store more than one value in a single data structure 
+that puts all the values next to each other in memory.
+
+
+
+
+
+
+
+
 
 
 
