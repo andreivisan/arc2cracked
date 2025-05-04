@@ -2167,7 +2167,29 @@ some extra guarantees, restrictions, and capabilities.
     let s = "initial contents".to_string();
 ```
 
+```rust
+    let s = String::from("initial contents");
+```
 
+- Remember that strings are UTF-8 encoded, so we can include any properly 
+encoded data in them.
+
+**Updating a String**
+
+- A String can grow in size and its contents can change, just like the contents 
+of a Vec<T>, if you push more data into it. In addition, you can conveniently 
+use the + operator or the format! macro to concatenate String values.
+
+```rust
+    let mut s = String::from("foo");
+    s.push_str("bar");
+```
+
+```rust
+    let s1 = String::from("Hello, ");
+    let s2 = String::from("world!");
+    let s3 = s1 + &s2; // note s1 has been moved here and can no longer be used
+```
 
 
 
