@@ -2053,8 +2053,20 @@ pub fn add_to_waitlist() {}
 - Vectors allow you to store more than one value in a single data structure 
 that puts all the values next to each other in memory.
 
+**Creating a New Vector**
 
+```rust
+let v: Vec<i32> = Vec::new();
+```
 
+- More often, you’ll create a Vec<T> with initial values and Rust will infer 
+the type of value you want to store, so you rarely need to do this type annotation.
+- Rust conveniently provides the vec! macro, which will create a new vector 
+that holds the values you give it.
+
+```rust
+let v = vec![1, 2, 3];
+```
 
 
 
