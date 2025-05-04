@@ -2147,6 +2147,17 @@ vector in order to make changes to all the elements.
     ];
 ```
 
+### Storing UTF-8 Encoded Text with Strings
+
+-  Rust has only one string type in the core language, which is the string slice 
+str that is usually seen in its borrowed form &str.
+- String is actually implemented as a wrapper around a vector of bytes with 
+some extra guarantees, restrictions, and capabilities.
+
+```rust
+    let mut s = String::new();
+```
+
 
 
 
