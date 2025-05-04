@@ -2548,3 +2548,37 @@ fn main() {
     assert_eq!(c, vec![1, 2, 3, 4]);
 }
 ```
+
+## Matches!
+
+- Rust’s matches! macro turns pattern-matching into a single Boolean expression:
+matches!(expr, pattern) returns true when expr fits the pattern, otherwise false.
+
+- Valid parentheses problem code
+
+```rust
+if !matches!((open, ch),
+             ('(', ')') | ('[', ']') | ('{', '}')) {
+    /* … */
+}
+```
+
+**Choosing between matches!, if let, and match**
+
+| Use-case                                                     | Best tool  | Why                              | Sources                   |
+| ------------------------------------------------------------ | ---------- | -------------------------------- | ------------------------- |
+| Need a quick **boolean** test inside `if`, `while`, `filter` | `matches!` | shortest, expression-oriented    | ([Stack Overflow][1])     |
+| Care about **one variant** and want to **access payload**    | `if let`   | binds variables and can run code | ([Stack Overflow][2])     |
+| Need to handle **every variant exhaustively**                | `match`    | compiler checks completeness     | ([patshaughnessy.net][3]) |
+
+**Hands-on tweak for the parentheses algorithm**
+
+```rust
+let pair_ok = matches!((open, ch),
+                       ('(', ')') | ('[', ']') | ('{', '}'));
+if !pair_ok {                 // the outer ! negates the result
+    return false;
+}
+```
+
+
