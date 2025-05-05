@@ -2210,8 +2210,30 @@ gets unwieldy:
     let s = s1 + "-" + &s2 + "-" + &s3;
 ```
 
+- For combining strings in more complicated ways, we can instead use the format! 
+macro:
 
+```rust
+    let s1 = String::from("tic");
+    let s2 = String::from("tac");
+    let s3 = String::from("toe");
 
+    let s = format!("{s1}-{s2}-{s3}");
+```
+
+**Indexing into Strings**
+
+- Rust strings don’t support indexing.
+
+```rust
+    let hello = String::from("Здравствуйте");
+```
+
+- If you were asked how long the string is, you might say 12. In fact, Rust’s 
+answer is 24: that’s the number of bytes it takes to encode “Здравствуйте” in 
+UTF-8, because each Unicode scalar value in that string takes 2 bytes of storage. 
+Therefore, an index into the string’s bytes will not always correlate to a valid 
+Unicode scalar value.
 
 
 
