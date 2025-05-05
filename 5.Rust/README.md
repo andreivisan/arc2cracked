@@ -2191,6 +2191,27 @@ use the + operator or the format! macro to concatenate String values.
     let s3 = s1 + &s2; // note s1 has been moved here and can no longer be used
 ```
 
+- The reason s1 is no longer valid after the addition, and the reason we used a 
+reference to s2, has to do with the signature of the method that’s called when 
+we use the + operator. 
+
+```rust
+fn add(self, s: &str) -> String {
+```
+
+- If we need to concatenate multiple strings, the behavior of the + operator 
+gets unwieldy:
+
+```rust
+    let s1 = String::from("tic");
+    let s2 = String::from("tac");
+    let s3 = String::from("toe");
+
+    let s = s1 + "-" + &s2 + "-" + &s3;
+```
+
+
+
 
 
 
