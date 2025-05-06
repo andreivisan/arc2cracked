@@ -2410,6 +2410,51 @@ moved into the hash map.
 - The values that the references point to must be valid for at least as long as 
 the hash map is valid.
 
+**Updating a Hash Map**
+
+- Although the number of key and value pairs is growable, each unique key can 
+only have one value associated with it at a time (but not vice versa: for 
+example, both the Blue team and the Yellow team could have the value 10 stored 
+in the scores hash map).
+
+**Overwriting a Value**
+
+```rust
+use std::collections::HashMap;
+
+let mut scores = HashMap::new();
+
+scores.insert(String::from("Blue"), 10);
+scores.insert(String::from("Blue"), 25);
+
+println!("{scores:?}");
+```
+
+**Adding a Key and Value Only If a Key Isn’t Present**
+
+- Hash maps have a special API for this called entry that takes the key you 
+want to check as a parameter. 
+- The return value of the entry method is an enum called Entry that represents 
+a value that might or might not exist.
+
+```rust
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+    scores.insert(String::from("Blue"), 10);
+
+    scores.entry(String::from("Yellow")).or_insert(50);
+    scores.entry(String::from("Blue")).or_insert(50);
+
+    println!("{scores:?}");
+```
+
+- The or_insert method on Entry is defined to return a mutable reference to 
+the value for the corresponding Entry key if that key exists, and if not, it 
+inserts the parameter as the new value for this key and returns a mutable 
+reference to the new value.
+
+**Updating a Value Based on the Old Value**
 
 
 
