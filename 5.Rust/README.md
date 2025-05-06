@@ -2374,6 +2374,22 @@ hash map, get will return None.
 - We can iterate over each key–value pair in a hash map in a similar manner as 
 we do with vectors, using a for loop:
 
+```rust
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    for (key, value) in &scores {
+        println!("{key}: {value}");
+    }
+```
+
+**Hash Maps and Ownership**
+
+
 
 
 
