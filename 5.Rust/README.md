@@ -2275,6 +2275,45 @@ indices to create string slices, therefore, Rust asks you to be more specific.
 - Rather than indexing using [] with a single number, you can use [] with a 
 range to create a string slice containing particular bytes:
 
+```rust
+let hello = "Здравствуйте";
+
+let s = &hello[0..4];
+```
+
+- Here, s will be a &str that contains the first four bytes of the string. 
+Earlier, we mentioned that each of these characters was two bytes, which means 
+s will be Зд.
+
+- If we were to try to slice only part of a character’s bytes with something 
+like &hello[0..1], Rust would panic at runtime in the same way as if an invalid 
+index were accessed in a vector
+
+**Methods for Iterating Over Strings**
+
+- The best way to operate on pieces of strings is to be explicit about whether 
+you want characters or bytes. For individual Unicode scalar values, use the 
+chars method. Calling chars on “Зд” separates out and returns two values of 
+type char, and you can iterate over the result to access each element:
+
+```rust
+for c in "Зд".chars() {
+    println!("{c}");
+}
+```
+
+- This code will print the following:
+
+```text
+З
+д
+```
+
+
+
+
+
+
 
 
 
