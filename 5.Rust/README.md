@@ -2336,9 +2336,43 @@ are available on crates.io if this is the functionality you need.
 
 ### Storing Keys with Associated Values in Hash Maps
 
+**Creating a New Hash Map**
 
+- One way to create an empty hash map is to use new and to add elements with 
+insert.
 
+```rust
+    use std::collections::HashMap;
 
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+```
+
+- Just like vectors, hash maps store their data on the heap. This HashMap has 
+keys of type String and values of type i32. Like vectors, hash maps are 
+homogeneous: all of the keys must have the same type, and all of the values 
+must have the same type.
+
+**Accessing Values in a Hash Map**
+
+```rust
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    let team_name = String::from("Blue");
+    let score = scores.get(&team_name).copied().unwrap_or(0);
+```
+
+- The get method returns an Option<&V>; if there’s no value for that key in the 
+hash map, get will return None. 
+- We can iterate over each key–value pair in a hash map in a similar manner as 
+we do with vectors, using a for loop:
 
 
 
