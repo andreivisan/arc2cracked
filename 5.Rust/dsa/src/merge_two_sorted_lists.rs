@@ -16,10 +16,10 @@ impl ListNode {
 
 pub fn merge_two_lists(list1: Option<Box<ListNode>>, list2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
     match (list1, list2) {
-        (Some(l1), None) => l1,
-        (None, Some(l2)) => l2,
+        (Some(l1), None) => Some(l1),
+        (None, Some(l2)) => Some(l2),
         (Some(l1), Some(l2)) => {
-            if l1 <= l2 {
+            if l1.val <= l2.val {
                 l1 = l1.next;
             } else {
                 let temp = &l1.next
