@@ -28,22 +28,35 @@ pub mod my_module {
 
     // TODO: Complete the function as described above.
     pub fn transformer(input: Vec<(String, Command)>) -> Vec<String> {
-        let mut result = Vec::new();
-        for (mut string, command) in input {
-           match command {
-               Command::Uppercase => {
-                   result.push(string.to_uppercase());
-               }
-               Command::Trim => {
-                   result.push(string.trim().to_string());
-               }
-               Command::Append(val) => {
-                   string.push_str(&"bar".repeat(val));
-                   result.push(string);
-               }
-           } 
-        }
-        result
+        // let mut result = Vec::new();
+        // for (mut string, command) in input {
+        //    match command {
+        //        Command::Uppercase => {
+        //            result.push(string.to_uppercase());
+        //        }
+        //        Command::Trim => {
+        //            result.push(string.trim().to_string());
+        //        }
+        //        Command::Append(val) => {
+        //            string.push_str(&"bar".repeat(val));
+        //            result.push(string);
+        //        }
+        //    } 
+        // }
+        // result
+        input.into_iter()                // consume the Vec, no cloning
+         .map(|(mut s, cmd)| match cmd {
+             Command::Uppercase => s.to_uppercase(),
+             Command::Trim      => s.trim().to_string(),
+             Command::Append(n) => {
+                 s.reserve(3 * n);   // one grow step for "bar" * n
+                 for _ in 0..n {
+                     s.push_str("bar");
+                 }
+                 s
+             }
+         })
+         .collect()
     }
 }
 
