@@ -2879,3 +2879,75 @@ more importantly, is part of a structure whose total size isn't known at
 compile time. Storing ListNode instances within a Box places them on the heap, 
 and the Box itself (which is a pointer) resides on the stack or within the 
 containing structure.
+
+## | … | — the closure parameter list
+
+### 1.1 Closures at a glance
+
+- A closure is an unnamed, inline function that can capture variables from the 
+surrounding scope. It’s created with vertical bars for parameters followed by 
+an expression that is the body.
+
+```rust
+let plus_one = |x| x + 1;
+```
+
+In the quizzes2.rs from rustlings we have:
+
+```rust
+input.into_iter()
+     .map(|(mut s, cmd)| match cmd { … })
+```
+
+- |(mut s, cmd)| declares two closure parameters:
+    - mut s – the String, taken by value and made mutable inside the closure;
+    - cmd – the Command enum.
+- Everything after the | until the matching braces is the closure body; here 
+it’s a single match cmd { … }.
+
+## ? — the quick way to bubble errors up
+
+### Purpose
+
+- The question-mark operator replaces a whole match on a Result. If the value 
+is Ok(v), it unwraps to v; if it’s Err(e), it returns early from the current 
+function with that error.
+
+### Desugaring
+
+```rust
+let data = std::fs::read_to_string("config.toml")?;
+```
+
+is exactly
+
+```rust
+let data = match std::fs::read_to_string("config.toml") {
+    Ok(s)  => s,
+    Err(e) => return Err(e.into()),
+};
+```
+
+- No panics, no unwraps—just neat early exit. The function’s return type must 
+itself be a Result (or something implementing FromResidual) so the propagated 
+error fits.
+
+## Real-world sketch
+
+```rust
+fn load_table(path: &str) -> Result<HashMap<String, i32>, io::Error> {
+    let txt   = std::fs::read_to_string(path)?;      // propagates I/O errors
+    let json  = serde_json::from_str(&txt)?;         // propagates parse errors
+    Ok(json)
+}
+```
+
+- Every ? keeps the happy path flush-left and leaves error handling to the 
+caller, mirroring Java’s throws but with zero runtime cost.
+
+## When you’ll see it
+
+- Any non-trivial Rust code that touches files, sockets, parsing, or other 
+fallible APIs relies on ? as its main control-flow tool. It’s also part of 
+async/await and iterator adapters, so you’ll spot it almost everywhere once you 
+start reading production crates.
