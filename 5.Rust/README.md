@@ -2932,7 +2932,7 @@ let data = match std::fs::read_to_string("config.toml") {
 itself be a Result (or something implementing FromResidual) so the propagated 
 error fits.
 
-## Real-world sketch
+### Real-world sketch
 
 ```rust
 fn load_table(path: &str) -> Result<HashMap<String, i32>, io::Error> {
@@ -2945,9 +2945,17 @@ fn load_table(path: &str) -> Result<HashMap<String, i32>, io::Error> {
 - Every ? keeps the happy path flush-left and leaves error handling to the 
 caller, mirroring Java’s throws but with zero runtime cost.
 
-## When you’ll see it
+### When you’ll see it
 
 - Any non-trivial Rust code that touches files, sockets, parsing, or other 
 fallible APIs relies on ? as its main control-flow tool. It’s also part of 
 async/await and iterator adapters, so you’ll spot it almost everywhere once you 
 start reading production crates.
+
+## The two “big-deal” features the speaker focuses on
+
+| #     | Feature                   | What it does                                                                                                                                                                                                    | Key take-aways from the talk                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ----- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1** | **Ownership & Borrowing** | Tracks who owns a piece of memory and *when* the ownership can be transferred (“move”) or merely *lent* (“borrow”). The compiler then frees the memory automatically at the last use, *with zero runtime cost*. | \* Passing a value to a function **moves** it unless you: <br> • **`clone()`** – explicit, may be expensive.<br> • **`Copy` trait** – implicit, but still duplicates.<br> • **Reference (`&T` / `&mut T`)** – lends the value without moving it.<br>\* You may have unlimited immutable borrows, **but never more than one mutable borrow at the same time**.<br>\* These rules are enforced at compile-time, preventing seg-faults (C/C++) and eliminating the need for a GC (Java, Go, Python).                                                                                                                                                       |
+| **2** | **Lifetimes**             | Tell the compiler how long those borrows must remain valid so that no reference ever outlives the data it points to.                                                                                            | \* When a function returns a reference taken from its arguments, the compiler must know **which argument** it came from and for **how long** it must stay alive – that’s what the `<'a>` annotations convey.<br>\* In simple “pass one ref in, return it back” cases the compiler infers lifetimes; for anything ambiguous you annotate them.<br>\* The same idea applies to structs that store references: the struct’s lifetime parameter guarantees the referenced data outlives the struct itself.<br>\* Getting a lifetime error at compile-time means Rust has prevented a *dangling pointer* bug that would crash at runtime in other languages. |
+
