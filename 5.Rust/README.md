@@ -2478,7 +2478,7 @@ This code will print {"world": 2, "hello": 1, "wonderful": 1}.
 - By default, HashMap uses a hashing function called SipHash that can provide 
 resistance to denial-of-service (DoS) attacks involving hash tables.
 
-
+## Error Handling
 
 
 
