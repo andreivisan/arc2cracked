@@ -3130,4 +3130,63 @@ for duplication and destruction.
 * Trust the compiler for `Copy` types: every copy is stack-only, freed
   automatically at the end of its own scope, with zero runtime overhead.
 
+## What Are `Rc` and `RefCell` in Rust?
 
+In your tree node definition:
+
+```rust
+pub struct TreeNode {
+    pub val: i32,
+    pub left: Option>>,
+    pub right: Option>>,
+}
+```
+
+the types `Rc` and `RefCell` are essential Rust smart pointers that enable shared, mutable data structures like trees.
+
+---
+
+**Rc (Reference Counted Pointer)**
+
+- `Rc` stands for "Reference Counted" and provides *shared ownership* of a value of type `T` on the heap.
+- Multiple parts of your program can "own" the same data, and the value will only be dropped when the last `Rc` goes out of scope.
+- `Rc` is single-threaded and cannot be sent across threads.
+- By default, `Rc` only allows *immutable* access to its contents. If you need to mutate the value, you must combine it with something like `RefCell`[1][5][7].
+
+> "`Rc` provides shared ownership of a value of type T, allocated in the heap. Invoking clone on Rc produces a new pointer to the same allocation in the heap. When the last Rc pointer to a given allocation is destroyed, the value stored in that allocation is also dropped."[7]
+
+---
+
+**RefCell (Interior Mutability Pattern)**
+
+- `RefCell` enables *interior mutability*: you can mutate the value inside a `RefCell` even when the `RefCell` itself is not mutable.
+- It enforces Rust's borrowing rules *at runtime* instead of compile time. This means you can have either multiple immutable borrows or one mutable borrow at a time, but if you break this rule, your program will panic at runtime[6][4][8][9].
+- `RefCell` is often used in combination with `Rc` to allow multiple owners to mutate shared data, which is not possible with `Rc` alone.
+
+> "`RefCell` and the Interior Mutability Pattern: Interior mutability is a design pattern in Rust that allows you to mutate data even when there are immutable references to that data; normally, this action is disallowed by the borrowing rules. ... With `RefCell`, these invariants are enforced at runtime."[6]
+
+---
+
+### Why Use Both Together?
+
+- `Rc` enables multiple parts of your program to own the same tree node.
+- `RefCell` allows you to mutate the tree node's contents (like adding or removing children) even if you only have an immutable reference to the node itself.
+
+This combination is necessary for structures like trees or graphs, where nodes may be shared (multiple parents or cycles) and must be mutated after creation[3][6][9].
+
+---
+
+### Summary Table
+
+| Smart Pointer | Ownership         | Mutability         | Borrowing Check  | Thread Safety |
+|---------------|------------------|--------------------|------------------|--------------|
+| `Rc`       | Shared           | Immutable only     | Compile time     | No           |
+| `RefCell`  | Single           | Interior mutable   | Runtime          | No           |
+| `Rc>` | Shared        | Interior mutable   | Runtime          | No           |
+
+---
+
+**In short:**  
+- Use `Rc` for shared ownership.
+- Use `RefCell` for interior mutability.
+- Combine them (`Rc>`) for shared, mutable data-perfect for tree nodes where nodes might be referenced and mutated from multiple places in your code[6][7][9].
