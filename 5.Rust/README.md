@@ -2480,6 +2480,15 @@ resistance to denial-of-service (DoS) attacks involving hash tables.
 
 ## Error Handling
 
+### Unrecoverable Errors with panic!
+
+- Sometimes bad things happen in your code, and there’s nothing you can do about 
+it. In these cases, Rust has the panic! macro.
+- There are two ways to cause a panic in practice: 
+    
+    1. by taking an action that causes our code to panic (such as accessing an 
+    array past the end)
+    2. by explicitly calling the panic! macro.
 
 
 
