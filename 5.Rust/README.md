@@ -2505,6 +2505,36 @@ fn main() {
 
 ### Recoverable Errors with Result
 
+- For example, if you try to open a file and that operation fails because the 
+file doesn’t exist, you might want to create the file instead of terminating 
+the process.
+
+```rust
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+```
+
+- T represents the type of the value that will be returned in a success case 
+within the Ok variant.
+- E represents the type of the error that will be returned in a failure case 
+within the Err variant.
+- Because Result has these generic type parameters, we can use the Result type 
+and the functions defined on it in many different situations where the success 
+value and error value we want to return may differ.
+
+Let’s call a function that returns a Result value because the function could 
+fail.
+
+```rust
+use std::fs::File;
+
+fn main() {
+    let greeting_file_result = File::open("hello.txt");
+}
+```
+
 
 
 
