@@ -2591,6 +2591,44 @@ greeting_file_result, but we also have an inner match on error.kind().
 - The condition we want to check in the inner match is whether the value 
 returned by error.kind() is the NotFound variant of the ErrorKind enum.
 
+> **Alternatives to Using match with Result<T, E>**
+> 
+> Here’s another way to write the same logic as shown in the code above, this 
+time using closures and the unwrap_or_else method.
+> 
+> ```rust
+> use std::fs::File;
+> use std::io::ErrorKind;
+> 
+> fn main() {
+>     let greeting_file = File::open("hello.txt").unwrap_or_else(|error| {
+>         if error.kind() == ErrorKind::NotFound {
+>             File::create("hello.txt").unwrap_or_else(|error| {
+>                 panic!("Problem creating the file: {error:?}");
+>             })
+>         } else {
+>             panic!("Problem opening the file: {error:?}");
+>         }
+>     });
+> }
+> ```
+
+**Shortcuts for Panic on Error: unwrap and expect**
+
+- The unwrap method is a shortcut method implemented just like the match 
+expression we wrote in the code abobe. If the Result value is the Ok variant, 
+unwrap will return the value inside the Ok. If the Result is the Err variant, 
+unwrap will call the panic! macro for us. Here is an example of unwrap in action:
+
+```rust
+use std::fs::File;
+
+fn main() {
+    let greeting_file = File::open("hello.txt").unwrap();
+}
+```
+
+
 
 
 
@@ -3302,4 +3340,4 @@ This combination is necessary for structures like trees or graphs, where nodes m
 **In short:**  
 - Use `Rc` for shared ownership.
 - Use `RefCell` for interior mutability.
-- Combine them (`Rc>`) for shared, mutable data-perfect for tree nodes where nodes might be referenced and mutated from multiple places in your code[6][7][9].
+- Combine them (`Rc>`) for shared, mutable data-perfect for tree nodes where nodes might be referenced and mutated from multiple places in your code.
