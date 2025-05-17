@@ -2535,6 +2535,64 @@ fn main() {
 }
 ```
 
+- The return type of File::open is a Result<T, E>.
+- The generic parameter T has been filled in by the implementation of File::open 
+with the type of the success value, std::fs::File, which is a file handle.
+
+```rust
+use std::fs::File;
+
+fn main() {
+    let greeting_file_result = File::open("hello.txt");
+
+    let greeting_file = match greeting_file_result {
+        Ok(file) => file,
+        Err(error) => panic!("Problem opening the file: {error:?}"),
+    };
+}
+```
+
+Note that, like the Option enum, the Result enum and its variants have been 
+brought into scope by the prelude, so we don’t need to specify Result:: before 
+the Ok and Err variants in the match arms.
+
+**Matching on Different Errors**
+
+```rust
+use std::fs::File;
+use std::io::ErrorKind;
+
+fn main() {
+    let greeting_file_result = File::open("hello.txt");
+
+    let greeting_file = match greeting_file_result {
+        Ok(file) => file,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => match File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("Problem creating the file: {e:?}"),
+            },
+            _ => {
+                panic!("Problem opening the file: {error:?}");
+            }
+        },
+    };
+}
+```
+
+- The type of the value that File::open returns inside the Err variant is 
+io::Error, which is a struct provided by the standard library. This struct has 
+a method kind that we can call to get an io::ErrorKind value. 
+- The enum io::ErrorKind is provided by the standard library and has variants 
+representing the different kinds of errors that might result from an io 
+operation. The variant we want to use is ErrorKind::NotFound, which indicates 
+the file we’re trying to open doesn’t exist yet. So we match on 
+greeting_file_result, but we also have an inner match on error.kind().
+- The condition we want to check in the inner match is whether the value 
+returned by error.kind() is the NotFound variant of the ErrorKind enum.
+
+
+
 
 
 
