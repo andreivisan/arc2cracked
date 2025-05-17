@@ -2691,6 +2691,15 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
+- The ? placed after a Result value is defined to work in almost the same way 
+as the match expressions we defined to handle the Result values in the code 
+above.
+- If the value of the Result is an Ok, the value inside the Ok will get returned 
+from this expression, and the program will continue.
+- If the value is an Err, the Err will be returned from the whole function as 
+if we had used the return keyword so the error value gets propagated to the 
+calling code.
+
 
 
 
