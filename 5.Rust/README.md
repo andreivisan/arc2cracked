@@ -2628,9 +2628,68 @@ fn main() {
 }
 ```
 
+- Similarly, the expect method lets us also choose the panic! error message. 
+Using expect instead of unwrap and providing good error messages can convey 
+your intent and make tracking down the source of a panic easier. The syntax of 
+expect looks like this:
 
+```rust
+use std::fs::File;
 
+fn main() {
+    let greeting_file = File::open("hello.txt")
+        .expect("hello.txt should be included in this project");
+}
+```
 
+- In production-quality code, most Rustaceans choose expect rather than unwrap 
+and give more context about why the operation is expected to always succeed.
+
+> NOTE: When there is an error and I want to do something about it I will use
+> ```unwrap_or_else``` and when I don't want to do anything about it but I want to 
+> control the error message then I use ```expect```.
+
+### Propagating Errors
+
+- In the listing below, there is function that reads a username from a file. If 
+the file doesn’t exist or can’t be read, this function will return those errors 
+to the code that called the function.
+
+```rust
+use std::fs::File;
+use std::io::{self, Read};
+
+fn read_username_from_file() -> Result<String, io::Error> {
+    let username_file_result = File::open("hello.txt");
+
+    let mut username_file = match username_file_result {
+        Ok(file) => file,
+        Err(e) => return Err(e),
+    };
+
+    let mut username = String::new();
+
+    match username_file.read_to_string(&mut username) {
+        Ok(_) => Ok(username),
+        Err(e) => Err(e),
+    }
+}
+```
+
+- This pattern of propagating errors is so common in Rust that Rust provides 
+the question mark operator ? to make this easier.
+
+```rust
+use std::fs::File;
+use std::io::{self, Read};
+
+fn read_username_from_file() -> Result<String, io::Error> {
+    let mut username_file = File::open("hello.txt")?;
+    let mut username = String::new();
+    username_file.read_to_string(&mut username)?;
+    Ok(username)
+}
+```
 
 
 
