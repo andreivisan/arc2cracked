@@ -2709,8 +2709,31 @@ converted into the error type defined in the return type of the current function
 This is useful when a function returns one error type to represent all the ways 
 a function might fail, even if parts might fail for many different reasons.
 
+- For example, we could change the read_username_from_file function in Listing 
+above to return a custom error type named OurError that we define. If we also 
+define impl From<io::Error> for OurError to construct an instance of OurError 
+from an io::Error, then the ? operator calls in the body of 
+read_username_from_file will call from and convert the error types without 
+needing to add any more code to the function.
 
+There is a way to make this even shorter using fs::read_to_string.
 
+```rust
+use std::fs;
+use std::io;
+
+fn read_username_from_file() -> Result<String, io::Error> {
+    fs::read_to_string("hello.txt")
+}
+```
+
+**Where The ? Operator Can Be Used**
+
+- The ? operator can only be used in functions whose return type is compatible 
+with the value the ? is used on. The return type of the function has to be a 
+Result so that it’s compatible with this return.
+- We’re only allowed to use the ? operator in a function that returns Result, 
+Option, or another type that implements FromResidual.
 
 
 
