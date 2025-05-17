@@ -2700,6 +2700,15 @@ from this expression, and the program will continue.
 if we had used the return keyword so the error value gets propagated to the 
 calling code.
 
+- There is a difference between what the match expression from Listing 9-6 does 
+and what the ? operator does: error values that have the ? operator called on 
+them go through the from function, defined in the From trait in the standard 
+library, which is used to convert values from one type into another.
+- When the ? operator calls the from function, the error type received is 
+converted into the error type defined in the return type of the current function. 
+This is useful when a function returns one error type to represent all the ways 
+a function might fail, even if parts might fail for many different reasons.
+
 
 
 
