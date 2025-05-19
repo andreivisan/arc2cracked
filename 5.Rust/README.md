@@ -2756,6 +2756,10 @@ to recover or not, but then you’re making the decision that a situation is
 unrecoverable on behalf of the calling code.
 - When you choose to return a Result value, you give the calling code options.
 
+## Generic Types, Traits, and Lifetimes
+
+
+
 
 
 
