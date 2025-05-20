@@ -2834,6 +2834,16 @@ fn main() {
 }
 ```
 
+- To define the generic largest function, we place type name declarations 
+inside angle brackets, <>, between the name of the function and the parameter 
+list, like this:
+
+```rust
+fn largest<T>(list: &[T]) -> &T {
+```
+
+
+
 
 
 
