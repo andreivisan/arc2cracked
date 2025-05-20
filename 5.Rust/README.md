@@ -2870,7 +2870,40 @@ fn main() {
 }
 ```
 
+If we compile this code right now, we’ll get this error:
 
+```text
+$ cargo run
+   Compiling chapter10 v0.1.0 (file:///projects/chapter10)
+error[E0369]: binary operation `>` cannot be applied to type `&T`
+ --> src/main.rs:5:17
+  |
+5 |         if item > largest {
+  |            ---- ^ ------- &T
+  |            |
+  |            &T
+  |
+help: consider restricting type parameter `T` with trait `PartialOrd`
+  |
+1 | fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
+  |             ++++++++++++++++++++++
+
+For more information about this error, try `rustc --explain E0369`.
+error: could not compile `chapter10` (bin "chapter10") due to 1 previous error
+```
+
+- Because we want to compare values of type T in the body, we can only use 
+types whose values can be ordered.
+- To enable comparisons, the standard library has the std::cmp::PartialOrd trait 
+that you can implement on types.
+- To fix the example code above, we would need to follow the help text’s 
+suggestions and restrict the types valid for T to only those that implement 
+PartialOrd. The example would then compile, because the standard library 
+implements PartialOrd on both i32 and char.
+
+```rust
+fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T
+```
 
 
 
