@@ -3015,6 +3015,76 @@ fn main() {
 }
 ```
 
+### Traits: Defining Shared Behavior
+
+- A trait defines the functionality a particular type has and can share with 
+other types. We can use traits to define shared behavior in an abstract way. We 
+can use trait bounds to specify that a generic type can be any type that has 
+certain behavior.
+
+> **Note**: Traits are similar to a feature often called interfaces in other 
+> languages, although with some differences.
+
+**Defining a Trait**
+
+```rust
+pub trait Summary {
+    fn summarize(&self) -> String;
+}
+```
+
+**Implementing a Trait on a Type**
+
+```rust
+pub struct NewsArticle {
+    pub headline: String,
+    pub location: String,
+    pub author: String,
+    pub content: String,
+}
+
+impl Summary for NewsArticle {
+    fn summarize(&self) -> String {
+        format!("{}, by {} ({})", self.headline, self.author, self.location)
+    }
+}
+
+pub struct SocialPost {
+    pub username: String,
+    pub content: String,
+    pub reply: bool,
+    pub repost: bool,
+}
+
+impl Summary for SocialPost {
+    fn summarize(&self) -> String {
+        format!("{}: {}", self.username, self.content)
+    }
+}
+```
+
+```rust
+use aggregator::{SocialPost, Summary};
+
+fn main() {
+    let post = SocialPost {
+        username: String::from("horse_ebooks"),
+        content: String::from(
+            "of course, as you probably already know, people",
+        ),
+        reply: false,
+        repost: false,
+    };
+
+    println!("1 new social post: {}", post.summarize());
+}
+```
+
+
+
+
+
+
 
 
 
