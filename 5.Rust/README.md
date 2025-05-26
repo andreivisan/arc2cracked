@@ -3276,9 +3276,24 @@ impl<T: Display + PartialOrd> Pair<T> {
 }
 ```
 
+- We can also conditionally implement a trait for any type that implements 
+another trait.
+- Implementations of a trait on any type that satisfies the trait bounds are 
+called blanket implementations and are used extensively in the Rust standard 
+library.
+- For example, the standard library implements the ToString trait on any type 
+that implements the Display trait. The impl block in the standard library looks 
+similar to this code:
 
+```rust
+impl<T: Display> ToString for T {
+    // --snip--
+}
+```
 
-
+- Because the standard library has this blanket implementation, we can call the 
+to_string method defined by the ToString trait on any type that implements the 
+Display trait.
 
 
 
