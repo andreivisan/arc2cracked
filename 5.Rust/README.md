@@ -3089,6 +3089,22 @@ the orphan rule, so named because the parent type is not present.
 
 **Default Implementations**
 
+- Sometimes it’s useful to have default behavior for some or all of the methods 
+in a trait instead of requiring implementations for all methods on every type.
+- Then, as we implement the trait on a particular type, we can keep or override 
+each method’s default behavior.
+
+```rust
+pub trait Summary {
+    fn summarize(&self) -> String {
+        String::from("(Read more...)")
+    }
+}
+```
+
+- To use a default implementation to summarize instances of NewsArticle, we 
+specify an empty impl block with impl Summary for NewsArticle {}.
+
 
 
 
