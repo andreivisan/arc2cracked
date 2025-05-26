@@ -3164,6 +3164,82 @@ pub fn notify(item: &(impl Summary + Display)) {
 pub fn notify<T: Summary + Display>(item: &T) {
 ```
 
+**Clearer Trait Bounds with where Clauses**
+
+- Using too many trait bounds has its downsides. Each generic has its own trait 
+bounds, so functions with multiple generic type parameters can contain lots of 
+trait bound information between the function’s name and its parameter list, 
+making the function signature hard to read.
+
+```rust
+fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
+```
+
+We can use a where clause, like this:
+
+```rust
+fn some_function<T, U>(t: &T, u: &U) -> i32
+where
+    T: Display + Clone,
+    U: Clone + Debug,
+{
+```
+
+**Returning Types That Implement Traits**
+
+```rust
+fn returns_summarizable() -> impl Summary {
+    SocialPost {
+        username: String::from("horse_ebooks"),
+        content: String::from(
+            "of course, as you probably already know, people",
+        ),
+        reply: false,
+        repost: false,
+    }
+}
+```
+
+- By using impl Summary for the return type, we specify that the 
+returns_summarizable function returns some type that implements the Summary 
+trait without naming the concrete type.
+
+- However, you can only use impl Trait if you’re returning a single type. For 
+example, this code that returns either a NewsArticle or a SocialPost with the 
+return type specified as impl Summary wouldn’t work:
+
+```rust
+fn returns_summarizable(switch: bool) -> impl Summary {
+    if switch {
+        NewsArticle {
+            headline: String::from(
+                "Penguins win the Stanley Cup Championship!",
+            ),
+            location: String::from("Pittsburgh, PA, USA"),
+            author: String::from("Iceburgh"),
+            content: String::from(
+                "The Pittsburgh Penguins once again are the best \
+                 hockey team in the NHL.",
+            ),
+        }
+    } else {
+        SocialPost {
+            username: String::from("horse_ebooks"),
+            content: String::from(
+                "of course, as you probably already know, people",
+            ),
+            reply: false,
+            repost: false,
+        }
+    }
+}
+```
+
+Returning either a NewsArticle or a SocialPost isn’t allowed due to restrictions 
+around how the impl Trait syntax is implemented in the compiler.
+
+### Using Trait Bounds to Conditionally Implement Methods
+
 
 
 
