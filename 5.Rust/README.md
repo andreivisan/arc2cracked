@@ -3105,6 +3105,65 @@ pub trait Summary {
 - To use a default implementation to summarize instances of NewsArticle, we 
 specify an empty impl block with impl Summary for NewsArticle {}.
 
+- Default implementations can call other methods in the same trait, even if 
+those other methods don’t have a default implementation.
+
+```rust
+pub trait Summary {
+    fn summarize_author(&self) -> String;
+
+    fn summarize(&self) -> String {
+        format!("(Read more from {}...)", self.summarize_author())
+    }
+}
+```
+
+```rust
+impl Summary for SocialPost {
+    fn summarize_author(&self) -> String {
+        format!("@{}", self.username)
+    }
+}
+```
+
+**Traits as Parameters**
+
+- Just like in Java when we have interfaces, we can pass in a method something
+like "anything that implements SaidInterface". 
+
+```rust
+pub fn notify(item: &impl Summary) {
+    println!("Breaking news! {}", item.summarize());
+}
+```
+
+- Instead of a concrete type for the item parameter, we specify the impl 
+keyword and the trait name. This parameter accepts any type that implements the 
+specified trait.
+
+**Trait Bound Syntax**
+
+- The impl Trait syntax works for straightforward cases but is actually syntax 
+sugar for a longer form known as a trait bound; it looks like this:
+
+```rust
+pub fn notify<T: Summary>(item: &T) {
+    println!("Breaking news! {}", item.summarize());
+}
+```
+
+**Specifying Multiple Trait Bounds with the + Syntax**
+
+```rust
+pub fn notify(item: &(impl Summary + Display)) {
+```
+
+- The + syntax is also valid with trait bounds on generic types:
+
+```rust
+pub fn notify<T: Summary + Display>(item: &T) {
+```
+
 
 
 
