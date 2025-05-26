@@ -3240,6 +3240,42 @@ around how the impl Trait syntax is implemented in the compiler.
 
 ### Using Trait Bounds to Conditionally Implement Methods
 
+- By using a trait bound with an impl block that uses generic type parameters, 
+we can implement methods conditionally for types that implement the specified 
+traits.
+
+- For example, the type Pair<T> in the code below always implements the new 
+function to return a new instance of Pair<T> (recall from the “Defining Methods” 
+section of Chapter 5 that Self is a type alias for the type of the impl block, 
+which in this case is Pair<T>). But in the next impl block, Pair<T> only 
+implements the cmp_display method if its inner type T implements the PartialOrd 
+trait that enables comparison and the Display trait that enables printing.
+
+```rust
+use std::fmt::Display;
+
+struct Pair<T> {
+    x: T,
+    y: T,
+}
+
+impl<T> Pair<T> {
+    fn new(x: T, y: T) -> Self {
+        Self { x, y }
+    }
+}
+
+impl<T: Display + PartialOrd> Pair<T> {
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            println!("The largest member is x = {}", self.x);
+        } else {
+            println!("The largest member is y = {}", self.y);
+        }
+    }
+}
+```
+
 
 
 
