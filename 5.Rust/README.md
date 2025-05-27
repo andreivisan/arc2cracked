@@ -3295,9 +3295,13 @@ impl<T: Display> ToString for T {
 to_string method defined by the ToString trait on any type that implements the 
 Display trait.
 
+### Validating References with Lifetimes
 
-
-
+- Lifetimes are another kind of generic that we’ve already been using.
+- Rather than ensuring that a type has the behavior we want, lifetimes ensure 
+that references are valid as long as we need them to be.
+- Every reference in Rust has a lifetime, which is the scope for which that 
+reference is valid.
 
 
 
