@@ -4066,3 +4066,13 @@ In this code:
 The **`dyn`** in `Box<dyn Error>` means the `Error` trait is being used with **dynamic dispatch**. It allows the `main` function to return any error type that implements `Error`, with the specific type determined at runtime. The `Box` wraps it to handle the fact that trait objects are unsized, making this a flexible and powerful way to manage errors in Rust.
 
 ---
+
+## impl Into<T>
+
+- impl Into<String> = “accept anything that can become a String.”
+- It increases API friendliness with zero runtime overhead.
+- Swap String for any other type (PathBuf, Duration, your own structs) to achieve the same ergonomic flexibility in other contexts.
+- For public libraries prefer impl Into<&str> over impl Into<String>
+when the function only temporarily needs a view of the data (avoids
+unnecessary cloning in the happy path).
+
