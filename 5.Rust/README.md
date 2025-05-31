@@ -4174,3 +4174,74 @@ tokio::spawn(async move {
 
 Once you see the pattern—`Arc<Mutex<HashMap<…>>>`—you’ll recognise it as Rust’s “safe global variable” recipe for concurrent servers.
 
+# Box, Rc and Arc
+
+## Box\<T> – single-owner heap allocation
+
+`Box<T>` is the simplest smart pointer: it owns exactly one value that lives on the heap and is freed when the box goes out of scope. It lets you:
+
+| Use-case                                             | Why `Box<T>` is handy                                                                                               |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **Big or recursive data** (e.g. linked lists, trees) | Moves the payload off the stack so compiler-known stack sizes are tiny.                   |
+| **Trait objects** (`Box<dyn Trait>`)                 | Enables dynamic dispatch while keeping ownership semantics.                                |
+| **Manual control of drop order**                     | You decide when the inner value is de-allocated by explicitly dropping or moving the box. |
+
+```rust
+fn main() {
+    let boxed = Box::new([0u8; 1024]); // heap-allocate 1 KiB
+    println!("array len = {}", boxed.len());
+} // array freed here
+```
+
+## Rc\<T> – single-threaded reference counting
+
+`Rc<T>` (reference counted) lets **multiple owners in the same thread** share read-only access to a value whose lifetime can’t be decided at compile time. Each `clone` increments a non-atomic counter; when the last `Rc` is dropped the value is freed.
+
+* **Cheap cloning** – a pointer copy plus `usize` counter bump.
+* **Not `Send` / not `Sync`** – compile-time guaranteed you can’t move it across threads.
+
+```rust
+use std::rc::Rc;
+
+fn main() {
+    let data = Rc::new("shared");
+    let a = Rc::clone(&data);
+    let b = Rc::clone(&data);
+    println!("refcount = {}", Rc::strong_count(&data)); // 3
+} // count reaches 0, string freed
+```
+
+## Arc\<T> – thread-safe reference counting
+
+`Arc<T>` is an **Atomically-Reference-Counted** pointer. Internally identical to `Rc<T>` except the counter uses atomic ops so it’s safe to share between threads.
+
+* **Send + Sync** – move or clone freely across threads.
+* **Higher overhead** – atomic increment/decrement is slower than plain `usize`.
+* **Combine with `Mutex`/`RwLock`** when you need interior mutability.
+
+```rust
+use std::{sync::Arc, thread};
+
+fn main() {
+    let shared = Arc::new(String::from("thread-safe"));
+    let handles: Vec<_> = (0..4).map(|_| {
+        let s = Arc::clone(&shared);
+        thread::spawn(move || println!("{s} from thread"))
+    }).collect();
+    for h in handles { h.join().unwrap(); }
+}
+```
+
+## Choosing quickly
+
+| Need                                 | Pointer |
+| ------------------------------------ | ------- |
+| Own exactly one value, single-thread | **Box** |
+| Many owners, all on same thread      | **Rc**  |
+| Many owners, may cross threads       | **Arc** |
+
+You can freely nest them: e.g. `Arc<Mutex<HashMap<…>>>` gives thread-safe sharing *and* interior mutability of a map, because `Mutex` enforces exclusive access while `Arc` handles cross-thread memory safety.
+
+### Why not always use Arc?
+
+Atomic operations cost more CPU and coordinate across cores. In single-threaded code `Rc` (or even plain `&`/`&mut`) is measurably faster and simpler.
