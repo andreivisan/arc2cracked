@@ -4245,3 +4245,102 @@ You can freely nest them: e.g. `Arc<Mutex<HashMap<…>>>` gives thread-safe shar
 ### Why not always use Arc?
 
 Atomic operations cost more CPU and coordinate across cores. In single-threaded code `Rc` (or even plain `&`/`&mut`) is measurably faster and simpler.
+
+## &str and String
+
+Choosing between `&str` and `String` is mostly about *ownership*, *mutability*, and the *lifetime* of text data. In short:
+
+* Use **`&str`** when you only need to *borrow* an immutable slice of UTF-8 text for a limited time.
+* Use **`String`** when you must *own*, mutate, or grow the text, or store it beyond the scope of a borrow.
+  Conversions are cheap: `&my_string` yields a `&str`, and `my_str.to_string()` (or `String::from`) gives a `String`. Below are the details and idiomatic patterns.
+
+### 1  What exactly are `&str` and `String`?
+
+| Type     | Stored where                                                                              | Ownership          | Mutability       | Typical size                                                                  |
+| -------- | ----------------------------------------------------------------------------------------- | ------------------ | ---------------- | ----------------------------------------------------------------------------- |
+| `&str`   | *Borrow* – points at UTF-8 bytes that live **elsewhere** (stack, heap, static data, etc.) | None (borrowed)    | Immutable        | Two machine words (ptr + len)                                |
+| `String` | Heap                                                                                      | Full (owns buffer) | Mutable/growable | Three words (ptr + len + capacity) |
+
+A `String` is a smart pointer; through `Deref` it automatically coerces to `&str` for read-only APIs.
+
+### 2  When to choose `&str`
+
+**Borrow-only, read-only parameters**
+
+Accept `&str` in public APIs unless callers must hand over ownership.
+
+```rust
+fn greet(name: &str) {       // any &str or &String works
+    println!("Hello, {name}");
+}
+```
+
+This lets the function consume string literals, slices of `String`, data read from the network, etc., without forcing allocations.
+
+**Zero-copy slicing**
+
+Operations such as `split`, `strip_prefix` or pattern matching often return `&str` slices into the same buffer – no allocation, O(1).
+
+**Static or embedded text**
+
+A string literal like `"GET / HTTP/1.1\r\n"` has type `&'static str`; passing it around keeps code allocation-free.
+
+### 3  When to choose `String`
+
+**You need ownership**
+
+Storing in a struct, sending across threads/channels, or returning from a function requires a *self-contained* value:
+
+```rust
+fn read_line() -> std::io::Result<String> {
+    let mut buf = String::new();
+    std::io::stdin().read_line(&mut buf)?;
+    Ok(buf)
+}
+```
+
+Ownership avoids dangling references.
+
+**Mutate or grow the text**
+
+`String` exposes `push`, `push_str`, `insert`, `reserve`, etc. `&str` cannot change length.
+
+```rust
+let mut url = String::from("https://example.com");
+url.push('?');
+url.push_str("q=rust");
+```
+
+**Lifetime unknown or unbounded**
+
+If the data must outlive the scope of the borrow (e.g., cached in a `HashMap`), take a `String`.
+
+### 4  Conversions and the `Into` pattern
+
+* `s: String` → `&str`: use `&s` or `s.as_str()` (free, no copy).
+* `s: &str` → `String`: `s.to_owned()` / `s.to_string()` / `String::from(s)` (allocates).
+
+Idiom: *accept `impl Into<String>` when your function must own the text but you want to be ergonomic*:
+
+```rust
+fn store<K: Into<String>>(key: K) {
+    db.insert(key.into());
+}
+```
+
+Callers can pass either a `String` or `&str`.
+
+### 5  Performance considerations
+
+* Borrowing `&str` avoids heap allocation and copy; prefer it for hot paths and read-only processing.
+* Converting `String` → `&str` is zero-cost (pointer reborrow).
+* Converting `&str` → `String` allocates; minimize in tight loops or large datasets.
+
+---
+
+## 6  Decision checklist
+
+1. **Need to mutate / append?** → `String`.
+2. **Need to keep it after the caller’s lifetime?** → `String`.
+3. **Just read or pass through?** → `&str`.
+4. **Public API, want maximum flexibility?** -> Take &str if you don’t need ownership; otherwise accept impl Into<String>.
