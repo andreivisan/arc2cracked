@@ -13,3 +13,7 @@ case for a struct can be made) variables.
 ```rust
 Result<(String, Duration, usize), TranscriptionError>
 ```
+
+## Lifetimes
+
+- Lifetimes are regions of code that references must be valid for.
