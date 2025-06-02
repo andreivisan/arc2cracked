@@ -35,4 +35,11 @@ fn main() {
 - We can use 2 different reference lifetimes even though, from the definition of
 longest it seems that only one block of memory should be used for both s1 and s2.
 - This also means that 'a , 'x and 'y don't have to be unified in the same block
-of memory.
+of memory. But it means both x and y have same lifetime 'a.
+
+If we want different lifetimes:
+
+```rust
+fn longest<'a>(s1: &'a str, s2: &'a str) -> &'a str {}
+    where 's1: 'out, 's2: 'out // out outlives s1 and s2 or s1 and s2 are a subset of out
+```
