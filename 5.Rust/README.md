@@ -3435,6 +3435,13 @@ other without affecting the lifetimes.
 parameters must start with an apostrophe (') and are usually all lowercase and 
 very short, like generic types.
 
+```rust
+&i32        // a reference
+&'a i32     // a reference with an explicit lifetime
+&'a mut i32 // a mutable reference with an explicit lifetime
+```
+
+**Lifetime Annotations in Function Signatures**
 
 
 
