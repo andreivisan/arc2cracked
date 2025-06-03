@@ -3368,6 +3368,76 @@ fn main() {
 
 Annotations of the lifetimes of r and x, named 'a and 'b, respectively
 
+- To fix the code:
+
+```rust
+fn main() {
+    let x = 5;            // ----------+-- 'b
+                          //           |
+    let r = &x;           // --+-- 'a  |
+                          //   |       |
+    println!("r: {r}");   //   |       |
+                          // --+       |
+}                         // ----------+
+```
+
+**Generic Lifetimes in Functions**
+
+- We’ll write a function that returns the longer of two string slices. This 
+function will take two string slices and return a single string slice.
+
+```rust
+fn longest(x: &str, y: &str) -> &str {
+    if x.len() > y.len() { x } else { y }
+}
+
+fn main() {
+    let string1 = String::from("abcd");
+    let string2 = "xyz";
+
+    let result = longest(string1.as_str(), string2);
+    println!("The longest string is {result}");
+}
+```
+
+- The code above will not compile and will give the following error
+
+```text
+$ cargo run
+   Compiling chapter10 v0.1.0 (file:///projects/chapter10)
+error[E0106]: missing lifetime specifier
+ --> src/main.rs:9:33
+  |
+9 | fn longest(x: &str, y: &str) -> &str {
+  |               ----     ----     ^ expected named lifetime parameter
+  |
+  = help: this function's return type contains a borrowed value, but the signature does not say whether it is borrowed from `x` or `y`
+help: consider introducing a named lifetime parameter
+  |
+9 | fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+  |           ++++     ++          ++          ++
+
+For more information about this error, try `rustc --explain E0106`.
+error: could not compile `chapter10` (bin "chapter10") due to 1 previous error
+```
+
+- The help text reveals that the return type needs a generic lifetime parameter 
+on it because Rust can’t tell whether the reference being returned refers to x 
+or y. Actually, we don’t know either, because the if block in the body of this 
+function returns a reference to x and the else block returns a reference to y!
+
+**Lifetime Annotation Syntax**
+
+- Lifetime annotations don’t change how long any of the references live. Rather, 
+they describe the relationships of the lifetimes of multiple references to each 
+other without affecting the lifetimes. 
+- Lifetime annotations have a slightly unusual syntax: the names of lifetime 
+parameters must start with an apostrophe (') and are usually all lowercase and 
+very short, like generic types.
+
+
+
+
 
 
 
