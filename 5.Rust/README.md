@@ -3342,6 +3342,32 @@ For more information about this error, try `rustc --explain E0597`.
 error: could not compile `chapter10` (bin "chapter10") due to 1 previous error
 ```
 
+- The error message says that the variable x “does not live long enough.” The 
+reason is that x will be out of scope when the inner scope ends on line 7. But 
+r is still valid for the outer scope; because its scope is larger, we say that 
+it “lives longer.”
+- Rust determinse that this code is invalid using the **borrow checker**.
+
+
+**The Borrow Checker**
+
+- Code with lifetimes shown:
+
+```rust
+fn main() {
+    let r;                // ---------+-- 'a
+                          //          |
+    {                     //          |
+        let x = 5;        // -+-- 'b  |
+        r = &x;           //  |       |
+    }                     // -+       |
+                          //          |
+    println!("r: {r}");   //          |
+}                         // ---------+
+```
+
+Annotations of the lifetimes of r and x, named 'a and 'b, respectively
+
 
 
 
