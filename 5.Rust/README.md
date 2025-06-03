@@ -3303,6 +3303,49 @@ that references are valid as long as we need them to be.
 - Every reference in Rust has a lifetime, which is the scope for which that 
 reference is valid.
 
+**Preventing Dangling References with Lifetimes**
+
+- Running the following code will result in an error:
+
+```rust
+fn main() {
+    let r;
+
+    {
+        let x = 5;
+        r = &x;
+    }
+
+    println!("r: {r}");
+}
+```
+
+will result in the following error:
+
+```text
+$ cargo run
+   Compiling chapter10 v0.1.0 (file:///projects/chapter10)
+error[E0597]: `x` does not live long enough
+ --> src/main.rs:6:13
+  |
+5 |         let x = 5;
+  |             - binding `x` declared here
+6 |         r = &x;
+  |             ^^ borrowed value does not live long enough
+7 |     }
+  |     - `x` dropped here while still borrowed
+8 |
+9 |     println!("r: {r}");
+  |                  --- borrow later used here
+
+For more information about this error, try `rustc --explain E0597`.
+error: could not compile `chapter10` (bin "chapter10") due to 1 previous error
+```
+
+
+
+
+
 
 
 
