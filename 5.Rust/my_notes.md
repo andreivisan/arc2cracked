@@ -43,3 +43,14 @@ If we want different lifetimes:
 fn longest<'a>(s1: &'a str, s2: &'a str) -> &'a str {}
     where 's1: 'out, 's2: 'out // out outlives s1 and s2 or s1 and s2 are a subset of out
 ```
+
+## MPSC - Multiple-Producer Single-Consumer
+
+- Instead of sharing memory between threads `mpsc` uses channels that let threads
+share data by sending messages. (The way I see this is a queue where muliple 
+threads add data and then one receiver that reads data one by one in FIFO).
+- `std::sync::mpsc::channel()` returns a pair (Sender, Receiver).
+- Sender can be cloned to create multiple senders that feed into the same channel.
+- Receiver can't be cloned as we can only have one receiver.
+- When you send a value through a channel, you move ownership of that value into 
+the channel. 
