@@ -1,3 +1,5 @@
+const INITIAL_NBUCKETS: usize = 1;
+
 struct Bucket<K, V> {
     items: Vec<(K, V)>,
 }
@@ -14,7 +16,10 @@ impl<K, V> HashMap<K, V> {
     }
 
     fn resize(&mut self) {
-        
+        let target_size = match self.buckets.len() {
+            0 => INITIAL_NBUCKETS,
+            n => 2 * n.
+        }; 
     }
 
     pub fn insert(&mut self, key: K, value: V) -> Option<V> {
