@@ -3458,6 +3458,10 @@ we’re not changing the lifetimes of any values passed in or returned. Rather,
 we’re specifying that the borrow checker should reject any values that don’t 
 adhere to these constraints.
 
+**Thinking in Terms of Lifetimes**
+
+
+
 
 
 
