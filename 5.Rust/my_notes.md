@@ -57,4 +57,29 @@ the channel.
 
 ## Difference between &, &mut and ref ref mut
 
+```rust
+for &mut (ref ekey, ref mut evalue) in bucket.iter_mut() {
+    /* ekey: &K, evalue: &mut V */
+}
+```
+
+- & (or &mut) matches an existing reference, so it can only appear when the value 
+you’re matching is already a reference.
+
+- ref (or ref mut) creates a reference binding to a value that is inside what 
+you’re destructuring, letting you borrow that part instead of moving it.
+
+Therefore, when you iterate with iter_mut()—which yields &mut (K, V)—and you 
+want &K and &mut V inside the tuple, you must peel off the outer &mut 
+(with &mut (…)) then use ref/ref mut to borrow the tuple’s fields in place.
+
+| You have…                                       | You write in the pattern | Resulting binding type |
+| ----------------------------------------------- | ------------------------ | ---------------------- |
+| `T` and you want to move it                     | `x`                      | `T`                    |
+| `T` and you want an immutable borrow            | `ref x`                  | `&T`                   |
+| `T` and you want a mutable borrow               | `ref mut x`              | `&mut T`               |
+| `&U` and you want to move `U`                   | `&x`                     | `U`                    |
+| `&mut U` and you want a *mutable* borrow to `U` | `&mut x`                 | `&mut U`               |
+
+
 ## mem::replace and drain(..)
