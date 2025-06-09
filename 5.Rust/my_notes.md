@@ -73,6 +73,14 @@ Therefore, when you iterate with iter_mut()—which yields &mut (K, V)—and you
 want &K and &mut V inside the tuple, you must peel off the outer &mut 
 (with &mut (…)) then use ref/ref mut to borrow the tuple’s fields in place.
 
+### Patterns in Rust
+
+- Patterns live on the left side.
+
+- Everything after for, let, match, etc. is a pattern, whose job is to fit the 
+shape of the value it receives and optionally bind names to pieces of it. 
+Patterns have their own mini-syntax independent of expressions.
+
 | You have…                                       | You write in the pattern | Resulting binding type |
 | ----------------------------------------------- | ------------------------ | ---------------------- |
 | `T` and you want to move it                     | `x`                      | `T`                    |
@@ -83,3 +91,10 @@ want &K and &mut V inside the tuple, you must peel off the outer &mut
 
 
 ## mem::replace and drain(..)
+
+```rust
+mem::replace(evalue, value)
+```
+
+- std::mem::replace moves a value into the place pointed-to by a mutable 
+reference and gives you the value that used to be there. 
