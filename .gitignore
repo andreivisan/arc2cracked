@@ -76,4 +76,6 @@ rust-project.json
 # Optional: Rust ICE reports
 rustc-ice-*.txt
 
+# Learning projects
 /5.Rust/dsa/target/
+/5.Rust/learning_projects/linked_hash_map/target/
