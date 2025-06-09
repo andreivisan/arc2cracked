@@ -105,4 +105,4 @@ for (key, value) in self.buckets.iter_mut().flat_map(|bucket| bucket.drain(..))
 
 - Vec::drain(range) gives you a draining iterator: it takes a mutable borrow of 
 the vector, yields each element in the specified range by value, and removes 
-those elements from the vector
+those elements from the vector.

@@ -3443,7 +3443,20 @@ very short, like generic types.
 
 **Lifetime Annotations in Function Signatures**
 
+- We want the signature to express the following constraint: the returned 
+reference will be valid as long as both the parameters are valid. This is the 
+relationship between lifetimes of the parameters and the return value. 
 
+```rust
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() { x } else { y }
+}
+```
+
+- Remember, when we specify the lifetime parameters in this function signature, 
+we’re not changing the lifetimes of any values passed in or returned. Rather, 
+we’re specifying that the borrow checker should reject any values that don’t 
+adhere to these constraints.
 
 
 
