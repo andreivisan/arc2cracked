@@ -98,3 +98,11 @@ mem::replace(evalue, value)
 
 - std::mem::replace moves a value into the place pointed-to by a mutable 
 reference and gives you the value that used to be there. 
+
+```rust
+for (key, value) in self.buckets.iter_mut().flat_map(|bucket| bucket.drain(..))
+```
+
+- Vec::drain(range) gives you a draining iterator: it takes a mutable borrow of 
+the vector, yields each element in the specified range by value, and removes 
+those elements from the vector
