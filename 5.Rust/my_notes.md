@@ -54,3 +54,7 @@ threads add data and then one receiver that reads data one by one in FIFO).
 - Receiver can't be cloned as we can only have one receiver.
 - When you send a value through a channel, you move ownership of that value into 
 the channel. 
+
+## Difference between &, &mut and ref ref mut
+
+## mem::replace and drain(..)
