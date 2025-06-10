@@ -3460,7 +3460,21 @@ adhere to these constraints.
 
 **Thinking in Terms of Lifetimes**
 
+The way in which you need to specify lifetime parameters depends on what your 
+function is doing. For example, if we changed the implementation of the longest 
+function to always return the first parameter rather than the longest string 
+slice, we wouldn’t need to specify a lifetime on the y parameter. 
+The following code will compile:
 
+```rust
+fn longest<'a>(x: &'a str, y: &str) -> &'a str {
+    x
+}
+```
+
+- We’ve specified a lifetime parameter 'a for the parameter x and the return 
+type, but not for the parameter y, because the lifetime of y does not have any 
+relationship with the lifetime of x or the return value.
 
 
 
