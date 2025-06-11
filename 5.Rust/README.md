@@ -1,4 +1,4 @@
-# Rust programming language
+
 
 ## 1. Variables
 
@@ -3490,6 +3490,11 @@ fn longest<'a>(x: &str, y: &str) -> &'a str {
     result.as_str()
 }
 ```
+
+- The problem is that result goes out of scope and gets cleaned up at the end 
+of the longest function. We’re also trying to return a reference to result from 
+the function. There is no way we can specify lifetime parameters that would 
+change the dangling reference, and Rust won’t let us create a dangling reference.
 
 
 
