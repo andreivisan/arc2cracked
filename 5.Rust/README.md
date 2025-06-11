@@ -3496,6 +3496,11 @@ of the longest function. We’re also trying to return a reference to result fro
 the function. There is no way we can specify lifetime parameters that would 
 change the dangling reference, and Rust won’t let us create a dangling reference.
 
+- Ultimately, lifetime syntax is about connecting the lifetimes of various 
+parameters and return values of functions. Once they’re connected, Rust has 
+enough information to allow memory-safe operations and disallow operations that 
+would create dangling pointers or otherwise violate memory safety.
+
 
 
 
