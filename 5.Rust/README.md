@@ -3501,6 +3501,9 @@ parameters and return values of functions. Once they’re connected, Rust has
 enough information to allow memory-safe operations and disallow operations that 
 would create dangling pointers or otherwise violate memory safety.
 
+**Lifetime Annotations in Struct Definitions**
+
+
 
 
 
