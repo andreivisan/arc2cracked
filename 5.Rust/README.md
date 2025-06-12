@@ -3526,6 +3526,49 @@ reference it holds in its part field.
 
 **Lifetime Elision**
 
+```rust
+fn first_word(s: &str) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    &s[..]
+}
+```
+
+- The reason this function compiles without lifetime annotations is historical: 
+in early versions (pre-1.0) of Rust, this code wouldn’t have compiled because 
+every reference needed an explicit lifetime. At that time, the function 
+signature would have been written like this:
+
+```rust
+fn first_word<'a>(s: &'a str) -> &'a str {
+```
+
+- After writing a lot of Rust code, the Rust team found that Rust programmers 
+were entering the same lifetime annotations over and over in particular 
+situations. These situations were predictable and followed a few deterministic 
+patterns. The developers programmed these patterns into the compiler’s code so 
+the borrow checker could infer the lifetimes in these situations and wouldn’t 
+need explicit annotations.
+
+- The patterns programmed into Rust’s analysis of references are called the 
+lifetime elision rules.
+
+- The compiler uses three rules to figure out the lifetimes of the references 
+when there aren’t explicit annotations. The first rule applies to input lifetimes, 
+and the second and third rules apply to output lifetimes. If the compiler gets 
+to the end of the three rules and there are still references for which it can’t 
+figure out lifetimes, the compiler will stop with an error. These rules apply to 
+fn definitions as well as impl blocks.
+
+- The first rule is that the compiler assigns a lifetime parameter to each 
+parameter that’s a reference.
+
 
 
 
