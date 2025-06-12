@@ -3592,6 +3592,27 @@ lifetime of references in the struct’s fields, or they might be independent.
 In addition, the lifetime elision rules often make it so that lifetime annotations 
 aren’t necessary in method signatures.
 
+```rust
+impl<'a> ImportantExcerpt<'a> {
+    fn level(&self) -> i32 {
+        3
+    }
+}
+```
+
+- Here is an example where the third lifetime elision rule applies:
+
+```rust
+impl<'a> ImportantExcerpt<'a> {
+    fn announce_and_return_part(&self, announcement: &str) -> &str {
+        println!("Attention please: {announcement}");
+        self.part
+    }
+}
+```
+
+
+
 
 
 
