@@ -3573,6 +3573,16 @@ parameter that’s a reference.
 that lifetime is assigned to all output lifetime parameters: 
 ```fn foo<'a>(x: &'a i32) -> &'a i32.```
 
+- The third rule is that, if there are multiple input lifetime parameters, but 
+one of them is &self or &mut self because this is a method, the lifetime of 
+self is assigned to all output lifetime parameters. This third rule makes 
+methods much nicer to read and write because fewer symbols are necessary.
+
+**Lifetime Annotations in Method Definitions**
+
+- When we implement methods on a struct with lifetimes, we use the same syntax 
+as that of generic type parameters.
+
 
 
 
