@@ -3503,7 +3503,9 @@ would create dangling pointers or otherwise violate memory safety.
 
 **Lifetime Annotations in Struct Definitions**
 
-
+- So far, the structs we’ve defined all hold owned types. We can define structs 
+to hold references, but in that case we would need to add a lifetime annotation 
+on every reference in the struct’s definition.
 
 
 

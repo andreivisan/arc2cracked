@@ -106,3 +106,11 @@ for (key, value) in self.buckets.iter_mut().flat_map(|bucket| bucket.drain(..))
 - Vec::drain(range) gives you a draining iterator: it takes a mutable borrow of 
 the vector, yields each element in the specified range by value, and removes 
 those elements from the vector.
+
+## My understand on when to use lifetimes
+
+1. When having a method that returns something that is connect with one or more
+parameters inside the function. The return value has to outlive the parameters
+that it's connected to.
+
+2. 
