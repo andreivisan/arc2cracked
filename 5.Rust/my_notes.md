@@ -113,4 +113,4 @@ those elements from the vector.
 parameters inside the function. The return value has to outlive the parameters
 that it's connected to.
 
-2. 
+2. Whenever there are references in structs.
