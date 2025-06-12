@@ -3611,6 +3611,13 @@ impl<'a> ImportantExcerpt<'a> {
 }
 ```
 
+- There are two input lifetimes, so Rust applies the first lifetime elision rule 
+and gives both &self and announcement their own lifetimes. Then, because one of 
+the parameters is &self, the return type gets the lifetime of &self, and all 
+lifetimes have been accounted for.
+
+**The Static Lifetime**
+
 
 
 
