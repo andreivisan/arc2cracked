@@ -3569,6 +3569,11 @@ fn definitions as well as impl blocks.
 - The first rule is that the compiler assigns a lifetime parameter to each 
 parameter that’s a reference.
 
+- The second rule is that, if there is exactly one input lifetime parameter, 
+that lifetime is assigned to all output lifetime parameters: 
+```fn foo<'a>(x: &'a i32) -> &'a i32.```
+
+
 
 
 
