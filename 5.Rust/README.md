@@ -3631,6 +3631,22 @@ always available. Therefore, the lifetime of all string literals is 'static.
 
 ### Generic Type Parameters, Trait Bounds, and Lifetimes Together
 
+```rust
+use std::fmt::Display;
+
+fn longest_with_an_announcement<'a, T>(
+    x: &'a str,
+    y: &'a str,
+    ann: T,
+) -> &'a str
+where
+    T: Display,
+{
+    println!("Announcement! {ann}");
+    if x.len() > y.len() { x } else { y }
+}
+```
+
 
 
 
