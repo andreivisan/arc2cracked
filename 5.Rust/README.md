@@ -3647,7 +3647,9 @@ where
 }
 ```
 
-
+- The function has an extra parameter named ann of the generic type T, which can be 
+filled in by any type that implements the Display trait as specified by the 
+where clause.
 
 
 
