@@ -3618,6 +3618,10 @@ lifetimes have been accounted for.
 
 **The Static Lifetime**
 
+- One special lifetime we need to discuss is 'static, which denotes that the 
+affected reference can live for the entire duration of the program. All string 
+literals have the 'static lifetime, which we can annotate as follows:
+
 
 
 
