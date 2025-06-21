@@ -3651,6 +3651,14 @@ where
 filled in by any type that implements the Display trait as specified by the 
 where clause.
 
+## Writing Automated Tests
+
+"Program testing can be a very effective way to show the presence of bugs, but 
+it is hopelessly inadequate for showing their absence."
+
+- Edsger W. Dijkstra
+
+### How to Write Tests
 
 
 
