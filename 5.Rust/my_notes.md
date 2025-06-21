@@ -166,4 +166,4 @@ of those four.
 
 4. Otherwise: try without. If the compiler is happy, the elision rules already did the job.
 
-
+write about your learning about pointer to array
