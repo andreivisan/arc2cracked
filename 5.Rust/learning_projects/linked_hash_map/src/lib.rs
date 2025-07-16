@@ -1,5 +1,5 @@
 use std::{
-    hash::{BuildHasher, DefaultHasher, Hash, Hasher, RandomState},
+    hash::{DefaultHasher, Hash, Hasher},
     mem, usize,
 };
 
@@ -60,7 +60,7 @@ where
             new_buckets[bucket].push((key, value));
         }
 
-        mem::replace(&mut self.buckets, new_buckets);
+        let _ = mem::replace(&mut self.buckets, new_buckets);
     }
 }
 
