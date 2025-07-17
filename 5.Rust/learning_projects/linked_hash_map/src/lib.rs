@@ -23,13 +23,18 @@ impl<K, V> HashMap<K, V>
 where
     K: Hash + Eq,
 {
+    fn bucket(&self, key: &K) -> usize {
+        let mut hasher = DefaultHasher::new();
+        key.hash(&mut hasher);
+        (hasher.finish() % self.buckets.len() as u64) as usize
+    }
+
     pub fn insert(&mut self, key: K, value: V) -> Option<V> {
         if self.buckets.is_empty() || self.items > 3 * self.buckets.len() / 4 {
             self.resize();
         }
-        let mut hasher = DefaultHasher::new();
-        key.hash(&mut hasher);
-        let bucket = (hasher.finish() % self.buckets.len() as u64) as usize;
+
+        let bucket = self.bucket(key);
         let bucket = &mut self.buckets[bucket];
 
         self.items += 1;
@@ -42,6 +47,10 @@ where
 
         bucket.push((key, value));
         None
+    }
+
+    pub fn get(&self, key: &K) -> Option<&V> {
+        
     }
 
     fn resize(&mut self) {
