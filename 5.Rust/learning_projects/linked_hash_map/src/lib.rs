@@ -34,7 +34,7 @@ where
             self.resize();
         }
 
-        let bucket = self.bucket(key);
+        let bucket = self.bucket(&key);
         let bucket = &mut self.buckets[bucket];
 
         self.items += 1;
@@ -50,7 +50,11 @@ where
     }
 
     pub fn get(&self, key: &K) -> Option<&V> {
-        
+        let bucket = self.bucket(key);
+        self.buckets[bucket]
+            .iter()
+            .find(|&(ref ekey, _)| ekey == key)
+            .map(|&(_, ref v)| v)
     }
 
     fn resize(&mut self) {
