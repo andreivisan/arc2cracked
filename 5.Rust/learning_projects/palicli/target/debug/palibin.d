@@ -1,0 +1,1 @@
+/Users/taavianf/personal/dev/arc2cracked/5.Rust/learning_projects/palicli/target/debug/palibin: /Users/taavianf/personal/dev/arc2cracked/5.Rust/learning_projects/palicli/palibin/src/main.rs /Users/taavianf/personal/dev/arc2cracked/5.Rust/learning_projects/palicli/palilib/src/lib.rs

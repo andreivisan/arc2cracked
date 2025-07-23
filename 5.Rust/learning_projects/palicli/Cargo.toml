@@ -1,5 +1,7 @@
 [workspace]
-members = [
-    "palilib"
-    #"palibin"
+members = [ 
+    "palilib",
+    "palibin"
 ]
+resolver = "3"
+default-members = ["palibin"]
