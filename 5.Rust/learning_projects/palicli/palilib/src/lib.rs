@@ -2,9 +2,14 @@ pub fn is_palindrome(s: &str) -> bool {
     if s.len() < 2 {
         return true;
     }
-    let mut left: usize = 0;
-    let mut right: usize = s.len() - 1;
-    let s_bytes = s.as_bytes();
+
+    let bytes = s.as_bytes();
+    let (mut left, mut right) = (0usize, bytes.len() - 1);
+
+    //helper closures for speed
+    let to_lower = |b: u8| b.to_ascii_lowercase();
+    let to_alnum = |b: u8| b.to_ascii_alphanumeric();
+
     while left < right && left < s.len() {
         let left_char = s_bytes[left as usize] as char;
         let right_char = s_bytes[right as usize] as char;
