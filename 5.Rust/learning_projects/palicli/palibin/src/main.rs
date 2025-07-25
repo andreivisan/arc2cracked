@@ -8,12 +8,7 @@ fn main() {
     for line in io::stdin().lines() {
         match line {
             Ok(input) => {
-                let ispali = is_palindrome(&input);
-                if ispali {
-                    println!("YES");
-                } else {
-                    println!("NO");
-                }
+               println!("{}", if is_palindrome(input.trim_end()) { "YES" } else { "NO" }); 
             },
             Err(e) => eprintln!("Error reading line: {}", e),
         }
