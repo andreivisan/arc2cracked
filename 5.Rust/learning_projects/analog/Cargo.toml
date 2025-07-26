@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "analog-lib"
+    #"analog-bin"
+]
