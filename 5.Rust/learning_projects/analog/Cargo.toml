@@ -1,5 +1,5 @@
 [workspace]
-members = [
-    "analog-lib"
-    #"analog-bin"
+members = [ "analog-bin",
+    "analog-lib",
+    "analog-bin"
 ]
