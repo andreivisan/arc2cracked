@@ -20,6 +20,11 @@ pub enum LogError {
     Overflow,
 }
 
+pub struct LogParser<R> {
+    reader: R,
+    buff: String,
+}
+
 pub fn tally_status<R: BufRead>(reader: R) -> Result<Vec<(u16, u64)>, LogError> {
 
 }
