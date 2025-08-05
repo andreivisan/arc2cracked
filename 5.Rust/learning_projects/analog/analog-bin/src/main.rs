@@ -25,6 +25,25 @@ pub struct LogParser<R> {
     buff: String,
 }
 
-pub fn tally_status<R: BufRead>(reader: R) -> Result<Vec<(u16, u64)>, LogError> {
-
+impl<R:BufRead> LogParser<R> {
+    pub fn new(reader: R) -> Self {
+        Self {
+            reader,
+            buff: String:new()
+        }
+    } 
 }
+
+impl<R:BufRead> Iterator for LogParser<R> {
+    type Item = Result<u16, ParseLineErr>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.buff.clear();
+
+        Some(OK())
+    }
+}
+
+//pub fn tally_status<R: BufRead>(reader: R) -> Result<Vec<(u16, u64)>, LogError> {
+//
+//}
