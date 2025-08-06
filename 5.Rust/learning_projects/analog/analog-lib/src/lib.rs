@@ -34,7 +34,7 @@ impl<R: BufRead> LogParser<R> {
     }
 }
 
-impl<R:BufRead> Iterator for LogParser<R> {
+impl<R:BufRead, ParseLineErr> Iterator for LogParser<R> {
    type Item = Result<u16, ParseLineErr>; 
 
    fn next(&mut self) -> Option<Self::Item> {
@@ -42,9 +42,9 @@ impl<R:BufRead> Iterator for LogParser<R> {
    }
 }
 
-pub fn tally_status<R: BufRead>(reader: R) -> Result<Vec<(u16, u64)>, LogError> {
-
-}
+// pub fn tally_status<R: BufRead>(reader: R) -> Result<Vec<(u16, u64)>, LogError> {
+//
+// }
 
 #[cfg(test)]
 mod tests {
