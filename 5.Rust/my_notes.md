@@ -4,7 +4,9 @@
 
 ### Ownership and Borrowing in Rust
 
+Think of Rust's ownership system like a strict librarian:
 
+1. One book (value) has exactly one owner at a time.
 
 ## Choosing between &str and String
 
