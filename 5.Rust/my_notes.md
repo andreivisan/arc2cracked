@@ -8,6 +8,14 @@ Think of Rust's ownership system like a strict librarian:
 
 1. One book (value) has exactly one owner at a time.
 
+    - When ownership moves, the original owner loses access.
+
+```rust
+let v1 = vec![1, 2, 3];
+let v2 = v1;
+// println!("{:?}", v1); // ❌ compile error
+```
+
 ## Choosing between &str and String
 
 - When I want to borrow an immutable slice of UTF-8 text, choose `&str`.
