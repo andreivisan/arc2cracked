@@ -16,6 +16,18 @@ let v2 = v1;
 // println!("{:?}", v1); // ❌ compile error
 ```
 
+2. Borrowing lets others look at the book without taking it.
+
+    - Use `&` to borrow immutably (read-only).
+    - Multiple immutable borrows are fine at the same time.
+
+```rust
+let v = vec![1, 2, 3];
+let len = get_length(&v);
+println!("Length: {}", len);
+// v is still usable here because it was borrowed, not moved
+```
+
 ## Choosing between &str and String
 
 - When I want to borrow an immutable slice of UTF-8 text, choose `&str`.
