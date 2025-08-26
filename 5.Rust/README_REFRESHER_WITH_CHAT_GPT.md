@@ -9,4 +9,5 @@ is dropped.
 
 ## Borrowing
 
-
+- Temporary access to someone else's data without taking it. 
+- &T (read-only), &mut T (exclusive, writable).
