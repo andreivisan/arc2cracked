@@ -17,7 +17,7 @@ is dropped.
 
 - The (compile-time) guarantee that references never outlive what they point to.
 
-## Real-world mental model
-
-
+> **Real-world mental model**
+> 
+> You own a GP. Letting a friend 
 
