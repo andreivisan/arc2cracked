@@ -19,5 +19,5 @@ is dropped.
 
 > **Real-world mental model**
 > 
-> You own a GP. Letting a friend 
-
+> You own a GP. Letting a friend look at it is &GPU. Letting them tinker is an
+> &mut GPU, but only one tinkerer at a time.
