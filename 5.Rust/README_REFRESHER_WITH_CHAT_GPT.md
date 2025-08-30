@@ -20,4 +20,5 @@ is dropped.
 > **Real-world mental model**
 > 
 > You own a GP. Letting a friend look at it is &GPU. Letting them tinker is an
-> &mut GPU, but only one tinkerer at a time.
+> &mut GPU, but only one tinkerer at a time. Selling the GPU transfers ownership (a move).
+> A lifetime error is to return a pointer to your GPU after you tossed it in the bin.
