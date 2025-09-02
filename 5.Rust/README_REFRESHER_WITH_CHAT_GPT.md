@@ -46,4 +46,4 @@ pub fn longest_line(input: &str) -> &str {
 
     best
 }
-````
+```
