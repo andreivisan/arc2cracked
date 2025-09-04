@@ -47,3 +47,22 @@ pub fn longest_line(input: &str) -> &str {
     best
 }
 ```
+
+### Borrowing in practice: "count words" without clones
+
+Parse words from a &str and count into a HashMap. The trick: intern &str keys by borrowing
+via the raw input slice, not by allocating new Strings.
+
+```rust
+use std::collections::HashMap;
+
+pub fn words_counts(input: &str) -> HashMap<&str, usize> {
+    // we must use mut here as we will keep changing the map
+    let mut map: HashMap<&str, usize> = HashMap::new();
+
+    for word in input.split_whitespace() {
+        // word is a &str slice into input; OK to use as map key that lives as long as input
+        // good to always think if this slice and source of slice live as long as the map
+        *map.entry(word).or_insert(0)
+    }
+}
