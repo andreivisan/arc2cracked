@@ -63,6 +63,18 @@ pub fn words_counts(input: &str) -> HashMap<&str, usize> {
     for word in input.split_whitespace() {
         // word is a &str slice into input; OK to use as map key that lives as long as input
         // good to always think if this slice and source of slice live as long as the map
-        *map.entry(word).or_insert(0)
+        *map.entry(word).or_insert(0) += 1;
     }
+
+    map
 }
+```
+
+>**Notes**
+> - Keys are &str, not String. This means the map doesn't own the characters; it borrows
+> from input. Fast, but it contrains lifetime: the map must not outlive input. That's fine
+> if I keep them in the same scope.
+>
+> - If I must return the map beuond input's lifetime, I switch to HashMap<String, usize> and
+> pay for the allocations at the edges. Know my data lifetimes → choose ownership boundaries
+> accordingly.
