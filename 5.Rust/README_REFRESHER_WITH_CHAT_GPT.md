@@ -78,3 +78,24 @@ pub fn words_counts(input: &str) -> HashMap<&str, usize> {
 > - If I must return the map beuond input's lifetime, I switch to HashMap<String, usize> and
 > pay for the allocations at the edges. Know my data lifetimes → choose ownership boundaries
 > accordingly.
+
+### Lifetimes: when I must annotate
+
+When a function returns a reference that's tied to one of its inputs, you sometimes need
+tell the compiler which one.
+
+```rust
+pub fn longer<'a>(a: &'a str, b: &'a str) -> &'a str {
+    if a.len() >= b.len() { a } else { b }
+}
+```
+
+- The 'a says: both inputs and the output share the same minimum lifetime.
+- This guarantees the return value can't outlive either a or b.
+- Without the annotation, the compiler can't figure out which input the output is tied to.
+
+> Heuristic: If your function returns a  reference to something in its arguments, lifetimes
+> likely need annotation. If you construct new owned data (e.g. String, Vec), you usually
+> don't.
+
+
