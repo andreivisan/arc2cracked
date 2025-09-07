@@ -7,6 +7,53 @@ is dropped.
 - When a value is moved, the ownership is transfered. 
 - When a value is copied, buts are duplicated (copy type).
 
+### Concrete examples
+
+```rust
+// Move (non-Copy)
+let s1 = String::from("hi");
+let s2 = s1;        // s1 is now invalid; s2 owns the string's heap buffer.
+// println!("{s1}"); // ❌ compile error
+
+// Copy (Copy types)
+let x = 42;
+let y = x;          // x and y are both valid; integers are Copy.
+println!("{x} {y}"); // ✅
+
+// Passing by value moves (for non-Copy)
+fn takes(s: String) { /* ... */ }
+
+let s = String::from("data");
+takes(s);           // move into function
+// s is invalid here
+
+// Returning by value gives ownership to caller
+fn make() -> String { String::from("owned by caller") }
+let got = make();   // got now owns it
+
+// Method calls that take self also move:
+struct Buf(String);
+impl Buf {
+    fn into_inner(self) -> String { self.0 } // moves out
+}
+let b = Buf(String::from("x"));
+let inner = b.into_inner(); // b moved
+
+// Iteration: into_iter moves items; iter borrows them
+let v = vec![String::from("a"), String::from("b")];
+for s in v.into_iter() {        // moves Strings out
+    /* s is owned here */
+}
+// v is now moved and unusable
+
+// Borrow instead:
+let v = vec![String::from("a"), String::from("b")];
+for s in v.iter() {             // s: &String
+    println!("{}", s);
+}
+// v still usable (it still owns its Strings)
+```
+
 ## Borrowing
 
 - Temporary access to someone else's data without taking it. 
