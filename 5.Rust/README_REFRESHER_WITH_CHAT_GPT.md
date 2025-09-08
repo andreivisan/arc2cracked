@@ -54,6 +54,14 @@ for s in v.iter() {             // s: &String
 // v still usable (it still owns its Strings)
 ```
 
+### Advanced but common move patterns
+
+- **Partial moves out of structs:** use Option<T> + .take() to move a field while leaving 
+None behind, keeping the rest usable.
+- **std::mem::replace / take:** swap/move values out cleanly without cloning.
+- **Shared ownership:** Rc<T>/Arc<T> let you “clone” a pointer and share ownership via 
+ref counts (not a deep copy of T).
+
 ## Borrowing
 
 - Temporary access to someone else's data without taking it. 
@@ -145,4 +153,59 @@ pub fn longer<'a>(a: &'a str, b: &'a str) -> &'a str {
 > likely need annotation. If you construct new owned data (e.g. String, Vec), you usually
 > don't.
 
+Tighten it:
 
+- You never need lifetime annotations when your function returns owned data (String, Vec<T>, 
+any non-reference). Ownership severs lifetime ties.
+- You also don’t need annotations when you return Copy scalars by value.
+- You do need lifetime annotations when your function returns a reference and the compiler 
+cannot infer which input it’s tied to.
+
+Rust’s lifetime elision rules often remove the need to write 'a:
+	
+1. Each input reference gets its own fresh lifetime.
+2. If there’s exactly one input reference, the output reference is assumed to borrow from it.
+3. If &self/&mut self is an input, output borrows from self.
+
+### Examples
+
+```rust
+// ✅ No annotation needed: one input reference, one output reference (elided)
+fn first_word(s: &str) -> &str {
+    // Output slice borrows from input `s`
+    let bytes = s.as_bytes();
+    for i in 0..bytes.len() {
+        if bytes[i].is_ascii_whitespace() {
+            return &s[..i]; // slice of s (OK)
+        }
+    }
+    s
+}
+
+// ✅ No annotation (owned output)
+fn make_vec() -> Vec<i32> {
+    vec![1, 2, 3]
+}
+
+// ✅ No annotation: returns Copy
+// because ints are Copy
+fn max3(a: i32, b: i32, c: i32) -> i32 {
+    a.max(b).max(c)
+}
+
+// ❌ Cannot return a ref to a local temporary (would dangle)
+fn bad_ref() -> &str {
+    let s = String::from("temp");
+    &s[..] // ERROR: s is dropped at end of function
+}
+
+// ✅ Needs annotation: output could come from `a` or `b`
+fn longer<'a>(a: &'a str, b: &'a str) -> &'a str {
+    if a.len() >= b.len() { a } else { b }
+}
+
+// ✅ Method elision rule #3: output borrows from &self, no explicit 'a needed
+impl MyBuf {
+    fn as_slice(&self) -> &str { &self.data }
+}
+```
