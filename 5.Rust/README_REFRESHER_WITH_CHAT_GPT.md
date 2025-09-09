@@ -209,3 +209,10 @@ impl MyBuf {
     fn as_slice(&self) -> &str { &self.data }
 }
 ```
+
+### Bonus: tiny “why it matters” mental model
+	
+• Ownership answers: who cleans up?
+• Borrowing answers: who can read/write right now, and does someone else still own it?
+• Lifetimes answer: how long is this borrow guaranteed to be valid?
+
