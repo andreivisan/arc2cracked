@@ -216,3 +216,82 @@ impl MyBuf {
 • Borrowing answers: who can read/write right now, and does someone else still own it?
 • Lifetimes answer: how long is this borrow guaranteed to be valid?
 
+## Shared ownership: Rc / Arc vs & / &mut
+
+- Rc<T> / Arc<T>: cloning duplicates the pointer and bumps a refcount (non-atomic for Rc, 
+atomic for Arc). The T is not cloned; all owners point to the same heap allocation. 
+Memory is freed when the last strong owner drops.
+- &T / &mut T: these are borrows, not owners. No refcount, zero runtime cost. They cannot 
+outlive the real owner, and &mut enforces exclusive access.
+
+Quick contrasts:
+
+- Cost: &/&mut (compile-time checks, zero runtime) ⟶ cheaper. 
+Rc/Arc (refcount updates) ⟶ some runtime overhead; Arc uses atomics.
+- Mutability: Rc<T> is shared-immutable by default. To mutate through many owners:
+	- single-thread: Rc<RefCell<T>>
+	- multi-thread: Arc<Mutex<T>> or Arc<RwLock<T>>
+- Cycles: Rc/Arc can leak with reference cycles. Use Weak<T> to break cycles.
+
+### Tiny demos
+
+**Many owners, single-thread**
+
+```rust
+use std::rc::Rc;
+
+let a = Rc::new(String::from("hi"));
+let b = Rc::clone(&a);           // bump refcount, same allocation
+assert_eq!(Rc::strong_count(&a), 2);
+```
+
+**Shared mutation, single-thread**
+
+```rust
+use std::cell::RefCell;
+use std::rc::Rc;
+
+let v = Rc::new(RefCell::new(0));
+let v1 = Rc::clone(&v);
+let v2 = Rc::clone(&v);
+*v1.borrow_mut() += 1;
+*v2.borrow_mut() += 1;
+assert_eq!(*v.borrow(), 2);
+```
+
+**Shared mutation, multi-thread**
+
+```rust
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+let data = Arc::new(Mutex::new(0));
+let mut handles = vec![];
+
+for _ in 0..4 {
+    let d = Arc::clone(&data);
+    handles.push(thread::spawn(move || *d.lock().unwrap() += 1));
+}
+
+for h in handles { h.join().unwrap(); }
+assert_eq!(*data.lock().unwrap(), 4);
+```
+
+**Avoid cycles with Weak**
+
+```rust
+use std::rc::{Rc, Weak};
+
+let a = Rc::new(42);
+let weak: Weak<i32> = Rc::downgrade(&a);   // not counted as strong owner
+assert!(weak.upgrade().is_some());
+drop(a);
+assert!(weak.upgrade().is_none());         // allocation freed
+```
+
+If you want a quick “when to reach for what” rule:
+	
+- Start with borrows (&T, &mut T).
+- If you must store data beyond a borrower’s lifetime, take ownership (T, e.g., String).
+- If you need multiple owners, use Rc<T> (same thread) or Arc<T> (across threads). 
+Add RefCell/Mutex only when you truly need mutation from multiple owners.
