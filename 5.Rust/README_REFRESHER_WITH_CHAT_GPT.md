@@ -295,3 +295,18 @@ If you want a quick “when to reach for what” rule:
 - If you must store data beyond a borrower’s lifetime, take ownership (T, e.g., String).
 - If you need multiple owners, use Rc<T> (same thread) or Arc<T> (across threads). 
 Add RefCell/Mutex only when you truly need mutation from multiple owners.
+
+
+Now I will answer the question challenges. If I get them right, I move on with the coding exercises.
+
+1. If I changed the signature to pub fn longest_line(input: String) -> &str, why won’t this compile? 
+A: Because we can’t use slicing on clone value (or value in general), we need a reference 
+to the memory that gets sliced.
+
+2. Why does returning &String from a function often smell, and what’s the more idiomatic 
+type to return for borrowed string data?
+A: The more idiomatic is to return &str . Returning &String returns a reference to a Copy type, 
+&str return the reference to a 
+
+3. Want a 2-minute challenge? Explain why Rc<RefCell<T>> compiles single-threaded but fails to 
+send across threads, and what the idiomatic threaded replacement is.
