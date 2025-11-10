@@ -38,6 +38,8 @@ sequential circuits have internal state.
 
 ![fibonacci circuit waveforms](./images/fibonacci_circuit_waveforms.png)
 
+- While $reset is asserted, a 1 value is driven into $num.
+
 
 
 
