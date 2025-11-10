@@ -17,4 +17,4 @@ have a collection of N wires (called a "vector") that represent up to 2^N possib
 
 ## Clock and Flip-Flops
 
-![clock](/images/clock_flip_flops.png)
+![clock](./images/clock_flip_flops.png)
