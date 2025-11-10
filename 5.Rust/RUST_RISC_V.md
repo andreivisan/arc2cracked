@@ -17,4 +17,12 @@ have a collection of N wires (called a "vector") that represent up to 2^N possib
 
 ## Clock and Flip-Flops
 
+Sequential logic introduces a clock signal.
+
 ![clock](./images/clock_flip_flops.png)
+
+- The clock is driven through the circuit to flip-flops which sequence the logic.
+- Flip-flops come in various flavors, but the simplest and most common is "positive-edge-triggered
+D-type flip-flop".
+- These drive the value at their input to their output, but only when the clock rises.
+- They hold their output value until the next rising edge of their clock input.
