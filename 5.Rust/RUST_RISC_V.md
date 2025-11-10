@@ -36,4 +36,8 @@ sequential circuits have internal state.
 
 ![fibonacci circuit](./images/fibonacci_circuit.png)
 
+![fibonacci circuit waveforms](./images/fibonacci_circuit_waveforms.png)
+
+
+
 
