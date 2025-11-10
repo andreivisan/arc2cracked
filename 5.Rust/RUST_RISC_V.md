@@ -45,6 +45,8 @@ sequential circuits have internal state.
 - **Instruction Set Architecture (ISA)** - The ISA defines the programmer-visible behavior of the 
 machine—its instructions and their encodings, registers, and rules of execution (plus memory/privilege
 model) — independent of implementation.
+- The ISA deines a human-readable form of every instruction, as well as the mapping of those *assembly*
+instructions into bits.
 - A **compiler** does the job of translating a program's source code into a binary file or executable
 containing machine instructions for a particular ISA.
 - An **Operating System** does the job of loading the binary file into the memory for execution by the
