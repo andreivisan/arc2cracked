@@ -26,3 +26,14 @@ Sequential logic introduces a clock signal.
 D-type flip-flop".
 - These drive the value at their input to their output, but only when the clock rises.
 - They hold their output value until the next rising edge of their clock input.
+
+### Sequencial circuit
+
+- Unlike a combinational circuit, where output values are purely a function of the input values,
+sequential circuits have internal state.
+- Every sequential circuit needs the ability to get to a known "reset" state.
+- Therefore, every sequential has a reset signal.
+
+![fibonacci circuit](./images/fibonacci_circuit.png)
+
+
