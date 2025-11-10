@@ -42,7 +42,7 @@ sequential circuits have internal state.
 
 ## Software, Compilers and CPUs
 
-- *Instruction Set Architecture (ISA)* - The ISA defines the programmer-visible behavior of the 
+- **Instruction Set Architecture (ISA)** - The ISA defines the programmer-visible behavior of the 
 machine—its instructions and their encodings, registers, and rules of execution (plus memory/privilege
 model) — independent of implementation.
 
