@@ -354,6 +354,36 @@ register specified in the instruction.
 
 7. **DMem** - it is written to by store instructions and read from by load instructions.
 
+> # Little-endian refresher (RISC-V context)
+>
+> **Definition:** In **little-endian**, the **least significant byte (LSB)** of a multi-byte value is stored at the **lowest memory address**; the most significant byte (MSB) at the highest.
+>
+> **Example (32-bit value):** `0x12_34_56_78` in memory starting at address `A`
+> `A+0: 0x78`, `A+1: 0x56`, `A+2: 0x34`, `A+3: 0x12`
+>
+> **Example (64-bit value):** `0x01_23_45_67_89_AB_CD_EF`
+> bytes in memory (lowest → highest addr): `EF CD AB 89 67 45 23 01`
+>
+> **Registers vs memory:** Endianness affects **byte order in memory only**. Once loaded into a register, the CPU sees the **same numeric value** regardless of endianness.
+>
+> **Loads/stores:**
+>
+> * 1-byte ops (`LB/LBU/SB`) are unaffected.
+> * Multi-byte ops (`LH/LHU/SH`, `LW/LWU/SW`, `LD/SD`) **reconstruct** or **decompose** values using little-endian byte order.
+>
+> **RISC-V note:** Practically all RISC-V systems you’ll use are **little-endian** by default.
+>
+> **Common pitfalls:**
+>
+> * Hexdumps show bytes in memory order (little-endian looks “reversed”).
+> * Casting pointers to different integer sizes can expose byte order.
+> * File formats & network protocols often use **big-endian (“network byte order”)**—convert on read/write.
+>
+> **Rule of thumb:** “**Little end goes first** (to the little address).”
+>
+> **Quick check:** If memory at `A..A+3` holds `78 56 34 12`, what 32-bit value is there? (Answer: `0x12345678`.)
+
+
 
 
 
