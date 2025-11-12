@@ -333,6 +333,16 @@ CPU hardware that understands the ISA.
 
 ![RISC-V CPU Diagram](./images/risc_v_cpu_diagram.png)
 
+1. **PC Logic** - responsible for the program counter (PC). The PC identifies the instruction our CPU will
+execute next. Most instructions execute sequentially, the PC increments to the following instruction
+each clock cycle. Jumps are not sequential and specify a target instructiont to execute next and the PC
+logic must update the PC accordingly.
+
+2. **Fetch** - pull the instruction pointed to by the PC.
+
+3. **Decode Logic** - once we have an instruction we must decode it. We break it into fields based on its
+type. These fields tell us which registers to read, which ops to perform, etc.
+
 
 
 
