@@ -224,6 +224,15 @@ CPU hardware that understands the ISA.
 > * **Linker** = connects pieces, pulls in helpers, fixes addresses.
 > * **OS/Loader** = maps into memory and starts execution.
 
+---
+
+- RISC-V instructions may provide the following fields:
+    - **opcode** - provides a general classification of the instruction and determines which of the 
+    remaining fieldsare needed and how they are laid out, or encoded, in the remaining instruction bits.
+    - **function field (func3/func7)** - specifies the exact function, if not fully specidied by the 
+    opcode.
+
+
 
 
 
