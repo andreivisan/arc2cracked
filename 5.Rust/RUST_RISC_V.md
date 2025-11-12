@@ -343,6 +343,17 @@ logic must update the PC accordingly.
 3. **Decode Logic** - once we have an instruction we must decode it. We break it into fields based on its
 type. These fields tell us which registers to read, which ops to perform, etc.
 
+4. **Register File Read** - is a small local storage of vlaues the program is actively working with.
+
+5. **Arithmetic Logic Unit (ALU)** - now we have the register values, it't time to operate on them. This is
+what the ALU does. It will add, substract, multiply, shift, etc, based on the op fetch from the 
+instruction.
+
+6. **Register File Write** - the result value from the ALU can be written back to the destination
+register specified in the instruction.
+
+7. **DMem** - it is written to by store instructions and read from by load instructions.
+
 
 
 
