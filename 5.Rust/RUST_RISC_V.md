@@ -331,6 +331,8 @@ CPU hardware that understands the ISA.
 >
 > For `ADDI` (I-type), what’s the valid **signed** immediate range you can encode?
 
+![RISC-V CPU Diagram](./images/risc_v_cpu_diagram.png)
+
 
 
 
