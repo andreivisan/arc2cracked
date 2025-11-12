@@ -238,6 +238,99 @@ CPU hardware that understands the ISA.
     offset for indexing into memory or a value upon which to operate (in place of the register value 
     indexed by rs2).
 
+---
+
+> # What is an **immediate** in RISC-V?
+>
+> **Plain English:** an *immediate* is a small constant **embedded inside the instruction bits**. It travels with the instruction so the CPU doesn’t have to fetch that constant from memory or a register.
+>
+> ---
+>
+> ## Why immediates exist
+>
+> * **Fast constants:** put `5` right in the instruction instead of loading it from memory.
+> * **Addressing:** add a small **offset** to a base register to reach a field/array element.
+> * **Control flow:** encode a **PC-relative offset** for branches/jumps.
+> * **Building big constants:** use upper-immediate forms to assemble 32/64-bit values in a few instructions.
+> * **Shifts:** encode the **shift amount** directly in the instruction.
+>
+> ---
+>
+> ## Where immediates appear (by instruction format)
+>
+> **I-type (12-bit signed, usually −2048..+2047)**
+>
+> * Used by: `ADDI`, `SLTI`, `SLTIU`, `XORI`, `ORI`, `ANDI`, **loads** (`LB/LH/LW/LBU/LHU` on RV32; + `LD/LWU` on RV64), `JALR`, `ECALL/EBREAK`, and **shift-immediates** (`SLLI/SRLI/SRAI`).
+> * Meaning:
+>
+>   * ALU-imm: constant operand (e.g., `ADDI x1,x0,5`).
+>   * Loads: **displacement** added to base register (e.g., `LW x3,12(x4)`).
+>   * `JALR`: **offset** added to `rs1` to form the jump target (then **bit 0 of target is forced to 0**).
+>   * Shifts: immediate is **shamt** (shift amount) — **not sign-extended**; width = 5 bits on RV32, **6 bits on RV64**; for `*IW` shifts (RV64) shamt is **5 bits**.
+>
+> **S-type (12-bit signed)**
+>
+> * Used by: **stores** `SB/SH/SW` (+ `SD` on RV64).
+> * Meaning: **displacement** added to base register for the store address (e.g., `SW x5,−8(x2)`).
+>
+> **B-type (branch offset, signed, encoded with bit-splitting)**
+>
+> * Used by: `BEQ`, `BNE`, `BLT`, `BGE`, `BLTU`, `BGEU`.
+> * Meaning: **PC-relative offset** to add to the current `pc` **if branch is taken**.
+>   Encoding stores the offset **without bit 0** (targets are at least 2-byte aligned), so hardware **reassembles then << 1**.
+>
+>   * Practical range: about **±4 KiB** from the branch (step size 2 bytes).
+>
+> **U-type (upper 20 bits)**
+>
+> * Used by: `LUI`, `AUIPC`.
+> * Meaning:
+>
+>   * `LUI rd,imm20` → `rd = imm20 << 12` (sets the upper bits; lower 12 are zeros).
+>   * `AUIPC rd,imm20` → `rd = pc + (imm20 << 12)` (PC-relative base to build addresses).
+>
+> **J-type (jump offset, signed, bit-split)**
+>
+> * Used by: `JAL`.
+> * Meaning: **PC-relative offset** to add to `pc` (**<< 1** after reassembly); also writes return address `pc+4` into `rd`.
+>
+>   * Practical range: about **±1 MiB** from the jump (step size 2 bytes).
+>
+> ---
+>
+> ## Sign extension rules (the default)
+>
+> * **Signed immediates:** I, S, B, J are **sign-extended** to XLEN before use.
+> * **U-type:** forms a value by **placing bits in the upper 20** (no sign-extend).
+> * **Shift immediates:** treat as **unsigned shamt** (width depends on RV32/RV64; `*IW` uses 5 bits).
+>
+> ---
+>
+> ## Quick examples (RV64 flavor)
+>
+> * **Small constant:** `ADDI x10,x0,5` → `x10 = 5`.
+> * **Addressing:** `LD x6,24(x8)` → load from `x8 + 24`.
+> * **Store:** `SD x7,-16(x2)` → store `x7` to `x2 - 16`.
+> * **PC-relative jump:** `JAL x1,128` → `x1=pc+4; pc=pc+128`.
+> * **PC-relative base:** `AUIPC x3,0x12345` → `x3 = pc + 0x12345_000`.
+> * **Build big constant:** `LUI x5,0x7FFFF; ADDI x5,x5,-1` → upper then adjust low bits.
+> * **Shift:** `SLLI x4,x4,3` → `x4 <<= 3` (shamt is 3).
+> * **Branch:** `BEQ x1,x2,-16` → if equal, `pc = pc - 16` (offset reassembled, sign-extended, then <<1 in hardware).
+>
+> ---
+>
+> ## Mental model to keep
+>
+> * An **immediate** is just “**a constant packed into the instruction**.”
+> * It can play **five roles**: constant operand, memory displacement, PC-relative offset, upper-bits builder, or shift amount.
+> * **Most** immediates are **signed**; **shifts and U-type** are the main exceptions.
+>
+> ---
+>
+> ### One-question check
+>
+> For `ADDI` (I-type), what’s the valid **signed** immediate range you can encode?
+
 
 
 
