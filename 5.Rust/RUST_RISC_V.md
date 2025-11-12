@@ -231,7 +231,12 @@ CPU hardware that understands the ISA.
     remaining fieldsare needed and how they are laid out, or encoded, in the remaining instruction bits.
     - **function field (func3/func7)** - specifies the exact function, if not fully specidied by the 
     opcode.
-
+    - **rs1/rs2** - the indices (0-31) identifying the register(s) in the register file containing the
+    source operand values on which the instruction operates.
+    - **rd** - the index (0-31) of the register into which the instruction's result is written.
+    - **immediate** - a value contained within the instruction bits themselves. This value may provide an
+    offset for indexing into memory or a value upon which to operate (in place of the register value 
+    indexed by rs2).
 
 
 
