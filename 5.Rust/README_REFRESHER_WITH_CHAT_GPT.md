@@ -400,3 +400,96 @@ fn first_char<'a>(s: &'a str) -> Option<&'a str> {
 * Using `&'a str` input + `&'a str` output makes the borrow relationship explicit and sound.
 
 ---
+
+# Strings
+
+## `&str` vs `String`: when to use each
+
+- Rust text is basically:
+    - `&str` = borrowed view of UTF-8 bytes
+    - `String` = owned, growable buffer of UTF-8 bytes
+
+- Under the hood:
+
+```rust
+// Conceptually:
+struct String {
+    ptr: *mut u8,   // heap buffer
+    len: usize,     // bytes used
+    cap: usize,     // bytes allocated
+}
+
+// &str is like:
+struct StrRef<'a> {
+    ptr: *const u8, // into some existing UTF-8 buffer
+    len: usize,     // bytes
+    // plus lifetime 'a
+}
+```
+
+### When to use each
+
+**`str` - borrowed, read-only, zero-copy**
+
+- Function inputs: you just need to read text.
+- Slices and other strings: substrings.
+- Static literals: "hello" is &'static str.
+
+**`String` - owned, growable**
+
+- You need to build or modify text.
+- You need to store text beyond the scope of the caller.
+- You need to put it in `Vec`, `HashMap`, etc.
+
+- Heuristic (95% right):
+    - Function parameters: &str
+    - Function returns:
+        - return &str if it’s a slice of caller data
+        - return String if it’s new / owned text
+
+## Encoding: why strings are weird in Rust
+
+- Rust strings are UTF-8:
+    - `len()` = bytes, not characters.
+    - Characters (`char`) are 4-byte Unicode scalar values.
+    - Human-visible "characters" can be multiple `char` s.
+
+```rust
+let s = "hé";        // "h" + "é"
+println!("{}", s.len());  // 3 bytes
+println!("{}", s.chars().count()); // 2 chars
+```
+
+Because:
+- h - 1 byte (0x68)
+- é - 2 bytes in UTF-8
+
+### Indexing is forbidden
+
+- This won't compile:
+
+```rust
+let c = s[0]; // ❌
+```
+
+- Why? Because index 0 might land in the middle of a UTF-8 code point. Rust refuses to let you create invalid Unicode.
+
+- Instead:
+    - for byte-level: s.as_bytes()[0]
+    - for char-level: s.chars().nth(i)
+    - for safe slicing: only slice at valid boundaries (e.g., from indices you got from char_indices()).
+
+```rust
+let s: &str = "...";
+
+for b in s.bytes() { /* u8 */ }          // raw bytes
+for ch in s.chars() { /* char */ }       // Unicode code points
+for (i, ch) in s.char_indices() { /* byte index + char */ }
+```
+
+- Use cases:
+    - ASCII / simple text problems: bytes() is usually enough (and faster).
+    - Unicode-aware problems: chars() or even a grapheme library if they care about real “characters”.
+    - Substring on char boundary: use char_indices() to capture safe indices.
+
+
