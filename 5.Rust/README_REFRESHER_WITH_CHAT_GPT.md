@@ -492,4 +492,78 @@ for (i, ch) in s.char_indices() { /* byte index + char */ }
     - Unicode-aware problems: chars() or even a grapheme library if they care about real “characters”.
     - Substring on char boundary: use char_indices() to capture safe indices.
 
+## Common operations and their cost
 
+### Building strings
+
+```rust
+let mut s = String::new();           // empty
+let mut s = String::with_capacity(64); // pre-reserve
+
+s.push('a');                         // O(1) amortized
+s.push_str("bc");                    // O(len("bc"))
+s += "def";                          // sugar for push_str
+s = format!("{}-{}", s, 123);        // can be more alloc / copies
+```
+
+- Performance tips:
+    - Use push/push_str in loops.
+    - Use with_capacity when you can estimate final size.
+    - Don’t chain a ton of + on Strings in a hot path; prefer push_str.
+
+### Slicing / substrings (no allocation)
+
+```rust
+let s = "hello world";
+let hello = &s[..5];   // &str slice
+let world = &s[6..];   // &str slice
+```
+
+- You must ensure 0..5 etc. are at UTF-8 boundaries; otherwise: panic at runtime. For ASCII-only tasks, indices are safe; for Unicode, use indices from char_indices().
+
+### Splitting and joining
+
+```rust
+let s = "a b  c";
+s.split_whitespace();        // splits on any unicode whitespace
+s.split(' ');                // exact character
+s.lines();                   // split on \n / \r\n
+["a", "b", "c"].join(",");   // returns String
+```
+
+## Advanced tools
+
+- Cow<'a, str>: “clone-on-write” string. Either &'a str or String. Great for APIs that usually just return a borrowed slice but sometimes need to allocate.
+- String::from_utf8(Vec<u8>) / String::from_utf8_lossy: converting raw bytes from I/O into String.
+- OsStr / OsString / Path / PathBuf: for OS paths that might not be valid UTF-8 on some platforms.
+
+# `matc` and `loop`
+
+## Pattern 1: Matching on a single `Option`
+
+```rust
+let mut iter = word.chars();
+loop {
+    match iter.next() {
+        Some(ch) => {
+            // use ch
+        }
+        None => break,  // iterator exhausted
+    }
+}
+```
+
+- iter.next() returns Option<char>.
+
+## Pattern 2: Matching on multiple values
+
+```rust
+loop {
+    match (iter1.next(), iter2.next()) {
+        (Some(a), Some(b)) => { /* got both */ }
+        (Some(a), None)    => { /* only iter1 had data */ }
+        (None, Some(b))    => { /* only iter2 had data */ }
+        (None, None)       => break, // both empty
+    }
+}
+```

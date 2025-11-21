@@ -1,0 +1,10 @@
+[package]
+name = "leetcode75"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "leetcode75"
+path = "lib.rs"
+
+[dependencies]
