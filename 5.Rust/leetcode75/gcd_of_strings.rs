@@ -1,5 +1,5 @@
 pub fn gcd_of_strings(str1: String, str2: String) -> String {
-    if str1.len() == 0 || str2.len() == 0 { return String::new(); }
+    if str1.is_empty() || str2.is_empty() { return String::new(); }
     let k = gcd(str1.len(), str2.len());
     if str1[..k] != str2[..k] { return String::new(); }
     let result = str1[..k].to_string();
