@@ -567,3 +567,61 @@ loop {
     }
 }
 ```
+
+# Working with files
+
+- Use BufReader to read line by line. Like that only one line at a time is kept in memory.
+- In order to safely return each line we have 3 options:
+
+### Concrete type (no Box, no `impl`)
+
+```rust
+use std::io::{BufRead, BufReader, Lines};
+
+pub fn foo(...) -> Lines<BufReader<File>> { ... }
+```
+
+- We say exactly what type it is.
+- No heap allocation.
+- Caller sees the full ugly type in the signature.
+
+### `impl Iterator` (no Box)
+
+```rust
+pub fn foo(...) -> impl Iterator<Item = io::Result<String>> { ... }
+```
+
+- We say: "I return some iterator type with these items".
+- The compiler still knows the exact type under the hood.
+- No heap allocation.
+- The caller only knows the capability, not the exact struct.
+
+### Trait object: `Box<dyn Iterator<...>>`
+
+```rust
+pub fn foo(...) -> Box<dyn Iterator<Item = io::Result<String>>> { ... }
+```
+
+- This is really: “a box (heap pointer) to something that implements Iterator”.
+- The actual concrete type is hidden behind dynamic dispatch.
+- This does allocate on the heap (for the iterator struct).
+
+## Why use `Box<dyn Iterator>`?
+
+### 1. Many possible iterator types from one function.
+
+```rust
+if something {
+    Box::new(reader1.lines()) as Box<dyn Iterator<_>>
+} else {
+    Box::new(reader2.bytes()) as Box<dyn Iterator<_>>
+}
+```
+
+### 2. Store different iterators in the same field / collection.
+
+```rust
+struct Foo {
+    iter: Box<dyn Iterator<Item = String>>,
+}
+```
