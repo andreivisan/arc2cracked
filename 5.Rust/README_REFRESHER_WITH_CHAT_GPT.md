@@ -570,7 +570,11 @@ loop {
 
 # Working with files
 
-- Use BufReader to read line by line. Like that only one line at a time is kept in memory.
+- BufReader reads the file in chunks into an internal buffer.
+- `lines()` gives you one `String` per line at a time.
+- So you never hold the whole file in memory at once, only:
+    - the internal buffer, and
+    - the current String for the line you’re working on.
 - In order to safely return each line we have 3 options:
 
 ### Concrete type (no Box, no `impl`)
