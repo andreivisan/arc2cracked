@@ -1625,4 +1625,47 @@ public class FibonacciTab {
 Bottom-up is essentially the tabulation method: all subproblems from the smallest up to n are solved in order.
 It ensures that when calculating dp[i], the sub-results it depends on (dp[i-1], dp[i-2], etc.) are already computed and stored in the table.
 
+## Directed Graphs
+
+- A directed graph G is:
+    - A set of **nodes** (vertices): V
+    - A set of **directed edges** E ⊆ V × V
+
+- An edge (u, v) usually means there is a directed connection from u to v.
+
+- **in-degree(v)** = how many edges go into v.
+- **out-degree(v)** = how many edges go out of v.
+- **Path** = sequence of nodes connected by edges.
+- **Cycle** = a path that starts and ends at the same node.
+
+### DAGs - Directed Acyclic Graps
+
+- Directed graph.
+- No cycles.
+- There is at least one topological ordering.
+- You can reason about **parallelism** cleanly - anything with all deps satisfied can run now.
+
+### Topological Order
+
+- An ordering of the nodes such that every edge u → v has u before v in that order.
+
+### Kahn's Algorithm
+
+1. Compute the in-degree of every node.
+2. Create a set/queue of "ready" nodes: nodes with in-degree 0.
+3. While ready is not empty:
+    - Remove a node u from ready.
+    - Add u to the topological order.
+    - For each outgoing edge u → v:
+        - decrement the in-degree of v
+        - if in-degree of v becomes 0, add v to ready.
+
+- If at the end you didn't process all nodes → there was a cycle.
+- For concurrency:
+    - All notes currently in `ready` are **independent** (no unsatisfied deps).
+    - They can run in parallel.
+
+
+
+
 
