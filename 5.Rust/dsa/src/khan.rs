@@ -27,6 +27,32 @@ pub fn can_finish(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
     count == n
 }
 
-// pub fn find_order(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> Vec<i32> {
-        
-// }
+pub fn find_order(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> Vec<i32> {
+    if prerequisites.is_empty() {
+        return (0..num_courses).collect();
+    }
+    let n = num_courses as usize;
+    let mut q: VecDeque<usize> = VecDeque::with_capacity(n);
+    let mut indegree = vec![0usize; n];
+    let mut graph = vec![Vec::<usize>::new(); n];
+    for pre in prerequisites {
+        graph[pre[1] as usize].push(pre[0] as usize);
+        indegree[pre[0] as usize] += 1;
+    }
+    for i in 0..num_courses as usize {
+        if indegree[i] == 0 {
+            q.push_back(i);
+        }
+    }
+    let mut result = Vec::with_capacity(num_courses as usize);
+    while let Some(course) = q.pop_front() {
+        result.push(course as i32);
+        for &next_course in &graph[course] {
+            indegree[next_course] -= 1;
+            if indegree[next_course] == 0 {
+                q.push_back(next_course);
+            }
+        }
+    }
+    if result.len() == num_courses as usize { result } else { Vec::new() }
+}
