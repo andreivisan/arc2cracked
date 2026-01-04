@@ -1,9 +1,9 @@
 pub fn find_max_consecutive_ones(nums: Vec<i32>) -> i32 {
-    let n = nums.len() as usize;        
+    let n = nums.len();        
     let mut max_ones: i32 = 0;
     let mut temp_max: i32 = 0;
     for i in 0..n {
-        if nums[i] == 1 { temp_max = temp_max + 1; } 
+        if nums[i] == 1 { temp_max += 1; } 
         else {
             max_ones = max_ones.max(temp_max);
             temp_max = 0;
