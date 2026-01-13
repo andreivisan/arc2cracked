@@ -4706,6 +4706,130 @@ Callers can pass either a `String` or `&str`.
 
 ## Tokio
 
+- Tokio runs async tasks on a runtime. You need #[tokio::main] or #[tokio::test] to run async code.
+- tokio::spawn(async move { ... }) launches a task and returns a JoinHandle<T>.
+- .await suspends the current task and lets others run.
+
+Minimal idea of spawning:
+
+let join = tokio::spawn(async move {
+        // do async work
+        });
+let _ = join.await; // wait for task to finish
+
+———
+
+Channels you’ll use
+
+1. Bounded mpsc
+
+use tokio::sync::mpsc;
+
+let (tx, mut rx) = mpsc::channel::<Msg>(capacity);
+// tx.clone() gives additional senders
+
+- tx.send(msg).await returns Err if receiver is gone.
+- rx.recv().await returns None when all senders are dropped.
+
+2. oneshot (request/response)
+
+```rust
+use tokio::sync::oneshot;
+
+let (reply_tx, reply_rx) = oneshot::channel::<i64>();
+// sender:
+let _ = reply_tx.send(value);
+// receiver:
+let value = reply_rx.await?;
+```
+
+- reply_tx.send(...) fails if receiver was dropped.
+- reply_rx.await fails if sender dropped before replying.
+
+———
+
+Core loop concept
+Your actor task receives messages sequentially:
+
+```rust
+while let Some(msg) = rx.recv().await {
+    match msg {
+        Msg::Add { delta, reply } => { /* update, reply */ }
+        Msg::Get { reply } => { /* reply */ }
+        Msg::Stop { reply } => { /* reply then break */ }
+    }
+}
+```
+
+Key idea: All state lives in this task. Only this loop mutates count.
+
+———
+
+Handle methods pattern
+Each handle method does the same three‑step pattern:
+
+1. Create oneshot channel for the ack
+2. Send message containing reply_tx
+3. Await reply_rx and map errors
+
+Small pattern (not full code):
+
+```rust
+let (reply_tx, reply_rx) = oneshot::channel();
+self.tx.send(Msg::Get { reply: reply_tx }).await
+.map_err(|_| ActorError::SendFailed)?;
+let value = reply_rx.await.map_err(|_| ActorError::ResponseDropped)?;
+```
+
+This is the core of add, get, and stop.
+
+———
+
+Error mapping
+Your ActorError is just a thin wrapper around two failure points:
+
+- SendFailed: tx.send(...).await returns Err (actor is gone)
+- ResponseDropped: reply_rx.await returns Err (actor died before replying)
+
+———
+
+Spawn function responsibilities
+spawn_counter(capacity) must:
+
+- create bounded channel with mpsc::channel(capacity)
+    - build a CounterHandle from the sender
+    - spawn the actor task (move rx + state into it)
+- return (handle, join_handle)
+
+———
+
+Testing with Tokio
+
+Use #[tokio::test] for async tests:
+
+#[tokio::test]
+    async fn counter_add_get_happy_path() {
+        let (handle, _join) = spawn_counter(8);
+        let v = handle.add(5).await.unwrap();
+        // assert v == 5, etc
+    }
+
+No sleeps are needed; everything is deterministic.
+
+———
+
+Common gotchas
+
+- Don’t use std::sync::mpsc (it’s blocking); use tokio::sync::mpsc.
+- The actor loop should break after replying to Stop.
+- If all handles are dropped, rx.recv().await returns None and loop ends.
+- JoinHandle errors only if the task panics; normal stop should be Ok(()).
+
+———
+
+Checkpoint: does the message/ack pattern and error mapping make sense?
+If yes, do you want a walkthrough focused on just (1) the actor loop, or (2) the handle method patterns?
+
 Concepts + tradeoffs
 
 - oneshot::Sender<T>: single-use, one-value channel. Think “promise resolver” — exactly one message, then done. Great for request/response or
