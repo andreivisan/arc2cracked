@@ -4703,3 +4703,81 @@ Callers can pass either a `String` or `&str`.
 2. **Need to keep it after the caller’s lifetime?** → `String`.
 3. **Just read or pass through?** → `&str`.
 4. **Public API, want maximum flexibility?** -> Take &str if you don’t need ownership; otherwise accept impl Into<String>.
+
+## Tokio
+
+Concepts + tradeoffs
+
+- oneshot::Sender<T>: single-use, one-value channel. Think “promise resolver” — exactly one message, then done. Great for request/response or
+returning a value from a task. Low overhead, simplest semantics.
+- mpsc::Sender<T>: multi‑producer, single‑consumer channel. Think “work queue” where many producers push tasks to one worker. Can be bounded/
+unbounded depending on the crate (e.g., tokio::sync::mpsc). Tradeoff: backpressure and potential drops if bounded; more bookkeeping than
+oneshot.
+- task::JoinHandle<T>: a handle to a spawned async task. Think “future you can await to get the task’s result.” It’s not a channel; it’s more
+like a thread join in other languages. If you drop it, the task might keep running (runtime-specific).
+
+Small, focused Rust examples
+
+oneshot::Sender
+
+```rust
+use tokio::sync::oneshot;
+
+async fn compute() -> i32 {
+    42
+}
+
+async fn demo_oneshot() {
+    let (tx, rx) = oneshot::channel::<i32>();
+
+    tokio::spawn(async move {
+            let value = compute().await;
+            let _ = tx.send(value); // send exactly once
+            });
+
+    let result = rx.await.expect("sender dropped");
+    println!("got {result}");
+}
+```
+
+mpsc::Sender
+
+```rust
+use tokio::sync::mpsc;
+
+async fn demo_mpsc() {
+    let (tx, mut rx) = mpsc::channel::<String>(8);
+
+    // producer
+    let tx2 = tx.clone();
+    tokio::spawn(async move {
+            let _ = tx2.send("job-1".to_string()).await;
+            });
+
+    // consumer
+    if let Some(job) = rx.recv().await {
+        println!("processing {job}");
+    }
+}
+```
+
+JoinHandle
+
+```rust
+use tokio::task;
+
+async fn demo_join_handle() {
+    let handle: task::JoinHandle<i32> = task::spawn(async {
+            5 + 7
+            });
+
+    let result = handle.await.expect("task panicked");
+    println!("result {result}");
+}
+```
+
+Key distinctions in one sentence each
+
+- oneshot::Sender is a one-time signal/value delivery.
+- mpsc::Sender is a stream of values from many producers to one consumer.
+- JoinHandle is how you await a spawned task’s return value (not a channel).
